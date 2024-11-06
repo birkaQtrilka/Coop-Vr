@@ -17,6 +17,7 @@ namespace Coop_Vr
 
         IPEndPoint iPEndPoint;
         Action step;
+        Socket client;
 
         public Client()
         {
@@ -29,7 +30,7 @@ namespace Coop_Vr
 
             iPEndPoint = new(ip, 1234);
             //create client socket
-            using Socket client = new(
+            client = new(
                 iPEndPoint.AddressFamily,
                 SocketType.Stream,
                 ProtocolType.Tcp
@@ -57,6 +58,11 @@ namespace Coop_Vr
         public void Step()
         {
             step.Invoke();
+        }
+
+        ~Client()
+        {
+            client.Dispose();
         }
     }
 }
