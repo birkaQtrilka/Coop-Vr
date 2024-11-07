@@ -21,8 +21,8 @@ namespace Coop_Vr
 
             
             //Action stepper = new Server().Step;
-            //Action stepper = new Client().Step;
-            var stepper = new ServerAsync().Step;
+            Action stepper = new ClientAsync().Step;
+            //var stepper = new ServerAsync().Step;
 
             while (SK.Step(() =>
             {

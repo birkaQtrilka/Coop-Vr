@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
@@ -10,8 +8,6 @@ namespace Coop_Vr
 {
     internal class ServerAsync
     {
-        //info about local host
-        //local host ip address
         IPAddress ip;
 
         IPEndPoint iPEndPoint;
@@ -57,7 +53,7 @@ namespace Coop_Vr
 
                 await HandleMessage(msg, handler);
             };
-
+            //purely for debugging
             while(!acceptanceTask.IsCompleted)
             {
                 await Task.Delay(200);
