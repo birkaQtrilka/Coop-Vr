@@ -19,10 +19,11 @@ namespace Coop_Vr
             if (!SK.Initialize(settings))
                 Environment.Exit(1);
 
-            
+
             //Action stepper = new Server().Step;
-            Action stepper = new ClientAsync().Step;
+            //Action stepper = new ClientAsync().Step;
             //var stepper = new ServerAsync().Step;
+            Action stepper = new ServerBuff().Step;
 
             while (SK.Step(() =>
             {

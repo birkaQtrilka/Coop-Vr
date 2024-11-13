@@ -22,6 +22,13 @@ namespace Coop_Vr
 
         async Task Init()
         {
+            //object based communication json or something else
+            //serialize deserialize
+            //udp only for continuosly sync position or more unimportant repeating data
+            //tcp for important events
+            //use tcp for everything FIRST
+            //biggest ip tricks
+            
             ip = IPAddress.Parse("192.168.1.157");
             iPEndPoint = new(ip, 50160);
 
