@@ -11,9 +11,11 @@ namespace Coop_Vr
 
         List<Score> _scores = new List<Score>();
         Score _lastAddedPlayerScore = null;
+        DemoShow demo = new();
 
         public ClientBuff()
         {
+
             connectToServer();
         }
 
@@ -77,6 +79,8 @@ namespace Coop_Vr
 
                     if (inObject is GetScoresExample getScores) { handleHighScores(getScores); }
                 }
+
+                demo.Step();
             }
             catch (Exception e)
             {

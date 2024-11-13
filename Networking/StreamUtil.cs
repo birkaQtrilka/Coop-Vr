@@ -17,6 +17,9 @@ namespace Coop_Vr.Networking
 	 */
     public static class StreamUtil
     {
+        const int HEADER_SIZE = 4;
+
+
         /**
 		 * Writes the size of the given byte array into the stream and then the bytes themselves.
 		 */
@@ -66,6 +69,16 @@ namespace Coop_Vr.Networking
 
             return (totalBytesRead == pByteCount) ? bytes : null;
         }
+        
+        public static bool Available (TcpClient tcpClient)
+        {
+            if (tcpClient.Available < HEADER_SIZE) return false;
+            byte[] sizeHeader = new byte[HEADER_SIZE];
+            tcpClient.Client.Receive(sizeHeader, HEADER_SIZE,SocketFlags.Peek);
+            int messageSize = BitConverter.ToInt32(sizeHeader, 0);
+            return tcpClient.Available >= HEADER_SIZE + messageSize;
+        }
     }
 
+    
 }
