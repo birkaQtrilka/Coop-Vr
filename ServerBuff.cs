@@ -12,7 +12,6 @@ namespace Coop_Vr
         TcpListener _listener;
         List<TcpClient> _clients = new();
         List<Score> _scores = new();
-        Action _step;
 
         public ServerBuff()
         {
@@ -24,7 +23,6 @@ namespace Coop_Vr
 
         public void Step()
         {
-            _step?.Invoke();
             ProcessNewClients();
             ProcessExistingClients();
 
@@ -49,8 +47,14 @@ namespace Coop_Vr
                 if (client.Available == 0) continue;
 
                 byte[] inBytes = StreamUtil.Read(client.GetStream());
-                Packet inPacket = new Packet(inBytes);
+                Packet inPacket = new(inBytes);
                 ISerializable inObject = inPacket.ReadObject();
+                if(inObject is not IMessage)
+                {
+                    Console.WriteLine("received packet with wrong format (not inheriting IMessage)");
+                    continue;
+                }    
+
                 Console.WriteLine("Received:" + inObject);
 
                 if (inObject is AddRequestExample addRequest) { HandleAddRequest(client, addRequest); }
@@ -74,7 +78,7 @@ namespace Coop_Vr
         void SendObject(TcpClient pClient, ISerializable pOutObject)
         {
             Console.WriteLine("Sending:" + pOutObject);
-            Packet outPacket = new Packet();
+            Packet outPacket = new();
             outPacket.Write(pOutObject);
             StreamUtil.Write(pClient.GetStream(), outPacket.GetBytes());
         }

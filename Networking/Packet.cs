@@ -38,6 +38,7 @@ namespace Coop_Vr.Networking
         public void Write(int pInt) { writer.Write(pInt); }
         public void Write(string pString) { writer.Write(pString); }
         public void Write(bool pBool) { writer.Write(pBool); }
+        public void Write(float pFloat) { writer.Write(pFloat); }
 
         public void Write(ISerializable pSerializable)
         {
@@ -50,11 +51,12 @@ namespace Coop_Vr.Networking
         public int ReadInt() { return reader.ReadInt32(); }
         public string ReadString() { return reader.ReadString(); }
         public bool ReadBool() { return reader.ReadBoolean(); }
+        public float ReadFloat() { return reader.ReadSingle(); }
 
         public ISerializable ReadObject()
         {
             Type type = Type.GetType(ReadString());
-            ISerializable obj = (ISerializable)Activator.CreateInstance(type);
+            ISerializable obj = (ISerializable)Activator.CreateInstance(type);//get class from a list, each class should have an id
             obj.Deserialize(this);
             return obj;
         }
