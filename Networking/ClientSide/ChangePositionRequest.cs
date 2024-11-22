@@ -4,24 +4,26 @@ namespace Coop_Vr.Networking.ClientSide
 {
     public class ChangePositionRequest : IMessage
     {
-        Pose pos;
+        public int ObjID;
+        public Pose Pos;
 
         public void Deserialize(Packet pPacket)
         {
-            pPacket.Write(pos.position.x);
-            pPacket.Write(pos.position.y);
-            pPacket.Write(pos.position.z);
+            pPacket.Write(ObjID);
+            pPacket.Write(Pos.position.x);
+            pPacket.Write(Pos.position.y);
+            pPacket.Write(Pos.position.z);
 
-            pPacket.Write(pos.orientation.x);
-            pPacket.Write(pos.orientation.y);
-            pPacket.Write(pos.orientation.z);
-            pPacket.Write(pos.orientation.w);
-
+            pPacket.Write(Pos.orientation.x);
+            pPacket.Write(Pos.orientation.y);
+            pPacket.Write(Pos.orientation.z);
+            pPacket.Write(Pos.orientation.w);
         }
 
         public void Serialize(Packet pPacket)
         {
-            pos = new(pPacket.ReadFloat(),
+            ObjID = pPacket.ReadInt();
+            Pos = new(pPacket.ReadFloat(),
                 pPacket.ReadFloat(),
                 pPacket.ReadFloat(),
                 new Quat(

@@ -29,13 +29,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if(message is PlayerJoinRequest)
-            {
-                RemoveMember(sender);
-                context.ChangeTo<LobbyRoom>();
-                
-                sender.SendMessage(new PlayerJoinResponse());
-            }
+            
 
         }
 

@@ -1,12 +1,9 @@
 ﻿
-using Coop_Vr.Networking.ServerSide.StateMachine.States;
-using Coop_Vr.Networking.ServerSide.StateMachine;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Net;
 using System;
 using Coop_Vr.Networking.ClientSide.StateMachine.States;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
@@ -22,8 +19,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public ClientStateMachine()
         {
-            ConnectToServer();
-
             _scenes = new()
             {
                 { typeof(LoginView), new LoginView(this)},
@@ -32,16 +27,36 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             };
 
 
-            _current = _scenes[typeof(LoginView)];
+            _current = _scenes[typeof(LobbyView)];
             _current.OnEnter();
         }
 
-        void ConnectToServer()
+        public void SendMessage(IMessage msg)
+        {
+            _server.SendMessage(msg);
+        }
+
+        public void ConnectToServer(string Ip)
         {
             try
             {
                 var client = new TcpClient();
-                client.Connect("localHost", 55555);
+                client.Connect(Ip, 55555);
+                _server = new TcpChanel(client);
+                Console.WriteLine("Connected to server.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public async Task ConnectToServerAsync(string Ip)
+        {
+            try
+            {
+                var client = new TcpClient();
+                await client.ConnectAsync(Ip, 55555);
                 _server = new TcpChanel(client);
                 Console.WriteLine("Connected to server.");
             }

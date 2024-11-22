@@ -29,6 +29,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 { typeof(LobbyRoom), new LobbyRoom(this)},
                 { typeof(GameRoom), new GameRoom(this)}
             };
+
+            _current = _states[typeof(LobbyRoom)];
+            _current.OnEnter();
         }
 
         void ProcessNewClients()

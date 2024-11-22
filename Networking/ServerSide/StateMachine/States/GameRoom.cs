@@ -14,6 +14,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
+            Console.WriteLine("Entered game room");
         }
 
         public override void OnExit()
