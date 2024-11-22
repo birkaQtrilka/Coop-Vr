@@ -1,0 +1,272 @@
+[
+  {
+    "Labal": "A0",
+    "X": 10,
+    "Y": 80,
+    "Z": 20,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A1",
+    "X": 35,
+    "Y": 60,
+    "Z": 20,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A2",
+    "X": 30,
+    "Y": 35,
+    "Z": 81,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A3",
+    "X": 36,
+    "Y": 53,
+    "Z": 15,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A4",
+    "X": 75,
+    "Y": 81,
+    "Z": 64,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A5",
+    "X": 37,
+    "Y": 82,
+    "Z": 52,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A6",
+    "X": 3,
+    "Y": 98,
+    "Z": 48,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A7",
+    "X": 42,
+    "Y": 88,
+    "Z": 47,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A8",
+    "X": 94,
+    "Y": 25,
+    "Z": 86,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "A9",
+    "X": 82,
+    "Y": 24,
+    "Z": 45,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B0",
+    "X": 72,
+    "Y": 32,
+    "Z": 1,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B1",
+    "X": 64,
+    "Y": 86,
+    "Z": 98,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B2",
+    "X": 73,
+    "Y": 35,
+    "Z": 10,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B3",
+    "X": 35,
+    "Y": 57,
+    "Z": 99,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B4",
+    "X": 87,
+    "Y": 20,
+    "Z": 69,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B5",
+    "X": 33,
+    "Y": 65,
+    "Z": 69,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B6",
+    "X": 55,
+    "Y": 53,
+    "Z": 55,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B7",
+    "X": 59,
+    "Y": 65,
+    "Z": 77,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B8",
+    "X": 98,
+    "Y": 47,
+    "Z": 3,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B9",
+    "X": 1,
+    "Y": 44,
+    "Z": 55,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B0",
+    "X": 56,
+    "Y": 75,
+    "Z": 70,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B1",
+    "X": 25,
+    "Y": 25,
+    "Z": 25,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B2",
+    "X": 55,
+    "Y": 44,
+    "Z": 28,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B3",
+    "X": 91,
+    "Y": 74,
+    "Z": 92,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B4",
+    "X": 38,
+    "Y": 38,
+    "Z": 71,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B5",
+    "X": 77,
+    "Y": 24,
+    "Z": 68,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B6",
+    "X": 56,
+    "Y": 85,
+    "Z": 82,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B7",
+    "X": 19,
+    "Y": 63,
+    "Z": 86,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B8",
+    "X": 79,
+    "Y": 15,
+    "Z": 7,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  },
+  {
+    "Labal": "B9",
+    "X": 28,
+    "Y": 80,
+    "Z": 47,
+    "info_1": "more_1",
+    "info_2": "more_2",
+    "info_3": "more_3"
+  }
+]

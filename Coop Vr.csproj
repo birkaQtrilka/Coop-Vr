@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
+    <PackageReference Include="CsvHelper" Version="33.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="StereoKit" Version="0.3.*" />
   </ItemGroup>
 
@@ -21,6 +24,12 @@
 
   <ItemGroup>
     <SKShader Include="Assets\floor.hlsl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Model\" />
+    <Folder Include="Assets\Fonts\" />
+    <Folder Include="Assets\Textures\" />
   </ItemGroup>
 
 </Project>
