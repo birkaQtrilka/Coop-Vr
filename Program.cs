@@ -1,4 +1,5 @@
 using Coop_Vr.Networking.ClientSide.StateMachine;
+using Coop_Vr.Networking.ServerSide.StateMachine;
 using StereoKit;
 using System;
 using System.Net;
@@ -20,11 +21,11 @@ namespace Coop_Vr
             if (!SK.Initialize(settings))
                 Environment.Exit(1);
 
-            ClientStateMachine clientSetup = new();
+            ServerStateMachine setup = new();
 
             while (SK.Step(() =>
             {
-                clientSetup.Update();
+                setup.Update();
             })) ;
             SK.Shutdown();
         }

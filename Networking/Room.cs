@@ -11,7 +11,7 @@ namespace Coop_Vr.Networking
         }
         protected T context;
 
-        List<TcpChanel> _members;
+        List<TcpChanel> _members = new();
 
         public abstract void ReceiveMessage(IMessage message, TcpChanel sender);
         public abstract void Update();
