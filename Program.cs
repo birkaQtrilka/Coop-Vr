@@ -74,7 +74,7 @@ namespace StereoKitDataPlotter
             var dataPoints = new List<DataPoint>
     {
         new DataPoint("P0", 0.0f, 0.0f, 0.0f),
-        new DataPoint("P1", 0.5f, 0.5f, 1.0f),
+        new DataPoint("P1", 1.5f, 0.5f, 0.5f),
         new DataPoint("P2", 1.0f, 1.0f, 2.0f),
         new DataPoint("P3", 1.5f, 0.5f, 3.0f),
         new DataPoint("P4", 2.0f, 0.0f, 4.0f),
