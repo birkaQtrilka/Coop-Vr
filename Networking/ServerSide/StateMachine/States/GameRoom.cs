@@ -28,6 +28,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectRequest objCreate)
             {
+                Console.WriteLine("create object request");
                 SkObject newObject = new SkObject() 
                 {
                     ID = currentId++,

@@ -1,5 +1,6 @@
 ﻿using Coop_Vr.Networking.ServerSide;
 using StereoKit;
+using System;
 using System.Collections.Generic;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
@@ -7,7 +8,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     public class GameView : Room<ClientStateMachine>
     {
         Pose windowPos = Pose.Identity;
-        Dictionary<int, SkObject> objects;
+        Dictionary<int, SkObject> objects = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -40,6 +41,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
             if(UI.Button("Add object sphere"))
             {
+                Console.WriteLine("request to add sphere");
                 context.SendMessage(new CreateObjectRequest() { 
                     Components = new List<ISerializable>() //really needs to be Icomponent (reference to object, )
                     {   
