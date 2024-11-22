@@ -39,7 +39,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             while (_listener.Pending())
             {
                 var newClient = new TcpChanel(_listener.AcceptTcpClient());
-                _states[typeof(LoginRoom)].AddMember(newClient);
+                _states[typeof(LobbyRoom)].AddMember(newClient);
                 Console.WriteLine("Accepted new client.");
 
             }

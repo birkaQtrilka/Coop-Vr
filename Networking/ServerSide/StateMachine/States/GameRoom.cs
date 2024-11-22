@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Coop_Vr.Networking.ClientSide;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
     public class GameRoom : Room<ServerStateMachine>
     {
+        public int currentId;
+
+        Dictionary<int, SkObject> objects = new(); 
+
         public GameRoom(ServerStateMachine context) : base(context)
         {
         }
@@ -23,6 +26,18 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
+            if (message is CreateObjectRequest objCreate)
+            {
+                SkObject newObject = new SkObject() 
+                {
+                    ID = currentId++,
+                    Components = objCreate.Components,
+                };
+
+                objects.Add(newObject.ID, newObject);
+
+                sender.SendMessage(new CreateObjectResponse() { NewObj = newObject});
+            }
         }
 
         public override void Update()

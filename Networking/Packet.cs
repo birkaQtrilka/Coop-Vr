@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Coop_Vr.Networking
@@ -46,12 +48,50 @@ namespace Coop_Vr.Networking
             pSerializable.Serialize(this);
         }
 
+        public void WriteList<T>(List<T> list) where T : ISerializable
+        {
+            Write(list.Count);
+            Write(typeof(T).Name);
+            foreach (T item in list)
+            {
+                item.Serialize(this);
+            }
+        }
+
         /// READ METHODS
 
         public int ReadInt() { return reader.ReadInt32(); }
         public string ReadString() { return reader.ReadString(); }
         public bool ReadBool() { return reader.ReadBoolean(); }
         public float ReadFloat() { return reader.ReadSingle(); }
+
+        //List<T> ReadList<T>() where T : ISerializable 
+        //{
+        //    int size = ReadInt();
+        //    List<T> list = new(size);
+
+        //    for (int i = 0; i < size; i++)
+        //    {
+        //        list.Add(Read<T>());
+        //    }
+
+        //    return list;
+        //}
+
+        public List<ISerializable> ReadList()
+        {
+            int size = ReadInt();
+            Type type = Type.GetType(ReadString());
+
+            List<ISerializable> list = new(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                list.Add(Read(type));
+            }
+
+            return list;
+        }
 
         public ISerializable ReadObject()
         {
@@ -61,9 +101,18 @@ namespace Coop_Vr.Networking
             return obj;
         }
 
-        public T Read<T>() where T : ISerializable
+        //T Read<T>() where T : ISerializable
+        //{
+        //    T obj = Activator.CreateInstance<T>();
+        //    obj.Deserialize(this);
+        //    return obj;
+        //}
+
+        ISerializable Read(Type serializable) 
         {
-            return (T)ReadObject();
+            ISerializable obj = Activator.CreateInstance(serializable) as ISerializable;
+            obj.Deserialize(this);
+            return obj;
         }
 
         /**
