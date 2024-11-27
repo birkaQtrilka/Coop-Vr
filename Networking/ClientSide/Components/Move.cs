@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide
 {
-    internal class Move : Component
+    public class Move : Component
     {
         public float speed;
+        private ModelComponent modelComponent;
         public override void Serialize(Packet pPacket)
         {
             pPacket.Write(speed);
+        }
+        public override void Start()
+        {
+            modelComponent = gameObject.GetComponent<ModelComponent>();
         }
         public override void Deserialize(Packet pPacket)
         {
@@ -21,6 +26,7 @@ namespace Coop_Vr.Networking.ClientSide
 
         public override void Update()
         {
+            UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
             gameObject.Transform.pose.position += Vec3.Forward * speed;
         }
 

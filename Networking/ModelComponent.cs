@@ -8,7 +8,7 @@ namespace Coop_Vr.Networking
         public string MeshName;
         public Mesh mesh;
         public Material material;
-
+        public Bounds bounds;
         public override void Deserialize(Packet pPacket)
         {
             MeshName = pPacket.ReadString();
@@ -22,10 +22,12 @@ namespace Coop_Vr.Networking
         public override void Start()
         {
             if(MeshName == "sphere")
-                mesh = Mesh.GenerateSphere(1);
+                mesh = Mesh.GenerateSphere(1.0f);
+            
             else if (MeshName == "cube")
                 mesh = Mesh.GenerateCube(new Vec3(1));
 
+            bounds = mesh.Bounds;
             material = Material.Default;
         }
 

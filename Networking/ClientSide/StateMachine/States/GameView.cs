@@ -18,7 +18,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
-            
+
         }
 
         public override void OnExit()
@@ -28,7 +28,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if(message is CreateObjectResponse createdObject)
+            if (message is CreateObjectResponse createdObject)
             {
                 objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
                 Console.WriteLine("received object: " + createdObject.NewObj.ID);
@@ -42,15 +42,16 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             UI.Label("GameView");
             UI.HSeparator();
 
-            if(UI.Button("Add object sphere"))
+            if (UI.Button("Add object sphere"))
             {
                 Console.WriteLine("request to add sphere");
-                context.SendMessage(new CreateObjectRequest() { 
-                    Components = new List<Component>() 
-                    {   
+                context.SendMessage(new CreateObjectRequest()
+                {
+                    Components = new List<Component>()
+                    {
                         new PosComponent() { pose = new Pose(2,0,0)},
                         new ModelComponent() { MeshName = "sphere"},
-                        new Move() { speed = 4.0f}
+                        new Move() { speed = 0.5f}
                     }
 
                 });
@@ -61,12 +62,12 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             {
                 context.SendMessage(new CreateObjectRequest()
                 {
-                    Components = new List<Component>() 
+                    Components = new List<Component>()
                     {
                         new PosComponent() { pose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
-                        new Move() { speed = 3.0f}
-                        
+                        new Move() { speed =  0.5f}
+
                     }
 
                 });
@@ -78,10 +79,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             {
                 SkObject obj = kv.Value;
                 foreach (Component component in obj.Components)
-                    if(component.Enabled)
+                    if (component.Enabled)
                         component.Update();
             }
-            
+
         }
 
 
