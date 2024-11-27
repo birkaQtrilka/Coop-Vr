@@ -28,11 +28,21 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if(message is CreateObjectResponse createdObject)
+            if (message is CreateObjectResponse createdObject)
             {
                 objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
                 Console.WriteLine("received object: " + createdObject.NewObj.ID);
                 createdObject.NewObj.Init();
+            }
+            else if (message is ChangePositionResponse changePosition)
+            {
+                if (changePosition.SenderID == context.ID)
+                {
+                    Console.WriteLine("want to change pos but it is sender");
+                    return;
+                }
+                Console.WriteLine("fuck, this is bad");
+                objects[changePosition.ObjectID].Transform.pose = changePosition.PosComponent.pose;
             }
         }
 
