@@ -7,7 +7,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
     public class LobbyRoom : Room<ServerStateMachine>
     {
-        const int MIN_PLAYERS = 1;
+        const int MIN_PLAYERS = 2;
         List<TcpChanel> readyPlayers = new();
         static int playerId;
 

@@ -72,6 +72,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             return _states[typeof(T)];
         }
 
+        public Room<ServerStateMachine> GetCurrentRoom() => _current;
+
         public void ChangeTo<T>()
         {
             _changedState = true;

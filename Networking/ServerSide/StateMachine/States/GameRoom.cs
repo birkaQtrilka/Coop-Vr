@@ -36,19 +36,21 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 };
                 newObject.Init();
                 objects.Add(newObject.ID, newObject);
-
-                sender.SendMessage(new CreateObjectResponse() { NewObj = newObject});
+                var response = new CreateObjectResponse() { NewObj = newObject };
+                context.GetCurrentRoom().SafeForEachMember((m) => m.SendMessage(response));
             }
             else if( message is ChangePositionRequest changePositionRequest)
             {
                 objects[changePositionRequest.ObjectID].Transform.pose = changePositionRequest.position.pose;
 
-                
-                sender.SendMessage(new ChangePositionResponse() { 
+                var response = new ChangePositionResponse() { 
                     ObjectID = changePositionRequest.ObjectID,
                     PosComponent = changePositionRequest.position,
                     SenderID = changePositionRequest.SenderID
-                });
+                };
+
+                context.GetCurrentRoom().SafeForEachMember((m) => m.SendMessage(response));
+
             }
         }
 
