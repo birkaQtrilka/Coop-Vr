@@ -4,16 +4,16 @@ namespace Coop_Vr.Networking.ClientSide
 {
     public class CreateObjectRequest : IMessage
     {
-        public List<ISerializable> Components;
+        public List<Component> Components;
 
         public void Deserialize(Packet pPacket)
         {
-            Components = pPacket.ReadList();
+            Components = pPacket.ReadComponentsList();
         }
 
         public void Serialize(Packet pPacket)
         {
-            pPacket.WriteList(Components);
+            pPacket.WriteComponentsList(Components);
         }
     }
 }

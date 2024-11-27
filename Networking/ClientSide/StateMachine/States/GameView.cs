@@ -2,6 +2,7 @@
 using StereoKit;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {
@@ -43,10 +44,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             {
                 Console.WriteLine("request to add sphere");
                 context.SendMessage(new CreateObjectRequest() { 
-                    Components = new List<ISerializable>() //really needs to be Icomponent (reference to object, )
+                    Components = new List<Component>() 
                     {   
                         new PosComponent() { pose = new Pose(2,1,1)},
-                        new MeshComponent() { MeshName = "sphere"}
+                        new ModelComponent() { MeshName = "sphere"}
 
                     }
 
@@ -58,10 +59,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             {
                 context.SendMessage(new CreateObjectRequest()
                 {
-                    Components = new List<ISerializable>() //really needs to be Icomponent (reference to object, )
+                    Components = new List<Component>() 
                     {
                         new PosComponent() { pose = new Pose(5,2,5)},
-                        new MeshComponent() { MeshName = "cube"}
+                        new ModelComponent() { MeshName = "cube"}
 
                     }
 
@@ -69,24 +70,17 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             }
 
             UI.WindowEnd();
-
-            foreach (var kv in objects) 
+            //put 
+            foreach (var kv in objects)
             {
                 SkObject obj = kv.Value;
-                MeshComponent meshC = obj.GetComponent<MeshComponent>();
-                if (meshC.MeshName == "sphere")
-                {
-                    Model model = Model.FromMesh(Mesh.GenerateSphere(1f),Material.Default);
-                    PosComponent pos = obj.GetComponent<PosComponent>();
-                    model.Draw(Matrix.TR(pos.pose.position, pos.pose.orientation));
-                }
-                else if(meshC.MeshName == "cube")
-                {
-                    Model model = Model.FromMesh(Mesh.GenerateCube(Vec3.One*2), Material.Default);
-                    PosComponent pos = obj.GetComponent<PosComponent>();
-                    model.Draw(Matrix.TR(pos.pose.position, pos.pose.orientation));
-                }
+                foreach (Component component in obj.Components)
+                    if(component.Enabled)
+                        component.Update();
             }
+            
         }
+
+
     }
 }

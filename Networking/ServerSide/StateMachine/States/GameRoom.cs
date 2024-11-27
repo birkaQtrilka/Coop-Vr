@@ -28,13 +28,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectRequest objCreate)
             {
-                Console.WriteLine("create object request");
-                SkObject newObject = new SkObject() 
+                Console.WriteLine("create object response");
+                SkObject newObject = new() 
                 {
                     ID = currentId++,
                     Components = objCreate.Components,
                 };
-
+                newObject.Init();
                 objects.Add(newObject.ID, newObject);
 
                 sender.SendMessage(new CreateObjectResponse() { NewObj = newObject});

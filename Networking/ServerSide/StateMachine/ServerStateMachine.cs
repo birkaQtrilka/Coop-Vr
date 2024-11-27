@@ -45,6 +45,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             }
         }
 
+
+
         public void Update()
         {
             ProcessNewClients();
@@ -63,6 +65,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             }
 
             _current.Update();
+        }
+
+
+        public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>
+        {
+            return _states[typeof(T)];
         }
 
         public void ChangeTo<T>()
