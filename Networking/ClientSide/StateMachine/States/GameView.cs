@@ -34,6 +34,16 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 Console.WriteLine("received object: " + createdObject.NewObj.ID);
                 createdObject.NewObj.Init();
             }
+            else if (message is ChangePositionResponse changePosition)
+            {
+                if (changePosition.SenderID == context.ID)
+                {
+                    Console.WriteLine("want to change pos but it is sender");
+                    return;
+                }
+                Console.WriteLine("fuck, this is bad");
+                objects[changePosition.ObjectID].Transform.pose = changePosition.PosComponent.pose;
+            }
         }
 
         public override void Update()

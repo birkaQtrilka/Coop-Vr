@@ -39,6 +39,17 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
                 sender.SendMessage(new CreateObjectResponse() { NewObj = newObject});
             }
+            else if( message is ChangePositionRequest changePositionRequest)
+            {
+                objects[changePositionRequest.ObjectID].Transform.pose = changePositionRequest.position.pose;
+
+                
+                sender.SendMessage(new ChangePositionResponse() { 
+                    ObjectID = changePositionRequest.ObjectID,
+                    PosComponent = changePositionRequest.position,
+                    SenderID = changePositionRequest.SenderID
+                });
+            }
         }
 
         public override void Update()

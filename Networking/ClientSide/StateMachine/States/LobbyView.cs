@@ -32,8 +32,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if(message is PlayerJoinResponse)
+            if(message is PlayerJoinResponse join)
             {
+                //set id
+                context.ID = join.ID;
                 context.ChangeTo<GameView>();
             }
         }
@@ -51,7 +53,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 else
                 {
                     connectingTask = null;
-                    context.SendMessage(new PlayerJoinRequest() { ID = (int)Time.Total });
+                    context.SendMessage(new PlayerJoinRequest());
                 }
 
                 return;

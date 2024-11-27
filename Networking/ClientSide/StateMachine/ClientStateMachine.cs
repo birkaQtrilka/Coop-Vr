@@ -4,11 +4,14 @@ using System.Net.Sockets;
 using System;
 using Coop_Vr.Networking.ClientSide.StateMachine.States;
 using System.Threading.Tasks;
+using Coop_Vr.Networking.ServerSide;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
     public class ClientStateMachine
     {
+        public int ID { get; set; }
+
         readonly Dictionary<Type, Room<ClientStateMachine>> _scenes;
 
         Room<ClientStateMachine> _current;
@@ -21,7 +24,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         {
             _scenes = new()
             {
-                { typeof(LoginView), new LoginView(this)},
                 { typeof(LobbyView), new LobbyView(this)},
                 { typeof(GameView), new GameView(this)}
             };
@@ -70,8 +72,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         public void Update()
         {
 
-            if (_server != null && _server.HasMessage()) 
+            if (_server != null && _server.HasMessage())
+            { 
                 _current.ReceiveMessage(_server.GetMessage(), _server);
+            }
 
             
             if (_changedScene)

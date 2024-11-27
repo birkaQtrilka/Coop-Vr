@@ -25,7 +25,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
             _states = new()
             {
-                { typeof(LoginRoom), new LoginRoom(this)},
                 { typeof(LobbyRoom), new LobbyRoom(this)},
                 { typeof(GameRoom), new GameRoom(this)}
             };

@@ -9,6 +9,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
     {
         const int MIN_PLAYERS = 1;
         List<TcpChanel> readyPlayers = new();
+        static int playerId;
 
         public LobbyRoom(ServerStateMachine context) : base(context)
         {
@@ -28,16 +29,17 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is PlayerJoinRequest request)
             {
-                Console.WriteLine($"PlayerJoinRequest: {sender}, id: {request.ID}");
                 readyPlayers.Add(sender);
-                if(readyPlayers.Count >= MIN_PLAYERS)
+                Console.WriteLine($"PlayerJoinRequest: {sender}");
+
+                if (readyPlayers.Count >= MIN_PLAYERS)
                 {
                     Room<ServerStateMachine> gameRoom = context.GetRoom<GameRoom>();
                     foreach (TcpChanel player in readyPlayers)
                     {
                         RemoveMember(player);
                         gameRoom.AddMember(player);
-                        player.SendMessage(new PlayerJoinResponse());
+                        player.SendMessage(new PlayerJoinResponse() { ID = playerId++ });
                     }
                     context.ChangeTo<GameRoom>();
                 }
