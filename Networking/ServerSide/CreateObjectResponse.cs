@@ -7,7 +7,9 @@ namespace Coop_Vr.Networking.ServerSide
 
         public void Deserialize(Packet pPacket)
         {
+            NewObj = new();
             NewObj.Deserialize(pPacket);
+
         }
 
         public void Serialize(Packet pPacket)

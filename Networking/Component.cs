@@ -10,6 +10,7 @@ namespace Coop_Vr.Networking
         public void Init(SkObject pGameObject)
         {
             gameObject = pGameObject;
+            Start();
         }
 
         public abstract void Serialize(Packet pPacket);
