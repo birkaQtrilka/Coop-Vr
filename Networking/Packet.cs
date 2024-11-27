@@ -48,12 +48,12 @@ namespace Coop_Vr.Networking
             pSerializable.Serialize(this);
         }
 
-        public void WriteList<T>(List<T> list) where T : ISerializable
+        public void WriteComponentsList(List<Component> list) 
         {
             Write(list.Count);
-            Write(typeof(T).Name);
-            foreach (T item in list)
+            foreach (Component item in list)
             {
+                Write(item.GetType().Name);
                 item.Serialize(this);
             }
         }
@@ -65,29 +65,17 @@ namespace Coop_Vr.Networking
         public bool ReadBool() { return reader.ReadBoolean(); }
         public float ReadFloat() { return reader.ReadSingle(); }
 
-        //List<T> ReadList<T>() where T : ISerializable 
-        //{
-        //    int size = ReadInt();
-        //    List<T> list = new(size);
-
-        //    for (int i = 0; i < size; i++)
-        //    {
-        //        list.Add(Read<T>());
-        //    }
-
-        //    return list;
-        //}
-
-        public List<ISerializable> ReadList()
+        public List<Component> ReadComponentsList()
         {
             int size = ReadInt();
-            Type type = Type.GetType(ReadString());
-
-            List<ISerializable> list = new(size);
+            List<Component> list = new(size);
 
             for (int i = 0; i < size; i++)
             {
-                list.Add(Read(type));
+                string typeName = ReadString();
+                Type type = Type.GetType(typeName);
+
+                list.Add(Read(type) as Component);
             }
 
             return list;
@@ -100,13 +88,6 @@ namespace Coop_Vr.Networking
             obj.Deserialize(this);
             return obj;
         }
-
-        //T Read<T>() where T : ISerializable
-        //{
-        //    T obj = Activator.CreateInstance<T>();
-        //    obj.Deserialize(this);
-        //    return obj;
-        //}
 
         ISerializable Read(Type serializable) 
         {

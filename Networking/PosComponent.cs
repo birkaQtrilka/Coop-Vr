@@ -2,11 +2,11 @@
 
 namespace Coop_Vr.Networking
 {
-    public struct PosComponent : ISerializable
+    public class PosComponent : Component
     {
         public Pose pose;
 
-        public void Deserialize(Packet pPacket)
+        public override void Deserialize(Packet pPacket)
         {
             pose = new(
                 pPacket.ReadFloat(),
@@ -21,7 +21,7 @@ namespace Coop_Vr.Networking
                 );
         }
 
-        public void Serialize(Packet pPacket)
+        public override void Serialize(Packet pPacket)
         {
             pPacket.Write(pose.position.x);
             pPacket.Write(pose.position.y);
@@ -31,5 +31,7 @@ namespace Coop_Vr.Networking
             pPacket.Write(pose.orientation.z);
             pPacket.Write(pose.orientation.w);
         }
+
+
     }
 }

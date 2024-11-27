@@ -32,11 +32,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 readyPlayers.Add(sender);
                 if(readyPlayers.Count >= MIN_PLAYERS)
                 {
+                    Room<ServerStateMachine> gameRoom = context.GetRoom<GameRoom>();
                     foreach (TcpChanel player in readyPlayers)
                     {
                         RemoveMember(player);
+                        gameRoom.AddMember(player);
                         player.SendMessage(new PlayerJoinResponse());
-
                     }
                     context.ChangeTo<GameRoom>();
                 }
