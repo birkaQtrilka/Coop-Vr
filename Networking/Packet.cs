@@ -53,7 +53,7 @@ namespace Coop_Vr.Networking
             Write(list.Count);
             foreach (Component item in list)
             {
-                Write(item.GetType().Name);
+                Write(item.GetType().AssemblyQualifiedName);
                 item.Serialize(this);
             }
         }
