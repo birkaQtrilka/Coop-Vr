@@ -7,7 +7,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     public class GameView : Room<ClientStateMachine>
     {
         Pose windowPos = Pose.Identity;
-        Dictionary<int, SkObject> objects;
+        Dictionary<int, SkObject> objects = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {

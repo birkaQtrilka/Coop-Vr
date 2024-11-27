@@ -13,7 +13,6 @@ namespace Coop_Vr.Networking.ClientSide
 
         public void Serialize(Packet pPacket)
         {
-            pPacket.WriteList(Components);
         }
     }
 }

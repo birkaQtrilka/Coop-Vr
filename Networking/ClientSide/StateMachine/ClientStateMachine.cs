@@ -64,11 +64,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             {
                 Console.WriteLine(e.Message);
             }
+            await Task.Delay(10);
         }
 
         public void Update()
         {
-            if (_server.HasMessage()) 
+
+            if (_server != null && _server.HasMessage()) 
                 _current.ReceiveMessage(_server.GetMessage(), _server);
 
             
