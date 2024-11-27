@@ -10,9 +10,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         string title = "Text Input";
         string description = "";
 
-        Pose windowPose = Pose.Identity;
-        string text = "Edit me";
+        Pose windowPose = new Pose(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
+
+        bool showHeader = true;
+        float slider = 0.5f;
+        string text = "192.168.138.33";
         Task connectingTask;
+        bool conecedToServer;
 
         public LobbyView(ClientStateMachine context) : base(context)
         {
@@ -52,9 +56,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
                 return;
             }
+            
 
-
-            UI.WindowBegin("Text Input", ref windowPose);
+            //UI.WindowBegin("Text Input", ref windowPose);
+            UI.WindowBegin("Window", ref windowPose, new Vec2(20, 0) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
 
             UI.Text("You can specify whether or not a UI element will hide an active soft keyboard upon interaction.");
             UI.Button("Hides active soft keyboard");
@@ -72,8 +77,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             UI.Label("Normal Text", labelSize); UI.SameLine();
             UI.Input("TextText", ref text, inputSize, TextContext.Text);
 
-            if (UI.Button("Find Lobby"))
+            if (UI.Button("Find Lobby") && !conecedToServer)
             {
+                conecedToServer = true;
                 connectingTask = context.ConnectToServerAsync(text);
             }
 

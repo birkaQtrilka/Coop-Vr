@@ -31,6 +31,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if(message is CreateObjectResponse createdObject)
             {
                 objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
+                Console.WriteLine("received object: " + createdObject.NewObj.ID);
+                createdObject.NewObj.Init();
             }
         }
 
@@ -46,9 +48,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 context.SendMessage(new CreateObjectRequest() { 
                     Components = new List<Component>() 
                     {   
-                        new PosComponent() { pose = new Pose(2,1,1)},
-                        new ModelComponent() { MeshName = "sphere"}
-
+                        new PosComponent() { pose = new Pose(2,0,0)},
+                        new ModelComponent() { MeshName = "sphere"},
+                        new Move() { speed = 4.0f}
                     }
 
                 });
@@ -61,9 +63,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 {
                     Components = new List<Component>() 
                     {
-                        new PosComponent() { pose = new Pose(5,2,5)},
-                        new ModelComponent() { MeshName = "cube"}
-
+                        new PosComponent() { pose = new Pose(3,0,0)},
+                        new ModelComponent() { MeshName = "cube"},
+                        new Move() { speed = 3.0f}
+                        
                     }
 
                 });

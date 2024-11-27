@@ -21,7 +21,7 @@ namespace Coop_Vr
             if (!SK.Initialize(settings))
                 Environment.Exit(1);
 
-            ServerStateMachine setup = new();
+            ClientStateMachine setup = new();
 
             while (SK.Step(() =>
             {
