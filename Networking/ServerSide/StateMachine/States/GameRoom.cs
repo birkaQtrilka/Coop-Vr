@@ -37,7 +37,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 newObject.Init();
                 objects.Add(newObject.ID, newObject);
                 var response = new CreateObjectResponse() { NewObj = newObject };
-                context.GetCurrentRoom().SafeForEachMember((m) => m.SendMessage(response));
+                context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
             }
             else if( message is ChangePositionRequest changePositionRequest)
             {
@@ -49,7 +49,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     SenderID = changePositionRequest.SenderID
                 };
 
-                context.GetCurrentRoom().SafeForEachMember((m) => m.SendMessage(response));
+                context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
 
             }
         }

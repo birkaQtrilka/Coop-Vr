@@ -28,6 +28,7 @@ namespace Coop_Vr
                 setup.Update();
             })) ;
             SK.Shutdown();
+            setup.StopRunning();
         }
 
         

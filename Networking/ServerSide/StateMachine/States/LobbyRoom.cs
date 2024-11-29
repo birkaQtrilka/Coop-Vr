@@ -17,6 +17,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
+            Console.WriteLine("entered lobby room");
+
         }
 
         public override void OnExit()

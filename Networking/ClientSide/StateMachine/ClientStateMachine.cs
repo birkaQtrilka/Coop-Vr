@@ -38,9 +38,12 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         TcpChanel _server;
 
+        bool _canFixedUpdate = true;
+        public int FixedUpdateDelay = 400;
+
         public ClientStateMachine()
         {
-            
+
             _scenes = new()
             {
                 { typeof(LobbyView), new LobbyView(this)},
@@ -50,17 +53,25 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
             _current = _scenes[typeof(LobbyView)];
             _current.OnEnter();
+            _ = FixedUpdate();
+
+        }
+
+        public void StopRunning()
+        {
+            _canFixedUpdate = false;
         }
 
         public void SetID(int id)
         {
             ID = id;
             MessageSender ??= new(SendMessage, ID);
-
+            Console.WriteLine("Setting ID");
         }
 
         public void SendMessage(IMessage msg)
         {
+            //Console.WriteLine(msg.ToString());
             _server.SendMessage(msg);
         }
 
@@ -92,18 +103,18 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             {
                 Console.WriteLine(e.Message);
             }
-            await Task.Delay(10);
+            await Task.Delay(100);
         }
 
         public void Update()
         {
 
             if (_server != null && _server.HasMessage())
-            { 
+            {
                 _current.ReceiveMessage(_server.GetMessage(), _server);
             }
 
-            
+
             if (_changedScene)
             {
                 _changedScene = false;
@@ -115,9 +126,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public async Task FixedUpdate()
         {
-            while(true)
+            while (_canFixedUpdate)
             {
-                await Task.Delay(200);
+                await Task.Delay(FixedUpdateDelay);
 
                 _current.FixedUpdate();
             }
