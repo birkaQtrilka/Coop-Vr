@@ -8,9 +8,27 @@ using Coop_Vr.Networking.ServerSide;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
+    public class MessageSender
+    {
+        public readonly int ID;
+        readonly Action<IMessage> _message;
+
+        public MessageSender(Action<IMessage> method, int id)
+        {
+            _message = method;
+            ID = id;
+        }
+
+        public void SendMessage(IMessage msg)
+        {
+            _message?.Invoke(msg);
+        }
+    }
+
     public class ClientStateMachine
     {
-        public int ID { get; set; }
+        public static MessageSender MessageSender { get; private set; }
+        public int ID { get; private set; }
 
         readonly Dictionary<Type, Room<ClientStateMachine>> _scenes;
 
@@ -22,6 +40,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public ClientStateMachine()
         {
+            
             _scenes = new()
             {
                 { typeof(LobbyView), new LobbyView(this)},
@@ -31,6 +50,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
             _current = _scenes[typeof(LobbyView)];
             _current.OnEnter();
+        }
+
+        public void SetID(int id)
+        {
+            ID = id;
+            MessageSender ??= new(SendMessage, ID);
+
         }
 
         public void SendMessage(IMessage msg)
@@ -85,6 +111,16 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
 
             _current.Update();
+        }
+
+        public async Task FixedUpdate()
+        {
+            while(true)
+            {
+                await Task.Delay(200);
+
+                _current.FixedUpdate();
+            }
         }
 
         public void ChangeTo<T>()

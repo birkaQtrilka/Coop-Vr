@@ -17,14 +17,8 @@ namespace Coop_Vr.Networking
         public abstract void Deserialize(Packet pPacket);
 
 
-        public virtual void Start()
-        {
-
-        }
-
-        public virtual void Update()
-        {
-
-        }
+        public virtual void Start() { }
+        public virtual void Update() { }
+        public virtual void FixedUpdate() { }
     }
 }

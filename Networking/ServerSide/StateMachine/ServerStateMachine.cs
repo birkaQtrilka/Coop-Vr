@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine
 {
@@ -11,10 +13,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
     {
         readonly Dictionary<Type, Room<ServerStateMachine>> _states;
 
-        Room<ServerStateMachine> _current;
+        public Room<ServerStateMachine> CurrentRoom { get; private set; }
 
         readonly TcpListener _listener;
         bool _changedState;
+        bool _canRunFixedUpdate = true;
+
+        public int FixedUpdateDelay = 400;
 
         public ServerStateMachine()
         {
@@ -29,8 +34,15 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 { typeof(GameRoom), new GameRoom(this)}
             };
 
-            _current = _states[typeof(LobbyRoom)];
-            _current.OnEnter();
+            CurrentRoom = _states[typeof(LobbyRoom)];
+            CurrentRoom.OnEnter();
+            _ = FixedUpdate();
+
+        }
+
+        public void StopRunning()
+        {
+            _canRunFixedUpdate = false ;
         }
 
         void ProcessNewClients()
@@ -44,17 +56,15 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             }
         }
 
-
-
         public void Update()
         {
             ProcessNewClients();
             
-            _current.SafeForEachMember((client) =>
+            CurrentRoom.SafeForEachMember((client) =>
             {
                 if (!client.HasMessage() || _changedState) return;
 
-                _current.ReceiveMessage(client.GetMessage(), client);
+                CurrentRoom.ReceiveMessage(client.GetMessage(), client);
             });
 
             if (_changedState)
@@ -63,23 +73,31 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 return;
             }
 
-            _current.Update();
+            CurrentRoom.Update();
         }
 
+        public async Task FixedUpdate()
+        {
+            while (_canRunFixedUpdate)
+            {
+                await Task.Delay(FixedUpdateDelay);
+
+                CurrentRoom.FixedUpdate();
+            }
+        }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>
         {
             return _states[typeof(T)];
         }
 
-        public Room<ServerStateMachine> GetCurrentRoom() => _current;
 
         public void ChangeTo<T>()
         {
             _changedState = true;
             Room<ServerStateMachine> newState = _states[typeof(T)];
-            _current.OnExit();
-            _current = newState;
+            CurrentRoom.OnExit();
+            CurrentRoom = newState;
             newState.OnEnter();
         }
     }

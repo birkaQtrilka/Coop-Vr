@@ -35,7 +35,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if(message is PlayerJoinResponse join)
             {
                 //set id
-                context.ID = join.ID;
+                context.SetID(join.ID);
                 context.ChangeTo<GameView>();
             }
         }

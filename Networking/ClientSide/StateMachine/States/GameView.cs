@@ -84,7 +84,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             }
 
             UI.WindowEnd();
-            //put 
+            
             foreach (var kv in objects)
             {
                 SkObject obj = kv.Value;
@@ -93,6 +93,17 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                         component.Update();
             }
 
+        }
+
+        public override void FixedUpdate()
+        {
+            foreach (var kv in objects)
+            {
+                SkObject obj = kv.Value;
+                foreach (Component component in obj.Components)
+                    if (component.Enabled)
+                        component.FixedUpdate();
+            }
         }
 
 

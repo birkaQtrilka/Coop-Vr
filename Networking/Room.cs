@@ -15,6 +15,7 @@ namespace Coop_Vr.Networking
 
         public abstract void ReceiveMessage(IMessage message, TcpChanel sender);
         public abstract void Update();
+        public virtual void FixedUpdate() { }
         public abstract void OnEnter();
         public abstract void OnExit();
 
