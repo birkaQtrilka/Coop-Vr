@@ -19,7 +19,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _changedState;
         bool _canRunFixedUpdate = true;
 
-        public int FixedUpdateDelay = 400;
+        public int FixedUpdateDelay = 50;
 
         public ServerStateMachine()
         {

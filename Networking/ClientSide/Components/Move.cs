@@ -33,7 +33,6 @@ namespace Coop_Vr.Networking.ClientSide
         public override void FixedUpdate()
         {
             if (!moving) return;
-            //gameObject.Transform.pose.position += Vec3.Forward * speed;
 
             ClientStateMachine.MessageSender.SendMessage(
                 new ChangePositionRequest()

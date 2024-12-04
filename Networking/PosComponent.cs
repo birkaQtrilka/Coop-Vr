@@ -9,7 +9,7 @@ namespace Coop_Vr.Networking
     {
         public Pose pose;
         Queue<Pose> _interpolationQueue = new();
-        readonly double _time = .3f;
+        readonly double _time = .2f;
         double _currTime = 0;
         Pose _startPose = Pose.Identity;
         bool _isPlaying = false;
@@ -42,7 +42,7 @@ namespace Coop_Vr.Networking
 
         public void QueueInterpolate(Pose p)
         {
-            _interpolationQueue.Enqueue(pose);
+            _interpolationQueue.Enqueue(p);
             _isPlaying = true;
             _startPose = pose;
             _currTime = 0;

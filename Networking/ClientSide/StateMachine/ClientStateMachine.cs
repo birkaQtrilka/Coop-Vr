@@ -39,7 +39,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         TcpChanel _server;
 
         bool _canFixedUpdate = true;
-        public int FixedUpdateDelay = 400;
+        public int FixedUpdateDelay = 80;
 
         public ClientStateMachine()
         {
