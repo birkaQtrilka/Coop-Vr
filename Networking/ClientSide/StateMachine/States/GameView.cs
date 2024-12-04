@@ -31,14 +31,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if (message is CreateObjectResponse createdObject)
             {
                 _objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
-                Console.WriteLine("received object: " + createdObject.NewObj.ID);
+                Log.Do("received object: " + createdObject.NewObj.ID);
                 createdObject.NewObj.Init();
             }
             else if (message is ChangePositionResponse changePosition)
             {
                 if (changePosition.SenderID == context.ID)
                 {
-                    Console.WriteLine("want to change pos but it is sender");
+                    Log.Do("want to change pos but it is sender");
                     return;
                 }
                 _objects[changePosition.ObjectID].Transform.QueueInterpolate(changePosition.PosComponent.pose);
@@ -78,7 +78,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
             if (UI.Button("Add object sphere"))
             {
-                Console.WriteLine("request to add sphere");
+                Log.Do("request to add sphere");
                 context.SendMessage(new CreateObjectRequest()
                 {
                     Components = new List<Component>()

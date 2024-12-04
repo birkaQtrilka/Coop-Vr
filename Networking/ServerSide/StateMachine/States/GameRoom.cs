@@ -18,7 +18,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
-            Console.WriteLine("Entered game room\nMember count: " + MemberCount());
+            Log.Do("Entered game room\nMember count: " + MemberCount());
 
             
         }
@@ -31,7 +31,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectRequest objCreate)
             {
-                Console.WriteLine("create object response");
                 SkObject newObject = new() 
                 {
                     ID = currentId++,
@@ -51,7 +50,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     PosComponent = changePositionRequest.position,
                     SenderID = changePositionRequest.SenderID
                 };
-                Console.Write("Member count: " + MemberCount() + "   ");
+                Log.Do("Member count: " + MemberCount() + "   ");
                 context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
 
             }

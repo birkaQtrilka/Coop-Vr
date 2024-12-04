@@ -23,9 +23,5 @@
     <SKShader Include="Assets\floor.hlsl" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Networking\ClientSide\Components\" />
-  </ItemGroup>
-
 </Project>
 

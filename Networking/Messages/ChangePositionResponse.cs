@@ -1,11 +1,10 @@
 ﻿
-namespace Coop_Vr.Networking.ServerSide
+namespace Coop_Vr.Networking
 {
     public class ChangePositionResponse : IMessage
     {
         public int ObjectID;
         public int SenderID;
-
         public PosComponent PosComponent;
 
         public void Deserialize(Packet pPacket)//find the obj with id and change component data

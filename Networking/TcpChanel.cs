@@ -19,7 +19,7 @@ namespace Coop_Vr.Networking
 
         public void SendMessage(IMessage msg)
         {
-            Console.WriteLine("Sending:" + msg);
+            Log.Do("Sending:" + msg);
             Packet outPacket = new();
             outPacket.Write(msg);
             StreamUtil.Write(_client.GetStream(), outPacket.GetBytes());

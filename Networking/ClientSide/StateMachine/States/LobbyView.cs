@@ -62,7 +62,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         void DrawJoinWindow()
         {
-            UI.WindowBegin("Window", ref windowPose, new Vec2(200, 0) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
+            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 50) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
 
             Vec2 inputSize = V.XY(20 * U.cm, 0);
 
