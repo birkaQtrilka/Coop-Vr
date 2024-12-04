@@ -1,6 +1,7 @@
 ﻿using Coop_Vr.Networking.ClientSide;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
@@ -17,7 +18,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
-            Console.WriteLine("Entered game room");
+            Console.WriteLine("Entered game room\nMember count: " + MemberCount());
+
+            
         }
 
         public override void OnExit()
@@ -48,7 +51,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     PosComponent = changePositionRequest.position,
                     SenderID = changePositionRequest.SenderID
                 };
-
+                Console.Write("Member count: " + MemberCount() + "   ");
                 context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
 
             }

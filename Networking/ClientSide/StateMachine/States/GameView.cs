@@ -9,7 +9,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     public class GameView : Room<ClientStateMachine>
     {
         Pose windowPos = Pose.Identity;
-        Dictionary<int, SkObject> objects = new();
+        readonly Dictionary<int, SkObject> _objects = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -30,7 +30,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         {
             if (message is CreateObjectResponse createdObject)
             {
-                objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
+                _objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
                 Console.WriteLine("received object: " + createdObject.NewObj.ID);
                 createdObject.NewObj.Init();
             }
@@ -41,12 +41,36 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     Console.WriteLine("want to change pos but it is sender");
                     return;
                 }
-                Console.WriteLine("fuck, this is bad");
-                objects[changePosition.ObjectID].Transform.pose = changePosition.PosComponent.pose;
+                _objects[changePosition.ObjectID].Transform.QueueInterpolate(changePosition.PosComponent.pose);
             }
         }
 
         public override void Update()
+        {
+            DrawWindow();
+
+            foreach (var kv in _objects)
+            {
+                SkObject obj = kv.Value;
+                foreach (Component component in obj.Components)
+                    if (component.Enabled)
+                        component.Update();
+            }
+
+        }
+
+        public override void FixedUpdate()
+        {
+            foreach (var kv in _objects)
+            {
+                SkObject obj = kv.Value;
+                foreach (Component component in obj.Components)
+                    if (component.Enabled)
+                        component.FixedUpdate();
+            }
+        }
+
+        void DrawWindow()
         {
             UI.WindowBegin("GameWindow", ref windowPos);
             UI.Label("GameView");
@@ -84,28 +108,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             }
 
             UI.WindowEnd();
-            
-            foreach (var kv in objects)
-            {
-                SkObject obj = kv.Value;
-                foreach (Component component in obj.Components)
-                    if (component.Enabled)
-                        component.Update();
-            }
-
         }
-
-        public override void FixedUpdate()
-        {
-            foreach (var kv in objects)
-            {
-                SkObject obj = kv.Value;
-                foreach (Component component in obj.Components)
-                    if (component.Enabled)
-                        component.FixedUpdate();
-            }
-        }
-
-
     }
 }

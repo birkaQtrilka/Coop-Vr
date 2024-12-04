@@ -17,6 +17,7 @@ namespace Coop_Vr
             {
                 appName = "Coop_Vr",
                 assetsFolder = "Assets",
+                flatscreenWidth = 10
             };
             if (!SK.Initialize(settings))
                 Environment.Exit(1);

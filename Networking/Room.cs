@@ -11,7 +11,7 @@ namespace Coop_Vr.Networking
         }
         protected T context;
 
-        List<TcpChanel> _members = new();
+        readonly List<TcpChanel> _members = new();
 
         public abstract void ReceiveMessage(IMessage message, TcpChanel sender);
         public abstract void Update();
@@ -26,6 +26,11 @@ namespace Coop_Vr.Networking
         public void RemoveMember(TcpChanel member)
         {
             _members.Remove(member);
+        }
+
+        public int MemberCount()
+        {
+            return _members.Count; 
         }
 
         public void SafeForEachMember(Action<TcpChanel> method)

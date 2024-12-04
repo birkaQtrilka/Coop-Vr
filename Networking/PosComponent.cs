@@ -1,10 +1,18 @@
 ﻿using StereoKit;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking
 {
     public class PosComponent : Component
     {
         public Pose pose;
+        Queue<Pose> _interpolationQueue = new();
+        readonly double _time = .3f;
+        double _currTime = 0;
+        Pose _startPose = Pose.Identity;
+        bool _isPlaying = false;
 
         public override void Deserialize(Packet pPacket)
         {
@@ -32,6 +40,28 @@ namespace Coop_Vr.Networking
             pPacket.Write(pose.orientation.w);
         }
 
+        public void QueueInterpolate(Pose p)
+        {
+            _interpolationQueue.Enqueue(pose);
+            _isPlaying = true;
+            _startPose = pose;
+            _currTime = 0;
+        }
 
+        public override void Update()
+        {
+            if (!_isPlaying) return;
+
+            _currTime += Time.Step;
+            if (_currTime < _time) 
+            {
+                pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
+                return;
+            }
+            _startPose = pose;
+            _currTime = 0;
+            _interpolationQueue.Dequeue();
+            _isPlaying = _interpolationQueue.Count > 0;
+        }
     }
 }
