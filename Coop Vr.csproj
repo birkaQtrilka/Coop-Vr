@@ -28,5 +28,11 @@
     <Folder Include="Assets\Documents\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\Documents\sample_data.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
 

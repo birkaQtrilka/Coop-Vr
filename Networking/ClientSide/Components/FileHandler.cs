@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Coop_Vr.Networking.ClientSide.Components
 {
+    
     internal class FileHandler
     {
+        
         public void WriteToFile(string filePath, string content)
         {
             try
