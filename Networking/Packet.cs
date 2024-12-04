@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Coop_Vr.Networking
@@ -38,6 +40,7 @@ namespace Coop_Vr.Networking
         public void Write(int pInt) { writer.Write(pInt); }
         public void Write(string pString) { writer.Write(pString); }
         public void Write(bool pBool) { writer.Write(pBool); }
+        public void Write(float pFloat) { writer.Write(pFloat); }
 
         public void Write(ISerializable pSerializable)
         {
@@ -45,23 +48,52 @@ namespace Coop_Vr.Networking
             pSerializable.Serialize(this);
         }
 
+        public void WriteComponentsList(List<Component> list) 
+        {
+            Write(list.Count);
+            foreach (Component item in list)
+            {
+                Write(item.GetType().AssemblyQualifiedName);
+                item.Serialize(this);
+            }
+        }
+
         /// READ METHODS
 
         public int ReadInt() { return reader.ReadInt32(); }
         public string ReadString() { return reader.ReadString(); }
         public bool ReadBool() { return reader.ReadBoolean(); }
+        public float ReadFloat() { return reader.ReadSingle(); }
+
+        public List<Component> ReadComponentsList()
+        {
+            int size = ReadInt();
+            List<Component> list = new(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                string typeName = ReadString();
+                Type type = Type.GetType(typeName);
+
+                list.Add(Read(type) as Component);
+            }
+
+            return list;
+        }
 
         public ISerializable ReadObject()
         {
             Type type = Type.GetType(ReadString());
-            ISerializable obj = (ISerializable)Activator.CreateInstance(type);
+            ISerializable obj = (ISerializable)Activator.CreateInstance(type);//get class from a list, each class should have an id
             obj.Deserialize(this);
             return obj;
         }
 
-        public T Read<T>() where T : ISerializable
+        ISerializable Read(Type serializable) 
         {
-            return (T)ReadObject();
+            ISerializable obj = Activator.CreateInstance(serializable) as ISerializable;
+            obj.Deserialize(this);
+            return obj;
         }
 
         /**
