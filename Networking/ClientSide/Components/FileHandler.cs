@@ -11,7 +11,7 @@ namespace Coop_Vr.Networking.ClientSide.Components
     {
         public float X { get; set; }
         public float Y { get; set; }
-        public float? Z { get; set; }
+        public float Z { get; set; }
         public Dictionary<string, string> ExtraInfo { get; set; }
 
         // Factory method to create a GraphPoint from a CSV record
@@ -21,9 +21,7 @@ namespace Coop_Vr.Networking.ClientSide.Components
             {
                 X = record.ContainsKey("X") ? float.Parse(record["X"].ToString(), CultureInfo.InvariantCulture) : 0,
                 Y = record.ContainsKey("Y") ? float.Parse(record["Y"].ToString(), CultureInfo.InvariantCulture) : 0,
-                Z = record.ContainsKey("Z") && !string.IsNullOrWhiteSpace(record["Z"].ToString())
-                    ? float.Parse(record["Z"].ToString(), CultureInfo.InvariantCulture)
-                    : (float?)null,
+                Z = record.ContainsKey("Z") ? float.Parse(record["Z"].ToString(), CultureInfo.InvariantCulture) : 0,
                 ExtraInfo = new Dictionary<string, string>()
             };
 
@@ -41,13 +39,21 @@ namespace Coop_Vr.Networking.ClientSide.Components
     public class FileHandler
     {
         public string FilePath { get; set; }
-        public static List<GraphPoint> ReadGraphPointsFromCsv(ref string filePath)
+
+        // Constructor to initialize FilePath
+        public FileHandler(string filePath)
+        {
+            FilePath = filePath;
+        }
+
+        // Method to read graph points from the CSV file
+        public List<GraphPoint> ReadGraphPointsFromCsv()
         {
             var graphPoints = new List<GraphPoint>();
 
             try
             {
-                using var reader = new StreamReader(filePath);
+                using var reader = new StreamReader(FilePath); // Use the FilePath property
                 using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
                 while (csv.Read())
@@ -68,28 +74,24 @@ namespace Coop_Vr.Networking.ClientSide.Components
             return graphPoints;
         }
 
-        public static void ScaleGraphPoints(List<GraphPoint> points)
+        public void ScaleGraphPoints(List<GraphPoint> points, float scale)
         {
             // Extract values for scaling
             var xValues = points.Select(p => p.X).ToList();
             var yValues = points.Select(p => p.Y).ToList();
-            var zValues = points.Where(p => p.Z.HasValue).Select(p => p.Z.Value).ToList();
+            var zValues = points.Select(p => p.Z).ToList();
 
             // Calculate min and max for normalization
             float xMin = xValues.Min(), xMax = xValues.Max();
             float yMin = yValues.Min(), yMax = yValues.Max();
-            float zMin = zValues.Count > 0 ? zValues.Min() : 0;
-            float zMax = zValues.Count > 0 ? zValues.Max() : 1;
+            float zMin = zValues.Min(), zMax = zValues.Max();
 
             // Apply normalization
             foreach (var point in points)
             {
-                point.X = (point.X - xMin) / (xMax - xMin);
-                point.Y = (point.Y - yMin) / (yMax - yMin);
-                if (point.Z.HasValue)
-                {
-                    point.Z = (point.Z.Value - zMin) / (zMax - zMin);
-                }
+                point.X = (point.X - xMin) / (xMax - xMin) * scale;
+                point.Y = (point.Y - yMin) / (yMax - yMin) * scale;
+                point.Z = (point.Z - zMin) / (zMax - zMin) * scale;
             }
         }
 
