@@ -19,11 +19,11 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _changedState;
         bool _canRunFixedUpdate = true;
 
-        public int FixedUpdateDelay = 400;
+        public int FixedUpdateDelay = 50;
 
         public ServerStateMachine()
         {
-            Console.WriteLine("Server started on port 55555");
+            Log.Do("Server started on port 55555");
 
             _listener = new TcpListener(IPAddress.Any, 55555);
             _listener.Start();
@@ -51,7 +51,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             {
                 var newClient = new TcpChanel(_listener.AcceptTcpClient());
                 _states[typeof(LobbyRoom)].AddMember(newClient);
-                Console.WriteLine("Accepted new client.");
+                Log.Do("Accepted new client.");
 
             }
         }

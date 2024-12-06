@@ -28,6 +28,11 @@ namespace Coop_Vr.Networking
             _members.Remove(member);
         }
 
+        public int MemberCount()
+        {
+            return _members.Count; 
+        }
+
         public void SafeForEachMember(Action<TcpChanel> method)
         {
             for (int i = _members.Count - 1; i >= 0; i--)

@@ -14,9 +14,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         bool showHeader = true;
         float slider = 0.5f;
+        //string text = "192.168.144.33";
         string text = "192.168.1.157";
-        Task connectingTask;
-        bool conecedToServer;
+        Task _connectingTask;
+        bool _pressedConectToServer;
+        bool _conectedToServer;
 
         public LobbyView(ClientStateMachine context) : base(context)
         {
@@ -32,7 +34,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if(message is PlayerJoinResponse join)
+            if (message is PlayerJoinResponse join)
             {
                 //set id
                 context.SetID(join.ID);
@@ -42,47 +44,35 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void Update()
         {
-            if (connectingTask != null)
+            if (_connectingTask != null)
             {
-                if (!connectingTask.IsCompleted)
+                _conectedToServer = true;
+                if (_connectingTask.IsCompleted)
                 {
-                    UI.WindowBegin("Text Input", ref windowPose);
-                    UI.Text("Searching for lobby...");
-                    UI.WindowEnd();
-                }
-                else
-                {
-                    connectingTask = null;
+                    _connectingTask = null;
                     context.SendMessage(new PlayerJoinRequest());
                 }
-
-                return;
             }
-            
 
-            //UI.WindowBegin("Text Input", ref windowPose);
-            UI.WindowBegin("Window", ref windowPose, new Vec2(20, 0) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
+            if (_conectedToServer)
+                DrawConnectionWindow();
+            else
+                DrawJoinWindow();
 
-            UI.Text("You can specify whether or not a UI element will hide an active soft keyboard upon interaction.");
-            UI.Button("Hides active soft keyboard");
-            UI.SameLine();
-            UI.PushPreserveKeyboard(true);
-            UI.Button("Doesn't hide");
-            UI.PopPreserveKeyboard();
+        }
 
-            UI.HSeparator();
+        void DrawJoinWindow()
+        {
+            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 0) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
 
-            UI.Text("Different TextContexts will surface different soft keyboards.");
-            Vec2 inputSize = V.XY(20 * U.cm, 0);
-            Vec2 labelSize = V.XY(8 * U.cm, 0);
+            Vec2 inputSize = V.XY(20 * U.cm, 5 * U.cm);
 
-            UI.Label("Normal Text", labelSize); UI.SameLine();
-            UI.Input("TextText", ref text, inputSize, TextContext.Text);
+            UI.Input("Sever IP", ref text, inputSize, TextContext.Text);
 
-            if (UI.Button("Find Lobby") && !conecedToServer)
+            if (UI.Button("Find Lobby") && !_pressedConectToServer)
             {
-                conecedToServer = true;
-                connectingTask = context.ConnectToServerAsync(text);
+                _pressedConectToServer = true;
+                _connectingTask = context.ConnectToServerAsync(text);
             }
 
 
@@ -94,6 +84,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if (UI.Toggle("Show Keyboard", ref openKeyboard))
                 Platform.KeyboardShow(openKeyboard);
 
+            UI.WindowEnd();
+        }
+
+        void DrawConnectionWindow()
+        {
+            UI.WindowBegin("Text Input", ref windowPose);
+            UI.Text("Searching for lobby...");
             UI.WindowEnd();
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Coop_Vr.Networking.ClientSide;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
@@ -17,7 +18,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
-            Console.WriteLine("Entered game room");
+            Log.Do("Entered game room\nMember count: " + MemberCount());
+
+            
         }
 
         public override void OnExit()
@@ -28,7 +31,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectRequest objCreate)
             {
-                Console.WriteLine("create object response");
                 SkObject newObject = new() 
                 {
                     ID = currentId++,
@@ -48,7 +50,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     PosComponent = changePositionRequest.position,
                     SenderID = changePositionRequest.SenderID
                 };
-
+                Log.Do("Member count: " + MemberCount() + "   ");
                 context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
 
             }

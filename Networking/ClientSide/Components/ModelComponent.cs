@@ -1,4 +1,5 @@
 ﻿
+using System;
 using StereoKit;
 
 namespace Coop_Vr.Networking
@@ -9,6 +10,8 @@ namespace Coop_Vr.Networking
         public Mesh mesh;
         public Material material;
         public Bounds bounds;
+
+
         public override void Deserialize(Packet pPacket)
         {
             MeshName = pPacket.ReadString();
@@ -34,7 +37,6 @@ namespace Coop_Vr.Networking
         public override void Update()
         {
             mesh.Draw(material, gameObject.Transform.pose.ToMatrix());
-
         }
     }
 }

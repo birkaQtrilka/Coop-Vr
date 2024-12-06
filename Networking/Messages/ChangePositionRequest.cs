@@ -1,5 +1,5 @@
 ﻿
-namespace Coop_Vr.Networking.ClientSide
+namespace Coop_Vr.Networking
 {
     public class ChangePositionRequest : IMessage
     {
@@ -7,7 +7,7 @@ namespace Coop_Vr.Networking.ClientSide
         public int SenderID;
         public PosComponent position;
 
-        public void Deserialize(Packet pPacket)//find the obj with id and change component data
+        public void Deserialize(Packet pPacket)
         {
             ObjectID = pPacket.ReadInt();
             SenderID = pPacket.ReadInt();

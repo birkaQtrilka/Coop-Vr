@@ -1,5 +1,5 @@
 ﻿
-namespace Coop_Vr.Networking.ServerSide
+namespace Coop_Vr.Networking
 {
     public class PlayerJoinResponse : IMessage
     {

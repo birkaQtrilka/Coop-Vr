@@ -17,13 +17,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
-            Console.WriteLine("entered lobby room");
+            Log.Do("entered lobby room");
 
         }
 
         public override void OnExit()
         {
-            Console.WriteLine("exited lobby room");
+            Log.Do("exited lobby room");
 
         }
 
@@ -32,7 +32,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             if (message is PlayerJoinRequest request)
             {
                 readyPlayers.Add(sender);
-                Console.WriteLine($"PlayerJoinRequest: {sender}");
+                Log.Do($"PlayerJoinRequest: {sender}");
 
                 if (readyPlayers.Count >= MIN_PLAYERS)
                 {

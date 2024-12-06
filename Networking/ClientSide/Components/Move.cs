@@ -1,4 +1,5 @@
-﻿using Coop_Vr.Networking.ClientSide.StateMachine;
+﻿using System;
+using Coop_Vr.Networking.ClientSide.StateMachine;
 using StereoKit;
 
 namespace Coop_Vr.Networking.ClientSide
@@ -33,8 +34,7 @@ namespace Coop_Vr.Networking.ClientSide
         public override void FixedUpdate()
         {
             if (!moving) return;
-            //gameObject.Transform.pose.position += Vec3.Forward * speed;
-
+            Console.WriteLine("moving");
             ClientStateMachine.MessageSender.SendMessage(
                 new ChangePositionRequest()
                 {

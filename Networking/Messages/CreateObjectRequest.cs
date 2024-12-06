@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Coop_Vr.Networking.ClientSide
+namespace Coop_Vr.Networking
 {
     public class CreateObjectRequest : IMessage
     {

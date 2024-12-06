@@ -39,7 +39,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         TcpChanel _server;
 
         bool _canFixedUpdate = true;
-        public int FixedUpdateDelay = 400;
+        public int FixedUpdateDelay = 80;
 
         public ClientStateMachine()
         {
@@ -65,7 +65,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         {
             ID = id;
             MessageSender ??= new(SendMessage, ID);
-            Console.WriteLine("Setting ID");
+            Log.Do("Setting ID");
         }
 
         public void SendMessage(IMessage msg)
@@ -81,11 +81,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 var client = new TcpClient();
                 client.Connect(Ip, 55555);
                 _server = new TcpChanel(client);
-                Console.WriteLine("Connected to server.");
+                Log.Do("Connected to server.");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Do(e.Message);
             }
         }
 
@@ -96,11 +96,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 var client = new TcpClient();
                 await client.ConnectAsync(Ip, 55555);
                 _server = new TcpChanel(client);
-                Console.WriteLine("Connected to server.");
+                Log.Do("Connected to server.");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                Log.Do(e.Message);
             }
             await Task.Delay(100);
         }
