@@ -1,4 +1,5 @@
-﻿using Coop_Vr.Networking.ServerSide;
+﻿using Coop_Vr.Networking.Messages;
+using Coop_Vr.Networking.ServerSide;
 using StereoKit;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,17 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
+            if (context.ID == 0)
+                context.SendMessage(new CreateObjectRequest()
+                {
+                    Components = new List<Component>()
+                    {
+                        new PosComponent() { pose = new Pose(2,0,0)},
+                        new ModelComponent() { MeshName = "sphere"},
+                        new Move()
+                    }
 
+                });
         }
 
         public override void OnExit()
@@ -41,7 +52,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     Log.Do("want to change pos but it is sender");
                     return;
                 }
-                _objects[changePosition.ObjectID].Transform.QueueInterpolate(changePosition.PosComponent.pose);
+                SkObject obj = _objects[changePosition.ObjectID];
+                obj.Transform.pose = changePosition.PosComponent.pose;
+            }
+            else if(message is MoveRequestResponse move)
+            {
+                
+                SkObject obj = _objects[move.ObjectID];
+                obj.GetComponent<Move>().HandleResponese(move);
             }
         }
 
@@ -85,7 +103,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     {
                         new PosComponent() { pose = new Pose(2,0,0)},
                         new ModelComponent() { MeshName = "sphere"},
-                        new Move() { speed = 0.5f}
+                        new Move() 
                     }
 
                 });
@@ -100,7 +118,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     {
                         new PosComponent() { pose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
-                        new Move() { speed =  0.5f}
+                        new Move() 
 
                     }
 

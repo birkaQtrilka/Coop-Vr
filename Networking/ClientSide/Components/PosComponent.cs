@@ -1,15 +1,14 @@
 ﻿using StereoKit;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking
 {
     public class PosComponent : Component
     {
         public Pose pose;
-        Queue<Pose> _interpolationQueue = new();
-        readonly double _time = .2f;
+
+        readonly Queue<Pose> _interpolationQueue = new();
+        readonly double _time = MySettings.FixedUpdateDelay / 1000.0;
         double _currTime = 0;
         Pose _startPose = Pose.Identity;
         bool _isPlaying = false;
@@ -46,6 +45,11 @@ namespace Coop_Vr.Networking
             _isPlaying = true;
             _startPose = pose;
             _currTime = 0;
+        }
+        
+        public bool QueueIsEmpty()
+        {
+            return _interpolationQueue.Count == 0;
         }
 
         public override void Update()

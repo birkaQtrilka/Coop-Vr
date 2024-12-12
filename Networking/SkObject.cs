@@ -37,5 +37,10 @@ namespace Coop_Vr.Networking
         {
             return Components.OfType<T>().First();
         }
+
+        public T GetComponent<T>(int i) where T : Component
+        {
+            return Components[i] as T;
+        }
     }
 }

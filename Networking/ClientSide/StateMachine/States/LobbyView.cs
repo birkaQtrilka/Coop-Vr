@@ -14,7 +14,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         bool showHeader = true;
         float slider = 0.5f;
-        string text = "192.168.144.33";
+        //string text = "192.168.144.33";
+        string text = "192.168.178.75";
         Task _connectingTask;
         bool _pressedConectToServer;
         bool _conectedToServer;
@@ -68,7 +69,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
             UI.Input("Sever IP", ref text, inputSize, TextContext.Text);
 
-            if (UI.Button("Find Lobby") && !_pressedConectToServer)
+            if (/*UI.Button("Find Lobby") &&*/ !_pressedConectToServer)
             {
                 _pressedConectToServer = true;
                 _connectingTask = context.ConnectToServerAsync(text);

@@ -39,7 +39,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         TcpChanel _server;
 
         bool _canFixedUpdate = true;
-        public int FixedUpdateDelay = 80;
 
         public ClientStateMachine()
         {
@@ -128,7 +127,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         {
             while (_canFixedUpdate)
             {
-                await Task.Delay(FixedUpdateDelay);
+                await Task.Delay(MySettings.FixedUpdateDelay);
 
                 _current.FixedUpdate();
             }

@@ -12,13 +12,26 @@ namespace Coop_Vr
     {
         static void Main(string[] args)
         {
-            // Initialize StereoKit
+            //serverSettings
             SKSettings settings = new SKSettings
             {
                 appName = "Coop_Vr",
                 assetsFolder = "Assets",
-                flatscreenWidth = 10
+                disableUnfocusedSleep = true,
+                disableFlatscreenMRSim = true,
+                flatscreenHeight = 1,
+                flatscreenWidth = 1,
+                disableDesktopInputWindow = true,
+                
             };
+            //SKSettings settings = new SKSettings
+            //{
+            //    appName = "Coop_Vr",
+            //    assetsFolder = "Assets",
+            //    disableUnfocusedSleep = true,
+            //    flatscreenHeight = 700,
+            //    flatscreenWidth = 700,
+            //};
             if (!SK.Initialize(settings))
                 Environment.Exit(1);
 
@@ -26,6 +39,8 @@ namespace Coop_Vr
 
             while (SK.Step(() =>
             {
+                if (Input.Key(Key.P) == BtnState.JustActive)
+                    Log.Enabled = !Log.Enabled;
                 setup.Update();
             })) ;
             SK.Shutdown();
