@@ -10,37 +10,27 @@ namespace Coop_Vr
 
     internal class Program
     {
-        
-
         static void Main(string[] args)
         {
-            string filePath = "D:\\saxion\\ACS\\2nd\\Honour\\Coop-Vr\\Assets\\Documents\\sample_data_3.csv";
-
-            // Create a FileHandler instance
-            var fileHandler = new FileHandler(filePath);
-
-            // Read graph points from the CSV file
-            var graphPoints = fileHandler.ReadGraphPointsFromCsv();
-
-            // Scale the graph points
-            fileHandler.ScaleGraphPoints(graphPoints, 100f);
-
-            // Output scaled data
-            foreach (var point in graphPoints)
+            SKSettings SKSettings = new SKSettings
             {
-                Console.WriteLine($"X: {point.X}, Y: {point.Y}, Z: {point.Z}");
-                Console.WriteLine("Extra Info:");
-                foreach (var info in point.ExtraInfo)
-                {
-                    Console.WriteLine($"{info.Key}: {info.Value}");
-                }
-            }
+                appName = "3D Plot Demo",
+                assetsFolder = "Assets",
+                flatscreenWidth = 700
 
-            if (!SK.Initialize(new SKSettings { appName = "3D Plot Demo", assetsFolder = "Assets" }))
+            };
+
+            if (!SK.Initialize(SKSettings))
                 Environment.Exit(1);
 
-            var visualizer = new Graph(graphPoints);
-            visualizer.Render();
+            ServerStateMachine setup = new();
+
+            while (SK.Step(() =>
+            {
+                if (Input.Key(Key.P) == BtnState.JustActive)
+                    Log.Enabled = !Log.Enabled;
+                setup.Update();
+            })) ;
 
             SK.Shutdown();
         }

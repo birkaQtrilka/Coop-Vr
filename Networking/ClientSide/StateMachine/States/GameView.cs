@@ -10,15 +10,17 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     {
         Pose windowPos = Pose.Identity;
         readonly Dictionary<int, SkObject> _objects = new();
+        SkObject _root;
 
         public GameView(ClientStateMachine context) : base(context)
         {
-
+            //the root
+            _root = new SkObject();
+            _objects.Add(-1, _root);
         }
 
         public override void OnEnter()
         {
-
         }
 
         public override void OnExit()
@@ -31,8 +33,12 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if (message is CreateObjectResponse createdObject)
             {
                 _objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
-                Log.Do("received object: " + createdObject.NewObj.ID);
+
+                _objects[createdObject.ParentID].AddChild(createdObject.NewObj);
+
                 createdObject.NewObj.Init();
+
+                Log.Do("received object: " + createdObject.NewObj.ID);
             }
             else if (message is ChangePositionResponse changePosition)
             {
@@ -49,25 +55,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         {
             DrawWindow();
 
-            foreach (var kv in _objects)
-            {
-                SkObject obj = kv.Value;
-                foreach (Component component in obj.Components)
-                    if (component.Enabled)
-                        component.Update();
-            }
+            _root.Update();
 
         }
 
         public override void FixedUpdate()
         {
-            foreach (var kv in _objects)
-            {
-                SkObject obj = kv.Value;
-                foreach (Component component in obj.Components)
-                    if (component.Enabled)
-                        component.FixedUpdate();
-            }
+            _root.FixedUpdate();
         }
 
         void DrawWindow()

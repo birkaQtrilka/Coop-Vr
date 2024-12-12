@@ -107,7 +107,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public void Update()
         {
-
             if (_server != null && _server.HasMessage())
             {
                 _current.ReceiveMessage(_server.GetMessage(), _server);
@@ -128,7 +127,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             while (_canFixedUpdate)
             {
                 await Task.Delay(FixedUpdateDelay);
-
                 _current.FixedUpdate();
             }
         }

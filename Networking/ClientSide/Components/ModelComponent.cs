@@ -10,7 +10,7 @@ namespace Coop_Vr.Networking
         public Mesh mesh;
         public Material material;
         public Bounds bounds;
-
+        public Color color = Color.White; 
 
         public override void Deserialize(Packet pPacket)
         {
@@ -36,7 +36,7 @@ namespace Coop_Vr.Networking
 
         public override void Update()
         {
-            mesh.Draw(material, gameObject.Transform.pose.ToMatrix());
+            mesh.Draw(material, gameObject.Transform.pose.ToMatrix(), color);
         }
     }
 }
