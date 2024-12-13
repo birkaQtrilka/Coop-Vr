@@ -86,7 +86,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             }
             else if (message is MoveRequestResponse move)
             {
-                SkObject obj = objects[move.ObjectID];
+                SkObject obj = _objects[move.ObjectID];
                 obj.Transform.pose = move.Position.pose;
                 var component = obj.GetComponent<Move>();
                 bool hasNoOwner = component.MoverClientID == -1;

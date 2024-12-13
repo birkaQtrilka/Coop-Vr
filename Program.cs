@@ -12,40 +12,67 @@ namespace Coop_Vr
     {
         static void Main(string[] args)
         {
-            //serverSettings
-            SKSettings settings = new SKSettings
+            ServerOrClientSetup(isClient: true);
+        }
+
+        static void ServerOrClientSetup(bool isClient)
+        {
+            if (isClient)
             {
-                appName = "3D Plot Demo",
-                assetsFolder = "Assets",
-                disableUnfocusedSleep = true,
-                disableFlatscreenMRSim = true,
-                flatscreenHeight = 1,
-                flatscreenWidth = 1,
-                disableDesktopInputWindow = true,
-                
-            };
-            //SKSettings settings = new SKSettings
-            //{
-            //    appName = "Coop_Vr",
-            //    assetsFolder = "Assets",
-            //    disableUnfocusedSleep = true,
-            //    flatscreenHeight = 700,
-            //    flatscreenWidth = 700,
-            //};
-            if (!SK.Initialize(settings))
-                Environment.Exit(1);
 
-            ServerStateMachine setup = new();
+                SKSettings settings = new SKSettings
+                {
+                    appName = "Coop_Vr Client",
+                    assetsFolder = "Assets",
+                    disableUnfocusedSleep = true,
+                    flatscreenHeight = 700,
+                    flatscreenWidth = 700,
+                };
+                if (!SK.Initialize(settings))
+                    Environment.Exit(1);
 
-            while (SK.Step(() =>
+                ClientStateMachine setup = new();
+
+                while (SK.Step(() =>
+                {
+                    if (Input.Key(Key.P) == BtnState.JustActive)
+                        Log.Enabled = !Log.Enabled;
+                    setup.Update();
+                })) ;
+
+                SK.Shutdown();
+                setup.StopRunning();
+            }
+            else
             {
-                if (Input.Key(Key.P) == BtnState.JustActive)
-                    Log.Enabled = !Log.Enabled;
-                setup.Update();
-            })) ;
+                //serverSettings
+                SKSettings settings = new SKSettings
+                {
+                    appName = "Server",
+                    assetsFolder = "Assets",
+                    disableUnfocusedSleep = true,
+                    disableFlatscreenMRSim = true,
+                    flatscreenHeight = 10,
+                    flatscreenWidth = 10,
+                    disableDesktopInputWindow = true,
 
-            SK.Shutdown();
-            setup.StopRunning();
+                };
+
+                if (!SK.Initialize(settings))
+                    Environment.Exit(1);
+
+                ServerStateMachine setup = new();
+
+                while (SK.Step(() =>
+                {
+                    if (Input.Key(Key.P) == BtnState.JustActive)
+                        Log.Enabled = !Log.Enabled;
+                    setup.Update();
+                })) ;
+
+                SK.Shutdown();
+                setup.StopRunning();
+            }
         }
     }
 }

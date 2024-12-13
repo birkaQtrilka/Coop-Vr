@@ -19,6 +19,7 @@ namespace Coop_Vr.Networking
         {
             Components = new();
         }
+
         //use when want to place in scene on creation
         public SkObject(int parentID, List<Component> components)
         {
@@ -36,7 +37,7 @@ namespace Coop_Vr.Networking
             }
         }
 
-            public void ForEach(Action<SkObject> method)
+        public void ForEach(Action<SkObject> method)
         {
             for (int i = 0; i < _children.Count; i++)
             {
@@ -99,9 +100,5 @@ namespace Coop_Vr.Networking
             foreach (var child in _children) child.FixedUpdate();
         }
 
-        public T GetComponent<T>(int i) where T : Component
-        {
-            return Components[i] as T;
-        }
     }
 }
