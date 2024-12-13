@@ -10,10 +10,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
         public void SetGraphPoints(List<GraphPoint> p) => _graphPoints = p;
 
-        public override void Start()
+        public void GenerateGraphPoints()
         {
-            Mesh mesh = Mesh.GenerateSphere(1f);
-
             for (int i = 0; i < _graphPoints.Count; i++)
             {
                 //is added automatically to the scene
@@ -27,14 +25,10 @@ namespace Coop_Vr.Networking.ServerSide.Components
                         _graphPoints[i],
                         new ModelComponent()
                         {
-                            MeshName = "m" + i,
-                            material = Material.Default,
-                            mesh = mesh,
-                            color = Color.White,
+                            MeshName = "sphere",
                     }   }
                 );
             }
-            
         }
 
         public override void Update()

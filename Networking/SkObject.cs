@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Coop_Vr.Networking
@@ -30,6 +31,16 @@ namespace Coop_Vr.Networking
                 component.Init(this);
 
         }
+
+        public void ForEach(Action<SkObject> method)
+        {
+            for (int i = 0; i < _children.Count; i++)
+            {
+                method(_children[i]);
+            }
+        }
+
+
 
         public void AddChild(SkObject obj)
         {

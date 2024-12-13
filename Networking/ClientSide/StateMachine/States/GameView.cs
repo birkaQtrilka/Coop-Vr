@@ -21,10 +21,12 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
+            //EventBus<SKObjectAdded>.Event += OnObjectCreated;
         }
 
         public override void OnExit()
         {
+            //EventBus<SKObjectAdded>.Event -= OnObjectCreated;
 
         }
 
@@ -32,12 +34,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         {
             if (message is CreateObjectResponse createdObject)
             {
-                _objects.Add(createdObject.NewObj.ID, createdObject.NewObj);
-
+                //adding it outside the objectCreated callback because 
+                //the object has already set its children in the deserialization loop
                 _objects[createdObject.ParentID].AddChild(createdObject.NewObj);
 
-                createdObject.NewObj.Init();
-
+                OnObjectCreated(createdObject.NewObj);
                 Log.Do("received object: " + createdObject.NewObj.ID);
             }
             else if (message is ChangePositionResponse changePosition)
@@ -49,6 +50,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 }
                 _objects[changePosition.ObjectID].Transform.QueueInterpolate(changePosition.PosComponent.pose);
             }
+        }
+
+        void OnObjectCreated(SkObject obj)
+        {
+            _objects.Add(obj.ID, obj);
+            obj.Init();
+            obj.ForEach(child => OnObjectCreated(child));
         }
 
         public override void Update()

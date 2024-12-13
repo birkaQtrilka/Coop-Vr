@@ -38,12 +38,17 @@ namespace Coop_Vr.Networking
             return null;
         }
 
+        //public bool HasMessage()
+        //{
+        //    if (_client.Available < HEADER_SIZE) return false;
+        //    _client.Client.Receive(sizeHeader, HEADER_SIZE, SocketFlags.Peek);
+        //    int messageSize = BitConverter.ToInt32(sizeHeader, 0);
+        //    return _client.Available >= HEADER_SIZE + messageSize;
+        //}
+
         public bool HasMessage()
         {
-            if (_client.Available < HEADER_SIZE) return false;
-            _client.Client.Receive(sizeHeader, HEADER_SIZE, SocketFlags.Peek);
-            int messageSize = BitConverter.ToInt32(sizeHeader, 0);
-            return _client.Available >= HEADER_SIZE + messageSize;
+            return _client.Available >= HEADER_SIZE;
         }
     }
 }

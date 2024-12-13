@@ -43,6 +43,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 parentID: -1,
                 new List<Component>() { new PosComponent(), graph}
             );
+
+            graph.GenerateGraphPoints();
+
             var response = new CreateObjectResponse() { NewObj = graphHolder, ParentID = -1};
             Task.Run(async () =>
             {

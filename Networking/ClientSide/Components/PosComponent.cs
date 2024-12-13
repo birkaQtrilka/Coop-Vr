@@ -8,7 +8,9 @@ namespace Coop_Vr.Networking
     public class PosComponent : Component
     {
         public Pose pose;
-        Queue<Pose> _interpolationQueue = new();
+        public Vec3 scale = new(1, 1, 1);
+
+        readonly Queue<Pose> _interpolationQueue = new();
         readonly double _time = .2f;
         double _currTime = 0;
         Pose _startPose = Pose.Identity;
@@ -27,6 +29,11 @@ namespace Coop_Vr.Networking
                     pPacket.ReadFloat()
                     )
                 );
+            scale = new(
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat()
+                );
         }
 
         public override void Serialize(Packet pPacket)
@@ -34,10 +41,15 @@ namespace Coop_Vr.Networking
             pPacket.Write(pose.position.x);
             pPacket.Write(pose.position.y);
             pPacket.Write(pose.position.z);
+
             pPacket.Write(pose.orientation.x);
             pPacket.Write(pose.orientation.y);
             pPacket.Write(pose.orientation.z);
             pPacket.Write(pose.orientation.w);
+
+            pPacket.Write(scale.x);
+            pPacket.Write(scale.y);
+            pPacket.Write(scale.z);
         }
 
         public void QueueInterpolate(Pose p)
@@ -53,7 +65,7 @@ namespace Coop_Vr.Networking
             if (!_isPlaying) return;
 
             _currTime += Time.Step;
-            if (_currTime < _time) 
+            if (_currTime < _time)
             {
                 pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
                 return;
@@ -65,3 +77,4 @@ namespace Coop_Vr.Networking
         }
     }
 }
+

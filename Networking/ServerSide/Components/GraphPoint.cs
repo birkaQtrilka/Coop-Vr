@@ -6,6 +6,8 @@ using System.Linq;
 
 namespace Coop_Vr.Networking.ServerSide.Components
 {
+    //bad part about it is that it has duplicate memory (XYZ here  and position in PosComponent)
+    //can be optimized by storing position data in posComponent
     public class GraphPoint : Component
     {
         public float X { get; set; }
@@ -65,6 +67,12 @@ namespace Coop_Vr.Networking.ServerSide.Components
             Vec3 coordPosition = spherePose.pose.position + new Vec3(0, -scale - 0.01f, 0);
             string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
             Text.Add(coordinates, Matrix.TRS(coordPosition, Quat.FromAngles(0, 180, 0), 5f), TextAlign.BottomCenter);
+
+            //changing data
+            X = spherePose.pose.position.x;
+            Y = spherePose.pose.position.y;
+            Z = spherePose.pose.position.z;
+            spherePose.scale = new(scale, scale, scale / 2);
         }
 
         public override void Serialize(Packet pPacket)
