@@ -19,8 +19,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _changedState;
         bool _canRunFixedUpdate = true;
 
-        public int FixedUpdateDelay = 50;
-
         public ServerStateMachine()
         {
             Log.Do("Server started on port 55555");
@@ -80,7 +78,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         {
             while (_canRunFixedUpdate)
             {
-                await Task.Delay(FixedUpdateDelay);
+                await Task.Delay(MySettings.FixedUpdateDelay);
 
                 CurrentRoom.FixedUpdate();
             }

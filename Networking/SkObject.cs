@@ -1,4 +1,6 @@
 ﻿using System;
+
+using StereoKit;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +11,7 @@ namespace Coop_Vr.Networking
         public int ID;
         public List<Component> Components;
         readonly List<SkObject> _children = new();
-
+        
         public PosComponent Transform { get; private set; }
 
         //use when just want to pass as serialized data
@@ -28,11 +30,13 @@ namespace Coop_Vr.Networking
         {
             Transform = GetComponent<PosComponent>();
             foreach (Component component in Components)
+            {
                 component.Init(this);
 
+            }
         }
 
-        public void ForEach(Action<SkObject> method)
+            public void ForEach(Action<SkObject> method)
         {
             for (int i = 0; i < _children.Count; i++)
             {
@@ -93,6 +97,11 @@ namespace Coop_Vr.Networking
             foreach (var component in Components) if (component.Enabled) component.FixedUpdate();
 
             foreach (var child in _children) child.FixedUpdate();
+        }
+
+        public T GetComponent<T>(int i) where T : Component
+        {
+            return Components[i] as T;
         }
     }
 }

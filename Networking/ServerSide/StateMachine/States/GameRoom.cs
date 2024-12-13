@@ -1,8 +1,10 @@
 ﻿using Coop_Vr.Networking.ClientSide;
 using Coop_Vr.Networking.ServerSide.Components;
+using Coop_Vr.Networking.Messages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,7 +29,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             EventBus<SKObjectAdded>.Event += OnObjectCreated;
 
             string filePath = "Assets\\Documents\\sample_data_3.csv";
-
+            
             // Create a FileHandler instance
             var fileHandler = new FileHandler(filePath);
 
@@ -80,6 +82,33 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 };
                 Log.Do("Member count: " + MemberCount() + "   ");
                 context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
+
+            }
+            else if (message is MoveRequestResponse move)
+            {
+                SkObject obj = objects[move.ObjectID];
+                obj.Transform.pose = move.Position.pose;
+                var component = obj.GetComponent<Move>();
+                bool hasNoOwner = component.MoverClientID == -1;
+
+                //will probably bug out if owner leaves the game
+                if (hasNoOwner || move.SenderID == component.MoverClientID)//is same Owner
+                {
+                    if(move.stopped)//terminating ownership
+                        component.MoverClientID = -1;
+                    else//claiming / continuing ownership 
+                        component.MoverClientID = move.SenderID;
+
+                    var response = new MoveRequestResponse()
+                    {
+                        ObjectID = move.ObjectID,
+                        SenderID = move.SenderID,
+                        Position = move.Position,
+                        stopped = move.stopped,
+                    };
+                    Log.Do("Member count: " + MemberCount() + "   ");
+                    context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
+                } 
 
             }
         }

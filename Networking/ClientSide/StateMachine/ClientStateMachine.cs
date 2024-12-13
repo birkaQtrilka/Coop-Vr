@@ -39,7 +39,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         TcpChanel _server;
 
         bool _canFixedUpdate = true;
-        public int FixedUpdateDelay = 80;
 
         public ClientStateMachine()
         {
@@ -49,6 +48,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 { typeof(LobbyView), new LobbyView(this)},
                 { typeof(GameView), new GameView(this)}
             };
+
 
             _current = _scenes[typeof(LobbyView)];
             _current.OnEnter();
@@ -107,6 +107,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public void Update()
         {
+
             if (_server != null && _server.HasMessage())
             {
                 _current.ReceiveMessage(_server.GetMessage(), _server);
@@ -126,7 +127,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         {
             while (_canFixedUpdate)
             {
-                await Task.Delay(FixedUpdateDelay);
+                await Task.Delay(MySettings.FixedUpdateDelay);
+
                 _current.FixedUpdate();
             }
         }

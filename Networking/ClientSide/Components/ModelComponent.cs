@@ -35,7 +35,7 @@ namespace Coop_Vr.Networking
                     _cachedMeshes.Add(MeshName, Mesh.GenerateSphere(1.0f));
 
                 mesh = _cachedMeshes[MeshName];
-
+            
             }
             else if (MeshName == "cube")
             {

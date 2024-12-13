@@ -15,6 +15,7 @@ namespace Coop_Vr.Networking
         public TcpChanel(TcpClient client)
         {
             _client = client;
+            _client.NoDelay = true;
         }
 
         public void SendMessage(IMessage msg)

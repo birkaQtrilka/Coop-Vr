@@ -10,8 +10,9 @@ namespace Coop_Vr.Networking
             this.context = context;
         }
         protected T context;
+
+        readonly List<TcpChanel> _members = new();
         public T Context => context;
-        List<TcpChanel> _members = new();
 
         public abstract void ReceiveMessage(IMessage message, TcpChanel sender);
         public abstract void Update();

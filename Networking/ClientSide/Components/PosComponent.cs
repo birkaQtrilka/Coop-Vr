@@ -11,7 +11,7 @@ namespace Coop_Vr.Networking
         public Vec3 scale = new(1, 1, 1);
 
         readonly Queue<Pose> _interpolationQueue = new();
-        readonly double _time = .2f;
+        readonly double _time = MySettings.FixedUpdateDelay / 1000.0;
         double _currTime = 0;
         Pose _startPose = Pose.Identity;
         bool _isPlaying = false;
@@ -59,13 +59,18 @@ namespace Coop_Vr.Networking
             _startPose = pose;
             _currTime = 0;
         }
+        
+        public bool QueueIsEmpty()
+        {
+            return _interpolationQueue.Count == 0;
+        }
 
         public override void Update()
         {
             if (!_isPlaying) return;
 
             _currTime += Time.Step;
-            if (_currTime < _time)
+            if (_currTime < _time) 
             {
                 pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
                 return;

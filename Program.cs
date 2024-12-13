@@ -12,15 +12,27 @@ namespace Coop_Vr
     {
         static void Main(string[] args)
         {
-            SKSettings SKSettings = new SKSettings
+            //serverSettings
+            SKSettings settings = new SKSettings
             {
                 appName = "3D Plot Demo",
                 assetsFolder = "Assets",
-                flatscreenWidth = 700
-
+                disableUnfocusedSleep = true,
+                disableFlatscreenMRSim = true,
+                flatscreenHeight = 1,
+                flatscreenWidth = 1,
+                disableDesktopInputWindow = true,
+                
             };
-
-            if (!SK.Initialize(SKSettings))
+            //SKSettings settings = new SKSettings
+            //{
+            //    appName = "Coop_Vr",
+            //    assetsFolder = "Assets",
+            //    disableUnfocusedSleep = true,
+            //    flatscreenHeight = 700,
+            //    flatscreenWidth = 700,
+            //};
+            if (!SK.Initialize(settings))
                 Environment.Exit(1);
 
             ServerStateMachine setup = new();
@@ -33,6 +45,7 @@ namespace Coop_Vr
             })) ;
 
             SK.Shutdown();
+            setup.StopRunning();
         }
     }
 }

@@ -15,7 +15,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         bool showHeader = true;
         float slider = 0.5f;
         //string text = "192.168.144.33";
-        string text = "192.168.1.157";
+        //string text = "192.168.1.157";
+        string text = "192.168.178.75";
         Task _connectingTask;
         bool _pressedConectToServer;
         bool _conectedToServer;
@@ -63,13 +64,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         void DrawJoinWindow()
         {
-            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 0) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
+            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 50) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
 
-            Vec2 inputSize = V.XY(20 * U.cm, 5 * U.cm);
+            Vec2 inputSize = V.XY(20 * U.cm, 0);
 
             UI.Input("Sever IP", ref text, inputSize, TextContext.Text);
 
-            if (UI.Button("Find Lobby") && !_pressedConectToServer)
+            if (/*UI.Button("Find Lobby") &&*/ !_pressedConectToServer)
             {
                 _pressedConectToServer = true;
                 _connectingTask = context.ConnectToServerAsync(text);
