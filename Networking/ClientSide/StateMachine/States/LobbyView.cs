@@ -14,9 +14,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         bool showHeader = true;
         float slider = 0.5f;
+        //baller hotspot
         //string text = "192.168.144.33";
+        //stefan house
+        //string text = "192.168.178.75";
+        //vr box
         //string text = "192.168.1.157";
-        string text = "192.168.178.75";
+        string text = "localhost";
+
         Task _connectingTask;
         bool _pressedConectToServer;
         bool _conectedToServer;

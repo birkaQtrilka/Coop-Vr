@@ -6,8 +6,9 @@ namespace Coop_Vr.Networking.ClientSide
 {
     public class Move : Component
     {
-        private ModelComponent modelComponent;
-        public int MoverClientID = -1;
+        public int MoverClientID { get; set; } = -1;
+
+        ModelComponent modelComponent;
         bool isMoving;
         bool stoppedMoving;
 
@@ -40,33 +41,27 @@ namespace Coop_Vr.Networking.ClientSide
             if (isMoving)
             {
                 stoppedMoving = false;
-                ClientStateMachine.MessageSender.SendMessage
-                (
-                   new MoveRequestResponse()
-                   {
-                       ObjectID = gameObject.ID,
-                       Position = gameObject.Transform,
-                       SenderID = ClientStateMachine.MessageSender.ID,
-                       stopped = false,
-                   }
-                );
-                return;
+                SendMoveRequest(stoppedMoving);
             }
-
-            if (!stoppedMoving && gameObject.Transform.QueueIsEmpty())
+            else if (!stoppedMoving && gameObject.Transform.QueueIsEmpty())
             {
                 stoppedMoving = true;
-                ClientStateMachine.MessageSender.SendMessage
+                SendMoveRequest(stoppedMoving);
+            }
+        }
+
+        void SendMoveRequest(bool stoppedMoving)
+        {
+            ClientStateMachine.MessageSender.SendMessage
                 (
                     new MoveRequestResponse()
                     {
                         ObjectID = gameObject.ID,
                         Position = gameObject.Transform,
                         SenderID = ClientStateMachine.MessageSender.ID,
-                        stopped = true,
+                        stopped = stoppedMoving,
                     }
                 );
-            }
         }
 
         public void HandleResponese(MoveRequestResponse move)
@@ -84,7 +79,7 @@ namespace Coop_Vr.Networking.ClientSide
 
                 return;
             }
-
+            //make a clock that calculates the refresh rate
             gameObject.Transform.QueueInterpolate(move.Position.pose);
             MoverClientID = move.SenderID;
         }

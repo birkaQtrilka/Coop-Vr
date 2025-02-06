@@ -1,6 +1,7 @@
 ﻿using Coop_Vr.Networking.Messages;
 using StereoKit;
 using System.Collections.Generic;
+using Coop_Vr.Networking.ServerSide;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {
@@ -9,6 +10,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         Pose windowPos = Pose.Identity;
         readonly Dictionary<int, SkObject> _objects = new();
         readonly SkObject _root;
+
+        AnchorManager _anchorManager = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -19,8 +22,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
+            _anchorManager.Initialize();
 
         }
+
 
         public override void OnExit()
         {
@@ -65,6 +70,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void Update()
         {
+            _anchorManager.Step();
+
             DrawWindow();
 
             _root.Update();

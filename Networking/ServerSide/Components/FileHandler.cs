@@ -46,6 +46,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
             return graphPoints;
         }
 
+        //
+
         public void ScaleGraphPoints(List<GraphPoint> points, float scale)
         {
             // Extract values for scaling

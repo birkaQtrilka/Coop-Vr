@@ -2,14 +2,15 @@ using Coop_Vr.Networking.ClientSide.StateMachine;
 using Coop_Vr.Networking.ServerSide.StateMachine;
 using StereoKit;
 using System;
-using System.Collections.Generic;
-using Coop_Vr.Networking.ServerSide.Components;
+using StereoKit.Framework;
 
 namespace Coop_Vr
 {
 
     internal class Program
     {
+        public static PassthroughFBExt _passthroughFBExt;
+
         static void Main(string[] args)
         {
             ServerOrClientSetup(isClient: true);
@@ -19,6 +20,7 @@ namespace Coop_Vr
         {
             if (isClient)
             {
+                _passthroughFBExt = SK.AddStepper( new PassthroughFBExt());
 
                 SKSettings settings = new SKSettings
                 {
@@ -27,7 +29,10 @@ namespace Coop_Vr
                     disableUnfocusedSleep = true,
                     flatscreenHeight = 700,
                     flatscreenWidth = 700,
+                    mode = AppMode.XR
+
                 };
+
                 if (!SK.Initialize(settings))
                     Environment.Exit(1);
 
@@ -35,6 +40,9 @@ namespace Coop_Vr
 
                 while (SK.Step(() =>
                 {
+                    if(!_passthroughFBExt.EnabledPassthrough)
+                        _passthroughFBExt.EnabledPassthrough = true;
+
                     if (Input.Key(Key.P) == BtnState.JustActive)
                         Log.Enabled = !Log.Enabled;
                     setup.Update();

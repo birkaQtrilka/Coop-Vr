@@ -43,36 +43,41 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public override void Start()
         {
             model = gameObject.GetComponent<ModelComponent>();
-            gameObject.Transform.pose.position = new Vec3 (X, Y, Z);
+
+            gameObject.Transform.pose = new Pose(new Vec3(X, Y, Z));
+            gameObject.Transform.scale = new Vec3(.1f);
         }
 
         private float CalculateScale()
         {
-            return Math.Clamp(Y / 10.0f, 0.5f, 2.0f);
+            return Math.Clamp(Y / 50.0f, 0.1f, 2.0f);
         }
 
         //render code
         public override void Update()
         {
-            float scale = CalculateScale();
+            //float scale = CalculateScale();
+
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
-            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(Vec3.One * scale));
+            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
 
-            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, scale + 0.01f, 0);
+            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f,0) ;
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
-            Text.Add(label, Matrix.TRS(labelPosition, Quat.FromAngles(0, 180, 0), 10f), TextAlign.TopCenter);
+            Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = spherePose.pose.position + new Vec3(0, -scale - 0.01f, 0);
+            Vec3 coordPosition = spherePose.pose.position + new Vec3(0,  -1f, 0);
             string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
-            Text.Add(coordinates, Matrix.TRS(coordPosition, Quat.FromAngles(0, 180, 0), 5f), TextAlign.BottomCenter);
+            Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 
             //changing data
-            X = spherePose.pose.position.x;
-            Y = spherePose.pose.position.y;
-            Z = spherePose.pose.position.z;
-            spherePose.scale = new(scale, scale, scale / 2);
+
+            Vec3 modelSpace = spherePose.pose.position;
+            //modelMatrix.Translation = modelSpace;
+            X = modelSpace.x;
+            Y = modelSpace.y;
+            Z = modelSpace.z;
         }
 
         public override void Serialize(Packet pPacket)
