@@ -1,5 +1,4 @@
-﻿using System;
-using Coop_Vr.Networking.ClientSide.StateMachine;
+﻿using Coop_Vr.Networking.ClientSide.StateMachine;
 using Coop_Vr.Networking.Messages;
 using StereoKit;
 
@@ -7,12 +6,10 @@ namespace Coop_Vr.Networking.ClientSide
 {
     public class Move : Component
     {
-        public float speed;
         private ModelComponent modelComponent;
         public int MoverClientID = -1;
         bool isMoving;
         bool stoppedMoving;
-        Material mat;
 
         public override void Serialize(Packet pPacket)
         {
@@ -27,19 +24,12 @@ namespace Coop_Vr.Networking.ClientSide
         public override void Start()
         {
             modelComponent = gameObject.GetComponent<ModelComponent>();
-            mat = Material.Default.Copy();
-            modelComponent.material = mat;
         }
 
         public override void Update()
         {
             if (MoverClientID != -1 && ClientStateMachine.MessageSender.ID != MoverClientID)
-            {
-                mat[MatParamName.ColorTint] = new Color(1, 0, 0);
                 return;
-            }
-            else
-                mat[MatParamName.ColorTint] = new Color(0, 1, 0);
 
             isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
 

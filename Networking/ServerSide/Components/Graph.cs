@@ -1,4 +1,5 @@
-﻿using StereoKit;
+﻿using Coop_Vr.Networking.ClientSide;
+using StereoKit;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
 {
     public class Graph : Component
     {
-        List<GraphPoint> _graphPoints;
+        List<GraphPoint> _graphPoints = new();
 
         public void SetGraphPoints(List<GraphPoint> p) => _graphPoints = p;
 
@@ -26,7 +27,9 @@ namespace Coop_Vr.Networking.ServerSide.Components
                         new ModelComponent()
                         {
                             MeshName = "sphere",
-                    }   }
+                        },
+                        new Move()
+                    }
                 );
             }
         }
@@ -36,7 +39,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             DrawAxes(10);
         }
 
-        void DrawAxes(float axisLimit)
+        static void DrawAxes(float axisLimit)
         {
             Lines.Add(Vec3.Zero, new Vec3(axisLimit, 0, 0), Color.White, 0.01f); // X-axis
             Text.Add("X", Matrix.TRS(new Vec3(axisLimit, 0, 0), Quat.Identity, 5f), TextAlign.BottomCenter);

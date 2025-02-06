@@ -1,9 +1,6 @@
 ﻿using Coop_Vr.Networking.Messages;
-using Coop_Vr.Networking.ServerSide;
 using StereoKit;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {
@@ -11,7 +8,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     {
         Pose windowPos = Pose.Identity;
         readonly Dictionary<int, SkObject> _objects = new();
-        SkObject _root;
+        readonly SkObject _root;
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -22,17 +19,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
-            if (context.ID == 0)
-                context.SendMessage(new CreateObjectRequest()
-                {
-                    Components = new List<Component>()
-                    {
-                        new PosComponent() { pose = new Pose(2,0,0)},
-                        new ModelComponent() { MeshName = "sphere"},
-                        new Move()
-                    }
 
-                });
         }
 
         public override void OnExit()
@@ -61,9 +48,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 SkObject obj = _objects[changePosition.ObjectID];
                 obj.Transform.pose = changePosition.PosComponent.pose;
             }
-            else if(message is MoveRequestResponse move)
+            else if (message is MoveRequestResponse move)
             {
-                
+
                 SkObject obj = _objects[move.ObjectID];
                 obj.GetComponent<Move>().HandleResponese(move);
             }
@@ -104,7 +91,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     {
                         new PosComponent() { pose = new Pose(2,0,0)},
                         new ModelComponent() { MeshName = "sphere"},
-                        new Move() 
+                        new Move()
                     }
 
                 });
@@ -119,7 +106,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     {
                         new PosComponent() { pose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
-                        new Move() 
+                        new Move()
 
                     }
 
