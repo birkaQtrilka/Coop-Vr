@@ -13,7 +13,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
-        public Dictionary<string, string> ExtraInfo { get; set; }
+        public Dictionary<string, string> ExtraInfo { get; set; } = new Dictionary<string, string>();
 
         //not serializable
         public ModelComponent model;
@@ -26,7 +26,6 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 X = record.ContainsKey("X") ? float.Parse(record["X"].ToString(), CultureInfo.InvariantCulture) : 0,
                 Y = record.ContainsKey("Y") ? float.Parse(record["Y"].ToString(), CultureInfo.InvariantCulture) : 0,
                 Z = record.ContainsKey("Z") ? float.Parse(record["Z"].ToString(), CultureInfo.InvariantCulture) : 0,
-                ExtraInfo = new Dictionary<string, string>()
             };
 
             foreach (var key in record.Keys)
@@ -63,11 +62,11 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
             UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
 
-            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f,0) ;
+            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y,0) ;
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = spherePose.pose.position + new Vec3(0,  -1f, 0);
+            Vec3 coordPosition = spherePose.pose.position + new Vec3(0,  -1f * spherePose.scale.y, 0);
             string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 

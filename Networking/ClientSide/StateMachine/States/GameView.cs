@@ -11,7 +11,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         readonly Dictionary<int, SkObject> _objects = new();
         readonly SkObject _root;
 
-        AnchorManager _anchorManager = new();
+        //AnchorManager _anchorManager = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -22,7 +22,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
-            _anchorManager.Initialize();
+            //_anchorManager.Initialize();
 
         }
 
@@ -70,7 +70,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void Update()
         {
-            _anchorManager.Step();
+            //_anchorManager.Step();
 
             DrawWindow();
 
