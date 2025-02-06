@@ -1,9 +1,6 @@
 ﻿using Coop_Vr.Networking.Messages;
-using Coop_Vr.Networking.ServerSide;
 using StereoKit;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {
@@ -22,17 +19,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
-            if (context.ID == 0)
-                context.SendMessage(new CreateObjectRequest()
-                {
-                    Components = new List<Component>()
-                    {
-                        new PosComponent() { pose = new Pose(2,0,0)},
-                        new ModelComponent() { MeshName = "sphere"},
-                        new Move()
-                    }
-
-                });
+            
         }
 
         public override void OnExit()

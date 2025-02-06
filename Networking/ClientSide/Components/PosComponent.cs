@@ -16,6 +16,40 @@ namespace Coop_Vr.Networking
         Pose _startPose = Pose.Identity;
         bool _isPlaying = false;
 
+        public void OnHierarchyChange()
+        {
+
+        }
+
+        public void QueueInterpolate(Pose p)
+        {
+            _interpolationQueue.Enqueue(p);
+            _isPlaying = true;
+            _startPose = pose;
+            _currTime = 0;
+        }
+        
+        public bool QueueIsEmpty()
+        {
+            return _interpolationQueue.Count == 0;
+        }
+
+        public override void Update()
+        {
+            if (!_isPlaying) return;
+
+            _currTime += Time.Step;
+            if (_currTime < _time) 
+            {
+                pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
+                return;
+            }
+            _startPose = pose;
+            _currTime = 0;
+            _interpolationQueue.Dequeue();
+            _isPlaying = _interpolationQueue.Count > 0;
+        }
+
         public override void Deserialize(Packet pPacket)
         {
             pose = new(
@@ -50,35 +84,6 @@ namespace Coop_Vr.Networking
             pPacket.Write(scale.x);
             pPacket.Write(scale.y);
             pPacket.Write(scale.z);
-        }
-
-        public void QueueInterpolate(Pose p)
-        {
-            _interpolationQueue.Enqueue(p);
-            _isPlaying = true;
-            _startPose = pose;
-            _currTime = 0;
-        }
-        
-        public bool QueueIsEmpty()
-        {
-            return _interpolationQueue.Count == 0;
-        }
-
-        public override void Update()
-        {
-            if (!_isPlaying) return;
-
-            _currTime += Time.Step;
-            if (_currTime < _time) 
-            {
-                pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
-                return;
-            }
-            _startPose = pose;
-            _currTime = 0;
-            _interpolationQueue.Dequeue();
-            _isPlaying = _interpolationQueue.Count > 0;
         }
     }
 }
