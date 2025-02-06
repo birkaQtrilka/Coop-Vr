@@ -1,4 +1,5 @@
-﻿using StereoKit;
+﻿using Coop_Vr.Networking.ClientSide;
+using StereoKit;
 using System;
 using System.Collections.Generic;
 
@@ -26,7 +27,10 @@ namespace Coop_Vr.Networking.ServerSide.Components
                         new ModelComponent()
                         {
                             MeshName = "sphere",
-                    }   }
+                        },
+                        new Move()
+                    }
+
                 );
             }
         }
