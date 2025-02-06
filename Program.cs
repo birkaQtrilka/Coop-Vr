@@ -45,34 +45,34 @@ namespace Coop_Vr
             }
             else
             {
-                //serverSettings
-                SKSettings settings = new SKSettings
-                {
+            //serverSettings
+            SKSettings settings = new SKSettings
+            {
                     appName = "Server",
-                    assetsFolder = "Assets",
-                    disableUnfocusedSleep = true,
-                    disableFlatscreenMRSim = true,
+                assetsFolder = "Assets",
+                disableUnfocusedSleep = true,
+                disableFlatscreenMRSim = true,
                     flatscreenHeight = 10,
                     flatscreenWidth = 10,
-                    disableDesktopInputWindow = true,
+                disableDesktopInputWindow = true,
+                
+            };
 
-                };
+            if (!SK.Initialize(settings))
+                Environment.Exit(1);
 
-                if (!SK.Initialize(settings))
-                    Environment.Exit(1);
+            ServerStateMachine setup = new();
 
-                ServerStateMachine setup = new();
+            while (SK.Step(() =>
+            {
+                if (Input.Key(Key.P) == BtnState.JustActive)
+                    Log.Enabled = !Log.Enabled;
+                setup.Update();
+            })) ;
 
-                while (SK.Step(() =>
-                {
-                    if (Input.Key(Key.P) == BtnState.JustActive)
-                        Log.Enabled = !Log.Enabled;
-                    setup.Update();
-                })) ;
-
-                SK.Shutdown();
-                setup.StopRunning();
-            }
+            SK.Shutdown();
+            setup.StopRunning();
         }
     }
+}
 }
