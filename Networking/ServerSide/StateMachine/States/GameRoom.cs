@@ -1,7 +1,12 @@
 ﻿using Coop_Vr.Networking.ClientSide;
+using Coop_Vr.Networking.ServerSide.Components;
 using Coop_Vr.Networking.Messages;
-using Coop_Vr.Networking.Scenes;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
@@ -11,38 +16,55 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         Dictionary<int, SkObject> _objects = new();
         SkObject _root;
-        Scene _currentScene;
 
         public GameRoom(ServerStateMachine context) : base(context)
         {
-            _currentScene = new AnchorScene(this);
             _root = new SkObject() { ID = -1 };
             _objects.Add(-1, _root);
-
-            
         }
 
         public override void OnEnter()
         {
-            EventBus<SKObjectCreated>.Event += OnObjectCreated;
-            EventBus<SKObjectAdded>.Event += OnObjectAdded;
-            EventBus<SKObjectRemoved>.Event += OnObjectRemoved;
-            EventBus<SKObjectGetter>.Event += ObjectGet;
-            _currentScene.OnStart();
+            Log.Do("Entered game room\nMember count: " + MemberCount());
+            EventBus<SKObjectAdded>.Event += OnObjectCreated;
+
+            string filePath = "Assets\\Documents\\sample_data_3.csv";
+            
+            // Create a FileHandler instance
+            var fileHandler = new FileHandler(filePath);
+
+            // Read graph points from the CSV file
+            var graphPoints = fileHandler.ReadGraphPointsFromCsv();
+
+            // Scale the graph points
+            fileHandler.ScaleGraphPoints(graphPoints, 100f);
+            var graph = new Graph();
+            graph.SetGraphPoints(graphPoints);
+
+            SkObject graphHolder = new(
+                parentID: -1,
+                new List<Component>() { new PosComponent(), graph}
+            );
+
+            graph.GenerateGraphPoints();
+
+            var response = new CreateObjectResponse() { NewObj = graphHolder, ParentID = -1};
+            Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                SafeForEachMember((m) => m.SendMessage(response));
+
+            });
         }
 
         public override void OnExit()
         {
-            _currentScene.OnStop();
-            EventBus<SKObjectCreated>.Event -= OnObjectCreated;
-            EventBus<SKObjectAdded>.Event -= OnObjectAdded;
-            EventBus<SKObjectRemoved>.Event -= OnObjectRemoved;
-            EventBus<SKObjectGetter>.Event -= ObjectGet;
+            EventBus<SKObjectAdded>.Event -= OnObjectCreated;
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if (message is CreateObjectRequest objCreate)
+            if (message is CreateObjectRequest objCreate)//SHOULD HAVE PARENT ID
             {
                 SkObject newObject = new(objCreate.ParentID, objCreate.Components); 
                 
@@ -64,7 +86,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             }
             else if (message is MoveRequestResponse move)
             {
-                SkObject obj = _objects[move.ObjectID];
+                SkObject obj = objects[move.ObjectID];
                 obj.Transform.pose = move.Position.pose;
                 var component = obj.GetComponent<Move>();
                 bool hasNoOwner = component.MoverClientID == -1;
@@ -91,31 +113,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             }
         }
 
-        void OnObjectCreated(SKObjectCreated evnt)
+        void OnObjectCreated(SKObjectAdded evnt)
         {
             var obj = evnt.Obj;
             obj.ID = CurrentId++;
             _objects.Add(obj.ID, obj);
-            obj.Init();
             _objects[evnt.ParentID].AddChild(obj);
-        }
-
-        void OnObjectAdded(SKObjectAdded evnt)
-        {
-            //_objects[evnt.OldParentID].RemoveChild(evnt.AddedObj);
-            //send response
-        }
-        
-        void OnObjectRemoved(SKObjectRemoved evnt)
-        {
-            //_objects[evnt.RemovedObj.ParentID].RemoveChild(evnt.RemovedObj);
-            //_root.AddChild(evnt.RemovedObj);
-            //send response
-        }
-
-        void ObjectGet(SKObjectGetter getter)
-        {
-            //getter.ReturnedObj = () => _objects[getter.ID];
+            obj.Init();
         }
 
         public override void Update()

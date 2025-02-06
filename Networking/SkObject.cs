@@ -1,4 +1,6 @@
 ﻿using System;
+
+using StereoKit;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,31 +8,23 @@ namespace Coop_Vr.Networking
 {
     public class SkObject : ISerializable
     {
-        public int ID { get; set; }
+        public int ID;
         public List<Component> Components;
         readonly List<SkObject> _children = new();
-
+        
         public PosComponent Transform { get; private set; }
-
-        //int _parentID = -1;
-        //public int ParentID => _parentID;
 
         //use when just want to pass as serialized data
         public SkObject()
         {
             Components = new();
         }
-
         //use when want to place in scene on creation
-        public SkObject(int parentID = -1, List<Component> components = null)
+        public SkObject(int parentID, List<Component> components)
         {
-            components ??= new List<Component>() { new PosComponent() };
-
             Components = components;
-            //_parentID = parentID;
-            EventBus<SKObjectCreated>.Publish(new SKObjectCreated(this, parentID));
+            EventBus<SKObjectAdded>.Publish(new SKObjectAdded(this, parentID));
         }
-
 
         public void Init()
         {
@@ -38,10 +32,11 @@ namespace Coop_Vr.Networking
             foreach (Component component in Components)
             {
                 component.Init(this);
+
             }
         }
 
-        public void ForEach(Action<SkObject> method)
+            public void ForEach(Action<SkObject> method)
         {
             for (int i = 0; i < _children.Count; i++)
             {
@@ -49,29 +44,17 @@ namespace Coop_Vr.Networking
             }
         }
 
+
+
         public void AddChild(SkObject obj)
         {
-            if (obj.ID == ID || obj == null) return;
+            //TO DO:
+            //check if not already child of parent
+            //remove from parent
+            //set parent as parent
 
             _children.Add(obj);
-            //EventBus<SKObjectAdded>.Publish(new SKObjectAdded(obj, obj._parentID, ID));
-
-            //Transform.OnHierarchyChange();
         }
-
-        public void RemoveChild(SkObject obj)
-        {
-            _children.Remove(obj);
-            //EventBus<SKObjectRemoved>.Publish(new SKObjectRemoved(obj));
-            Transform.OnHierarchyChange();
-        }
-
-        //public SkObject GetParent()
-        //{
-        //    var getter = new SKObjectGetter(_parentID);
-        //    EventBus<SKObjectGetter>.Publish(getter);
-        //    return getter.ReturnedObj();
-        //}
 
         public void Deserialize(Packet pPacket)
         {
@@ -86,7 +69,6 @@ namespace Coop_Vr.Networking
                 _children.Add(obj);
                 //don't add to scene
             }
-            //_parentID = pPacket.ReadInt();
         }
 
         public void Serialize(Packet pPacket)
@@ -96,8 +78,6 @@ namespace Coop_Vr.Networking
             pPacket.Write(_children.Count);
 
             foreach (var obj in _children) obj.Serialize(pPacket);
-
-         //   pPacket.Write(_parentID); 
         }
 
         public T GetComponent<T>()
@@ -117,6 +97,11 @@ namespace Coop_Vr.Networking
             foreach (var component in Components) if (component.Enabled) component.FixedUpdate();
 
             foreach (var child in _children) child.FixedUpdate();
+        }
+
+        public T GetComponent<T>(int i) where T : Component
+        {
+            return Components[i] as T;
         }
     }
 }
