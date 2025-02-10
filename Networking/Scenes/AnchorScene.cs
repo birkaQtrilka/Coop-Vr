@@ -30,12 +30,12 @@ namespace Coop_Vr.Networking.Scenes
                     }
                 );
 
-            var createObjInstruction = new CreateObjectResponse() { NewObj = point, ParentID = -1 };
+            var createObjInstruction = new CreateObjectMsg() { NewObj = point, ParentID = -1, SenderID = -9999 };
 
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
-                room.SafeForEachMember((m) => m.SendMessage(createObjInstruction));
+                room.Context.SendMessage(createObjInstruction);
 
             });
         }

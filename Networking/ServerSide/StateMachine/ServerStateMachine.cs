@@ -4,10 +4,22 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading.Tasks;
-using System.Threading;
+using Coop_Vr.Networking.Messages;
+using StereoKit;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine
 {
+    class ClientHeart
+    {
+        public readonly TcpChanel Client;
+        public double LastHeartBeat;
+
+        public ClientHeart(TcpChanel client, double lastHeartBeat)
+        {
+            Client = client;
+            LastHeartBeat = lastHeartBeat;
+        }
+    }
 
     public class ServerStateMachine
     {
@@ -18,6 +30,10 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         readonly TcpListener _listener;
         bool _changedState;
         bool _canRunFixedUpdate = true;
+
+        readonly List<ClientHeart> _clientHearts = new();
+        Queue<IMessage> _mesageQueue = new();
+
 
         public ServerStateMachine()
         {
@@ -35,6 +51,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             CurrentRoom = _states[typeof(LobbyRoom)];
             CurrentRoom.OnEnter();
             _ = FixedUpdate();
+            _ = HeartBeatLoop();
 
         }
 
@@ -50,7 +67,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 var newClient = new TcpChanel(_listener.AcceptTcpClient());
                 _states[typeof(LobbyRoom)].AddMember(newClient);
                 Log.Do("Accepted new client.");
-
+                //there is no client removing system
+                _clientHearts.Add(new ClientHeart(newClient, Time.Total));
             }
         }
 
@@ -62,7 +80,14 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             {
                 if (!client.HasMessage() || _changedState) return;
 
-                CurrentRoom.ReceiveMessage(client.GetMessage(), client);
+                IMessage message = client.GetMessage();
+                if(message is HeartBeat heartBeat)
+                {
+                    ClientHeart clientHeart = _clientHearts.Find(h => h.Client == client);
+                    clientHeart.LastHeartBeat = Time.Total;
+                }
+                else
+                    CurrentRoom.ReceiveMessage(message, client);
             });
 
             if (_changedState)
@@ -74,6 +99,11 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             CurrentRoom.Update();
         }
 
+        public void SendMessage(IMessage msg)
+        {
+            _mesageQueue.Enqueue(msg);
+        }
+
         public async Task FixedUpdate()
         {
             while (_canRunFixedUpdate)
@@ -81,7 +111,60 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 await Task.Delay(MySettings.FixedUpdateDelay);
 
                 CurrentRoom.FixedUpdate();
+
+                while(_mesageQueue.Count > 0)
+                {
+                    var msg = _mesageQueue.Dequeue();
+                    CurrentRoom.SafeForEachMember(c => c.SendMessage(msg));
+                }
+
             }
+        }
+
+        async Task HeartBeatLoop()
+        {
+            while(_canRunFixedUpdate)
+            {
+                await Task.Delay(MySettings.HeartBeatDelay);
+                HeartBeat heartBeatMsg = new();
+                Log.Enabled = false;
+                
+                SendMessage(heartBeatMsg);
+
+                Log.Enabled = true;
+                CheckClientHeart();
+            }
+        }
+
+        void CheckClientHeart()
+        {
+            double currentTime = Time.Total;
+            for (int i = 0; i < _clientHearts.Count; i++)
+            {
+                ClientHeart client = _clientHearts[i];
+
+                bool overdueHeartBeat = currentTime - client.LastHeartBeat > MySettings.MaxTimeForHeartBeat;
+                bool clientedDisconnected = !client.Client.Connected;
+
+                if (overdueHeartBeat || clientedDisconnected)
+                {
+                    //ResetServer();
+                    Log.Do("Reset!!!!!!!!!!!");
+                    return;
+                }
+                else
+                    client.LastHeartBeat = currentTime;
+            }
+        }
+
+        void ResetServer()
+        {
+            SendMessage(new ResetMsg());
+            CurrentRoom.SafeForEachMember(client =>
+            {
+                CurrentRoom.RemoveMember(client);
+            });
+            ChangeTo<LobbyRoom>();
         }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>

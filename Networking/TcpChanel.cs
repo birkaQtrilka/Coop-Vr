@@ -12,6 +12,8 @@ namespace Coop_Vr.Networking
 
         readonly TcpClient _client;
 
+        public bool Connected => _client.Connected;
+
         public TcpChanel(TcpClient client)
         {
             _client = client;
@@ -20,6 +22,8 @@ namespace Coop_Vr.Networking
 
         public void SendMessage(IMessage msg)
         {
+            if (!Connected) return;
+
             Log.Do("Sending:" + msg);
             Packet outPacket = new();
             outPacket.Write(msg);

@@ -7,7 +7,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
     public class GameRoom : Room<ServerStateMachine>
     {
-        public int CurrentId { get; private set; }
+        public int CurrentId { get; private set; } = 1;
 
         Dictionary<int, SkObject> _objects = new();
         SkObject _root;
@@ -16,10 +16,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         public GameRoom(ServerStateMachine context) : base(context)
         {
             _currentScene = new AnchorScene(this);
-            _root = new SkObject() { ID = -1 };
+            _root = new SkObject() { ID = -1, Components = new() { new PosComponent() } };
             _objects.Add(-1, _root);
-
-            
+            _root.Init();
         }
 
         public override void OnEnter()
@@ -38,41 +37,54 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             EventBus<SKObjectAdded>.Event -= OnObjectAdded;
             EventBus<SKObjectRemoved>.Event -= OnObjectRemoved;
             EventBus<SKObjectGetter>.Event -= ObjectGet;
+            _objects.Clear();
+            
+            _root.ForEach(c => { 
+                _root.RemoveChild(c, false);
+            });
+
+            _objects.Add(-1, _root);
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if (message is CreateObjectRequest objCreate)
+            if (message is CreateObjectMsg objCreate)
             {
-                SkObject newObject = new(objCreate.ParentID, objCreate.Components); 
-                
-                var response = new CreateObjectResponse() { NewObj = newObject, ParentID = objCreate.ParentID };
-                context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
-            }
-            else if( message is ChangePositionRequest changePositionRequest)
-            {
-                _objects[changePositionRequest.ObjectID].Transform.pose = changePositionRequest.position.pose;
+                EventBus<SKObjectCreated>.Publish(new SKObjectCreated(objCreate.NewObj, objCreate.ParentID));
 
-                var response = new ChangePositionResponse() { 
+                var response = new CreateObjectMsg()
+                {
+                    NewObj = objCreate.NewObj,
+                    ParentID = objCreate.ParentID,
+                    SenderID = objCreate.SenderID,
+                };
+                context.SendMessage(response);
+            }
+            else if (message is ChangePositionRequest changePositionRequest)
+            {
+                _objects[changePositionRequest.ObjectID].Transform.Pose = changePositionRequest.position.Pose;
+
+                var response = new ChangePositionResponse()
+                {
                     ObjectID = changePositionRequest.ObjectID,
                     PosComponent = changePositionRequest.position,
                     SenderID = changePositionRequest.SenderID
                 };
                 Log.Do("Member count: " + MemberCount() + "   ");
-                context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
+                context.SendMessage(response);
 
             }
             else if (message is MoveRequestResponse move)
             {
                 SkObject obj = _objects[move.ObjectID];
-                obj.Transform.pose = move.Position.pose;
+                obj.Transform.Pose = move.Position.Pose;
                 var component = obj.GetComponent<Move>();
                 bool hasNoOwner = component.MoverClientID == -1;
 
                 //will probably bug out if owner leaves the game
                 if (hasNoOwner || move.SenderID == component.MoverClientID)//is same Owner
                 {
-                    if(move.stopped)//terminating ownership
+                    if (move.stopped)//terminating ownership
                         component.MoverClientID = -1;
                     else//claiming / continuing ownership 
                         component.MoverClientID = move.SenderID;
@@ -85,8 +97,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                         stopped = move.stopped,
                     };
                     Log.Do("Member count: " + MemberCount() + "   ");
-                    context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
-                } 
+                    context.SendMessage(response);
+                }
 
             }
         }
@@ -94,33 +106,34 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         void OnObjectCreated(SKObjectCreated evnt)
         {
             var obj = evnt.Obj;
-            obj.ID = CurrentId++;
+            
+            obj.ID = obj.ID == 0 ? CurrentId++ : obj.ID;
+
             _objects.Add(obj.ID, obj);
             obj.Init();
-            _objects[evnt.ParentID].AddChild(obj);
+            _objects[evnt.ParentID].AddChild(obj, false);
         }
 
         void OnObjectAdded(SKObjectAdded evnt)
         {
-            //_objects[evnt.OldParentID].RemoveChild(evnt.AddedObj);
+            _objects[evnt.OldParentID].RemoveChild(evnt.AddedObj);
             //send response
         }
-        
+
         void OnObjectRemoved(SKObjectRemoved evnt)
         {
             //_objects[evnt.RemovedObj.ParentID].RemoveChild(evnt.RemovedObj);
-            //_root.AddChild(evnt.RemovedObj);
+            _root.AddChild(evnt.RemovedObj);
             //send response
         }
 
         void ObjectGet(SKObjectGetter getter)
         {
-            //getter.ReturnedObj = () => _objects[getter.ID];
+            getter.ReturnedObj = () => _objects[getter.ID];
         }
 
         public override void Update()
         {
-            //_root.Update();
         }
     }
 }

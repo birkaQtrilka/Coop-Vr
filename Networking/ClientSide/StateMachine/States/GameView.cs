@@ -8,7 +8,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     {
         Pose windowPos = Pose.Identity;
         readonly Dictionary<int, SkObject> _objects = new();
-        SkObject _root;
+        readonly SkObject _root;
+
+        //AnchorManager _anchorManager = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -19,21 +21,34 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnEnter()
         {
-            
+            //_anchorManager.Initialize();
+            EventBus<SKObjectCreated>.Event += OnSkObjectCreated;
+        }
+
+        void OnSkObjectCreated(SKObjectCreated evnt)
+        {
+            OnObjectCreated(evnt.Obj);
+            context.SendMessage(new CreateObjectMsg()
+            {
+                NewObj = evnt.Obj,
+                ParentID = evnt.ParentID,
+                SenderID = context.ID
+            });
         }
 
         public override void OnExit()
         {
+            EventBus<SKObjectCreated>.Event -= OnSkObjectCreated;
 
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if (message is CreateObjectResponse createdObject)
+            if (message is CreateObjectMsg createdObject)
             {
                 //adding it outside the objectCreated callback because 
                 //the object has already set its children in the deserialization loop
-                _objects[createdObject.ParentID].AddChild(createdObject.NewObj);
+                if (createdObject.SenderID == context.ID) return;
 
                 OnObjectCreated(createdObject.NewObj);
                 Log.Do("received object: " + createdObject.NewObj.ID);
@@ -46,11 +61,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     return;
                 }
                 SkObject obj = _objects[changePosition.ObjectID];
-                obj.Transform.pose = changePosition.PosComponent.pose;
+                obj.Transform.Pose = changePosition.PosComponent.Pose;
             }
-            else if(message is MoveRequestResponse move)
+            else if (message is MoveRequestResponse move)
             {
-                
+
                 SkObject obj = _objects[move.ObjectID];
                 obj.GetComponent<Move>().HandleResponese(move);
             }
@@ -58,6 +73,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         void OnObjectCreated(SkObject obj)
         {
+            _objects[obj.ParentID].AddChild(obj, false);
             _objects.Add(obj.ID, obj);
             obj.Init();
             obj.ForEach(child => OnObjectCreated(child));
@@ -65,6 +81,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void Update()
         {
+            //_anchorManager.Step();
+
             DrawWindow();
 
             _root.Update();
@@ -85,32 +103,36 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if (UI.Button("Add object sphere"))
             {
                 Log.Do("request to add sphere");
-                context.SendMessage(new CreateObjectRequest()
-                {
-                    Components = new List<Component>()
+                var newObj =
+                    new SkObject(components: new()
                     {
-                        new PosComponent() { pose = new Pose(2,0,0)},
+                        new PosComponent() { Pose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "sphere"},
-                        new Move() 
-                    }
+                        new Move()
+                    });
+                var newObj2 =
+                    new SkObject(components: new()
+                    {
+                        new PosComponent() { Pose = new Pose(3,0,0)},
+                        new ModelComponent() { MeshName = "cube"},
+                        new Move()
+                    });
 
-                });
+
+                newObj.AddChild(newObj2, true);
             }
             UI.HSeparator();
 
             if (UI.Button("Add object cube"))
             {
-                context.SendMessage(new CreateObjectRequest()
-                {
-                    Components = new List<Component>()
+                var newObj =
+                    new SkObject(components: new()
                     {
-                        new PosComponent() { pose = new Pose(3,0,0)},
+                        new PosComponent() { Pose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
-                        new Move() 
+                        new Move()
+                    });
 
-                    }
-
-                });
             }
 
             UI.WindowEnd();

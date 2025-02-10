@@ -7,13 +7,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     public class LobbyView : Room<ClientStateMachine>
     {
         //wrap this into own "gameObject" class
-        string title = "Text Input";
-        string description = "";
 
-        Pose windowPose = new Pose(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
+        Pose windowPose = new(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
 
         bool showHeader = true;
-        float slider = 0.5f;
         //baller hotspot
         //string text = "192.168.144.33";
         //stefan house

@@ -17,8 +17,6 @@ namespace Coop_Vr.Networking.ServerSide.Components
         //not serializable
         public ModelComponent model;
 
-        Matrix _modelMatrix;
-
         // Factory method to create a GraphPoint from a CSV record
         public static GraphPoint FromCsvRecord(IDictionary<string, object> record)
         {
@@ -43,9 +41,6 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public override void Start()
         {
             model = gameObject.GetComponent<ModelComponent>();
-            _modelMatrix = Matrix.S(0.1f) * Matrix.T(new Vec3(X, Y, Z));
-
-            gameObject.Transform.pose.position = _modelMatrix.Pose.position;
         }
 
         private float CalculateScale()
@@ -56,29 +51,28 @@ namespace Coop_Vr.Networking.ServerSide.Components
         //render code
         public override void Update()
         {
-            //float scale = CalculateScale();
+            float scale = CalculateScale();
+            gameObject.Transform.Scale = new Vec3(scale);
 
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
+            
+            var poseCopy = spherePose.Pose;
+            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref poseCopy, new Bounds(spherePose.Scale));
+            spherePose.Pose = poseCopy;
 
-            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(_modelMatrix.Scale));
-
-            Vec3 labelPosition = _modelMatrix * new Vec3(0, 1f, 0);
+            Vec3 labelPosition = gameObject.Transform.ModelMatrix * new Vec3(0, 1f, 0);
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = _modelMatrix * new Vec3(0, -1f, 0);
-            string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
+            Vec3 coordPosition = spherePose.ModelMatrix * new Vec3(0, -1f, 0);
+            string coordinates = $"({poseCopy.position.x:F1}, {poseCopy.position.y:F1}, {poseCopy.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 
-            //changing data
-
-            Vec3 modelSpace = _modelMatrix.Inverse * spherePose.pose.position;
-
-            X = modelSpace.x;
-            Y = modelSpace.y;
-            Z = modelSpace.z;
-            spherePose.scale = _modelMatrix.Scale;
+            //local pos
+            X = poseCopy.position.x;
+            Y = poseCopy.position.y;
+            Z = poseCopy.position.z;
         }
 
         public override void Serialize(Packet pPacket)

@@ -1,7 +1,6 @@
-﻿
-namespace Coop_Vr.Networking.Messages
+﻿namespace Coop_Vr.Networking.Messages
 {
-    public class HeartBeat : IMessage
+    public class ResetMsg : IMessage
     {
         public void Deserialize(Packet pPacket)
         {

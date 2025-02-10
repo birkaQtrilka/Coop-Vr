@@ -34,11 +34,11 @@ namespace Coop_Vr.Networking.Scenes
 
             graph.GenerateGraphPoints();
 
-            var response = new CreateObjectResponse() { NewObj = graphHolder, ParentID = -1 };
+            var response = new CreateObjectMsg() { NewObj = graphHolder, ParentID = -1 };
             Task.Run(async () =>
             {
                 await Task.Delay(1000);
-                room.SafeForEachMember((m) => m.SendMessage(response));
+                room.Context.SendMessage(response);
 
             });
         }

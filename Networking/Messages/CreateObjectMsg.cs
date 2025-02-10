@@ -2,22 +2,25 @@
 
 namespace Coop_Vr.Networking
 {
-    public class CreateObjectRequest : IMessage
+    public class CreateObjectMsg : IMessage
     {
-        //-1 is the ID of the root
+        public SkObject NewObj;
         public int ParentID = -1;
-        public List<Component> Components;
+        public int SenderID;
 
         public void Deserialize(Packet pPacket)
         {
-            Components = pPacket.ReadComponentsList();
+            NewObj = new();
+            NewObj.Deserialize(pPacket);
             ParentID = pPacket.ReadInt();
+            SenderID = pPacket.ReadInt();
         }
 
         public void Serialize(Packet pPacket)
         {
-            pPacket.WriteComponentsList(Components);
+            NewObj.Serialize(pPacket);
             pPacket.Write(ParentID);
+            pPacket.Write(SenderID);
         }
     }
 }

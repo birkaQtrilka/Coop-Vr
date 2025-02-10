@@ -12,8 +12,8 @@ namespace Coop_Vr.Networking
 
         public PosComponent Transform { get; private set; }
 
-        //int _parentID = -1;
-        //public int ParentID => _parentID;
+        int _parentID = -1;
+        public int ParentID => _parentID;
 
         //use when just want to pass as serialized data
         public SkObject()
@@ -27,7 +27,7 @@ namespace Coop_Vr.Networking
             components ??= new List<Component>() { new PosComponent() };
 
             Components = components;
-            //_parentID = parentID;
+            _parentID = parentID;
             EventBus<SKObjectCreated>.Publish(new SKObjectCreated(this, parentID));
         }
 
@@ -39,45 +39,50 @@ namespace Coop_Vr.Networking
             {
                 component.Init(this);
             }
+
         }
 
         public void ForEach(Action<SkObject> method)
         {
-            for (int i = 0; i < _children.Count; i++)
+            for (int i = _children.Count - 1; i >= 0; i--)
             {
                 method(_children[i]);
             }
         }
 
-        public void AddChild(SkObject obj)
+        public void AddChild(SkObject obj, bool networked = true)
         {
             if (obj.ID == ID || obj == null) return;
 
             _children.Add(obj);
-            //EventBus<SKObjectAdded>.Publish(new SKObjectAdded(obj, obj._parentID, ID));
+            if (networked)
+                EventBus<SKObjectAdded>.Publish(new SKObjectAdded(obj, obj._parentID, ID));
 
-            //Transform.OnHierarchyChange();
+            obj.Transform.OnObjAdded();
         }
 
-        public void RemoveChild(SkObject obj)
+        public void RemoveChild(SkObject obj, bool networked = true)
         {
             _children.Remove(obj);
-            //EventBus<SKObjectRemoved>.Publish(new SKObjectRemoved(obj));
-            Transform.OnHierarchyChange();
+
+            if(networked)
+                EventBus<SKObjectRemoved>.Publish(new SKObjectRemoved(obj));
+
+            obj.Transform.OnObjRemoved(this);
         }
 
-        //public SkObject GetParent()
-        //{
-        //    var getter = new SKObjectGetter(_parentID);
-        //    EventBus<SKObjectGetter>.Publish(getter);
-        //    return getter.ReturnedObj();
-        //}
+        public SkObject GetParent()
+        {
+            var getter = new SKObjectGetter(_parentID);
+            EventBus<SKObjectGetter>.Publish(getter);
+            return getter.ReturnedObj();
+        }
 
         public void Deserialize(Packet pPacket)
         {
             ID = pPacket.ReadInt();
             Components = pPacket.ReadComponentsList();
-            
+
             int count = pPacket.ReadInt();
             for (int i = 0; i < count; i++)
             {
@@ -86,7 +91,7 @@ namespace Coop_Vr.Networking
                 _children.Add(obj);
                 //don't add to scene
             }
-            //_parentID = pPacket.ReadInt();
+            _parentID = pPacket.ReadInt();
         }
 
         public void Serialize(Packet pPacket)
@@ -97,7 +102,7 @@ namespace Coop_Vr.Networking
 
             foreach (var obj in _children) obj.Serialize(pPacket);
 
-         //   pPacket.Write(_parentID); 
+            pPacket.Write(_parentID);
         }
 
         public T GetComponent<T>()
