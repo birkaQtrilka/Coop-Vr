@@ -79,7 +79,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             try
             {
                 var client = new TcpClient();
-                client.Connect(Ip, 55555);
+                client.Connect(Ip, 5000);
                 _server = new TcpChanel(client);
                 Log.Do("Connected to server.");
             }
@@ -94,7 +94,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             try
             {
                 var client = new TcpClient();
-                await client.ConnectAsync(Ip, 55555);
+                await client.ConnectAsync(Ip, 5000);
                 _server = new TcpChanel(client);
                 Log.Do("Connected to server.");
             }
