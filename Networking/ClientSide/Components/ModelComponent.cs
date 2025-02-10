@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using StereoKit;
 
 namespace Coop_Vr.Networking
@@ -35,7 +33,7 @@ namespace Coop_Vr.Networking
                     _cachedMeshes.Add(MeshName, Mesh.GenerateSphere(1.0f));
 
                 mesh = _cachedMeshes[MeshName];
-            
+
             }
             else if (MeshName == "cube")
             {
@@ -52,10 +50,7 @@ namespace Coop_Vr.Networking
 
         public override void Update()
         {
-            Pose p = gameObject.Transform.pose;
-            Vec3 s = gameObject.Transform.scale;
-
-            mesh.Draw(material, Matrix.TRS(p.position, p.orientation, s), color);
+            mesh.Draw(material, gameObject.Transform.ModelMatrix, color);
         }
     }
 }

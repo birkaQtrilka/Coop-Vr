@@ -26,6 +26,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         bool _pressedConectToServer;
         bool _conectedToServer;
 
+        bool _test = true;
+
         public LobbyView(ClientStateMachine context) : base(context)
         {
         }
@@ -56,7 +58,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 if (_connectingTask.IsCompleted)
                 {
                     _connectingTask = null;
-                    context.SendMessage(new PlayerJoinRequest());
+                    if(_test)
+                        context.SendMessage(new PlayerJoinRequest());
+                    _test = false;
                 }
             }
 
@@ -80,7 +84,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 _pressedConectToServer = true;
                 _connectingTask = context.ConnectToServerAsync(text);
             }
-
+            if (UI.Button("Find Lobby") )
+            {
+                _test = true;
+            }
 
             UI.HSeparator();
 

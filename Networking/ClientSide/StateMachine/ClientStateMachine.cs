@@ -5,6 +5,7 @@ using System;
 using Coop_Vr.Networking.ClientSide.StateMachine.States;
 using System.Threading.Tasks;
 using Coop_Vr.Networking.ServerSide;
+using Coop_Vr.Networking.Messages;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
@@ -40,6 +41,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         bool _canFixedUpdate = true;
 
+        Queue<IMessage> _mesageQueue = new();
+
         public ClientStateMachine()
         {
 
@@ -71,7 +74,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         public void SendMessage(IMessage msg)
         {
             //Console.WriteLine(msg.ToString());
-            _server.SendMessage(msg);
+            _mesageQueue.Enqueue(msg);
         }
 
         public void ConnectToServer(string Ip)
@@ -91,17 +94,20 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public async Task ConnectToServerAsync(string Ip)
         {
-            try
-            {
-                var client = new TcpClient();
-                await client.ConnectAsync(Ip, 55555);
-                _server = new TcpChanel(client);
-                Log.Do("Connected to server.");
-            }
-            catch (Exception e)
-            {
-                Log.Do(e.Message);
-            }
+            //while(_server == null)
+            //{
+                try
+                {
+                    var client = new TcpClient();
+                    await client.ConnectAsync(Ip, 55555);
+                    _server = new TcpChanel(client);
+                    Log.Do("Connected to server.");
+                }
+                catch (Exception e)
+                {
+                    Log.Do(e.Message);
+                }
+            //}
             await Task.Delay(100);
         }
 
@@ -110,7 +116,18 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
             if (_server != null && _server.HasMessage())
             {
-                _current.ReceiveMessage(_server.GetMessage(), _server);
+                IMessage msg = _server.GetMessage();
+                if (msg is HeartBeat beat)
+                {
+                    SendMessage(beat);
+                }
+                else if (msg is ResetMsg)
+                {
+                    //ResetClient();
+                    Log.Do("Reset!!");
+                }
+                else
+                    _current.ReceiveMessage(msg, _server);
             }
 
 
@@ -123,6 +140,15 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             _current.Update();
         }
 
+        void ResetClient()
+        {
+            _current.SafeForEachMember(member =>
+            {
+                _current.RemoveMember(member);
+            });
+            ChangeTo<LobbyView>();
+        }
+
         public async Task FixedUpdate()
         {
             while (_canFixedUpdate)
@@ -130,6 +156,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 await Task.Delay(MySettings.FixedUpdateDelay);
 
                 _current.FixedUpdate();
+
+                while (_mesageQueue.Count > 0)
+                    _server.SendMessage(_mesageQueue.Dequeue());
+
             }
         }
 

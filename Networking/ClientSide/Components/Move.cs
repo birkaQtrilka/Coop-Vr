@@ -6,11 +6,10 @@ namespace Coop_Vr.Networking.ClientSide
 {
     public class Move : Component
     {
-        public int MoverClientID { get; set; } = -1;
-
-        ModelComponent modelComponent;
+        private ModelComponent modelComponent;
+        public int MoverClientID = -1;
         bool isMoving;
-        bool stoppedMoving;
+        bool stoppedMoving = false;
 
         public override void Serialize(Packet pPacket)
         {
@@ -32,8 +31,11 @@ namespace Coop_Vr.Networking.ClientSide
             if (MoverClientID != -1 && ClientStateMachine.MessageSender.ID != MoverClientID)
                 return;
 
-            isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
+            Pose copy = gameObject.Transform.Pose;
 
+            isMoving = UI.Handle(gameObject.ID.ToString(), ref copy, modelComponent.bounds);
+
+            gameObject.Transform.Pose = copy;
         }
 
         public override void FixedUpdate()
@@ -41,32 +43,38 @@ namespace Coop_Vr.Networking.ClientSide
             if (isMoving)
             {
                 stoppedMoving = false;
-                SendMoveRequest(stoppedMoving);
+                ClientStateMachine.MessageSender.SendMessage
+                (
+                   new MoveRequestResponse()
+                   {
+                       ObjectID = gameObject.ID,
+                       Position = gameObject.Transform,
+                       SenderID = ClientStateMachine.MessageSender.ID,
+                       stopped = false,
+                   }
+                );
+                return;
             }
-            else if (!stoppedMoving && gameObject.Transform.QueueIsEmpty())
+
+            if (!stoppedMoving && gameObject.Transform.QueueIsEmpty())
             {
                 stoppedMoving = true;
-                SendMoveRequest(stoppedMoving);
-            }
-        }
-
-        void SendMoveRequest(bool stoppedMoving)
-        {
-            ClientStateMachine.MessageSender.SendMessage
+                ClientStateMachine.MessageSender.SendMessage
                 (
                     new MoveRequestResponse()
                     {
                         ObjectID = gameObject.ID,
                         Position = gameObject.Transform,
                         SenderID = ClientStateMachine.MessageSender.ID,
-                        stopped = stoppedMoving,
+                        stopped = true,
                     }
                 );
+            }
         }
 
         public void HandleResponese(MoveRequestResponse move)
         {
-            if(move.stopped)
+            if (move.stopped)
             {
                 MoverClientID = -1;
                 return;
@@ -79,10 +87,10 @@ namespace Coop_Vr.Networking.ClientSide
 
                 return;
             }
-            //make a clock that calculates the refresh rate
-            gameObject.Transform.QueueInterpolate(move.Position.pose);
+
+            gameObject.Transform.QueueInterpolate(move.Position.Pose);
             MoverClientID = move.SenderID;
         }
-        
-}
+
+    }
 }

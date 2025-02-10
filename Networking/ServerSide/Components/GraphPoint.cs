@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Coop_Vr.Networking.ServerSide.Components
 {
@@ -42,9 +41,6 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public override void Start()
         {
             model = gameObject.GetComponent<ModelComponent>();
-
-            gameObject.Transform.pose = new Pose(new Vec3(X, Y, Z));
-            gameObject.Transform.scale = new Vec3(.1f);
         }
 
         private float CalculateScale()
@@ -55,28 +51,28 @@ namespace Coop_Vr.Networking.ServerSide.Components
         //render code
         public override void Update()
         {
-            //float scale = CalculateScale();
+            float scale = CalculateScale();
+            gameObject.Transform.Scale = new Vec3(scale);
 
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
-            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
+            var poseCopy = spherePose.Pose;
+            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref poseCopy, new Bounds(spherePose.Scale));
+            spherePose.Pose = poseCopy;
 
-            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y,0) ;
+            Vec3 labelPosition = gameObject.Transform.ModelMatrix * new Vec3(0, 1f, 0);
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = spherePose.pose.position + new Vec3(0,  -1f * spherePose.scale.y, 0);
-            string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
+            Vec3 coordPosition = spherePose.ModelMatrix * new Vec3(0, -1f, 0);
+            string coordinates = $"({poseCopy.position.x:F1}, {poseCopy.position.y:F1}, {poseCopy.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 
-            //changing data
-
-            Vec3 modelSpace = spherePose.pose.position;
-            //modelMatrix.Translation = modelSpace;
-            X = modelSpace.x;
-            Y = modelSpace.y;
-            Z = modelSpace.z;
+            //local pos
+            X = poseCopy.position.x;
+            Y = poseCopy.position.y;
+            Z = poseCopy.position.z;
         }
 
         public override void Serialize(Packet pPacket)
@@ -85,7 +81,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             pPacket.Write(Y);
             pPacket.Write(Z);
 
-            pPacket.Write(ExtraInfo.Count());
+            pPacket.Write(ExtraInfo.Count);
             foreach (var item in ExtraInfo)
             {
                 pPacket.Write(item.Key);
