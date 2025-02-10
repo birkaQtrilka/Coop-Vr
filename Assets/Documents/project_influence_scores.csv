@@ -1,0 +1,381 @@
+Project1,Project2,Score,Technology1,Country1,Capacity1,Investment1,Date1,Technology2,Country2,Capacity2,Investment2,Date2
+H2 research center BTU Cottbus,Rozenburg Power2Gas Phase 1,0.6999734,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,NLD,0.007,0.001049515,2013.0
+H2 research center BTU Cottbus,Narva power plant ELY,0.6999991405264,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,EST,0.144297368,0.025,2010.0
+H2 research center BTU Cottbus,Hunfeld project ,0.499028,Unknown,DEU,0.14,0.023728174,2012.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+H2 research center BTU Cottbus,Hydrogen Lab Gorlitz,0.9996280000000001,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DEU,2.0,0.346506667,2023.0
+H2 research center BTU Cottbus,Lhyfe-Enerparc Luckau project,0.499028,Unknown,DEU,0.14,0.023728174,2012.0,Solar PV,DEU,5.0,0.847434783,2024.0
+H2 research center BTU Cottbus,Linde Hellas - Mandra,0.699828,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,GRC,1.0,0.173253333,2022.0
+H2 research center BTU Cottbus,"Porto, CUTE",0.699968,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,PRT,0.3,0.050846087,2003.0
+H2 research center BTU Cottbus,Methanation at Eichhof,0.999982,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DEU,0.05,0.007496538,2018.0
+H2 research center BTU Cottbus,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.9987680000000001,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DEU,6.3,1.067767826,2013.0
+H2 research center BTU Cottbus,RENOVAGAS,0.69997384,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,ESP,0.0092,0.00155928,2014.0
+H2 research center BTU Cottbus,Refhyne,0.998028,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DEU,10.0,1.499307692,2021.0
+H2 research center BTU Cottbus,Hynamics Martres-Tolosane,0.699628,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,FRA,2.0,0.338973913,2025.0
+H2 research center BTU Cottbus,SALCOS - WindH2 Windwasserstoff Salzgitter,0.49952799999999997,Unknown,DEU,0.14,0.023728174,2012.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+H2 research center BTU Cottbus,Utilitas ELY,0.1999855188548,Unknown,DEU,0.14,0.023728174,2012.0,Solar PV,EST,0.212405726,0.036,2025.0
+H2 research center BTU Cottbus,RIC Energy Valladolid -phase 1,0.199028,Unknown,DEU,0.14,0.023728174,2012.0,Solar PV,ESP,5.0,0.749653846,2024.0
+H2 research center BTU Cottbus,Stromlückenfüller 2nd phase,0.9999880000000001,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DEU,0.2,0.029986154,2019.0
+H2 research center BTU Cottbus,P2G-Biocat - Continued (Ref 508),0.699928,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,DNK,0.5,0.084743478,2015.0
+H2 research center BTU Cottbus,Energi Hub Kjerlingland,0.699028,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,NOR,5.0,0.866266667,2025.0
+H2 research center BTU Cottbus,"Oslo, CHIC",0.699908,Unknown,DEU,0.14,0.023728174,2012.0,Unknown,NOR,0.6,0.101692174,2013.0
+Rozenburg Power2Gas Phase 1,H2 research center BTU Cottbus,0.6999734,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,0.14,0.023728174,2012.0
+Rozenburg Power2Gas Phase 1,Narva power plant ELY,0.6999725405264,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,EST,0.144297368,0.025,2010.0
+Rozenburg Power2Gas Phase 1,Hunfeld project ,0.1990014,Unknown,NLD,0.007,0.001049515,2013.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Rozenburg Power2Gas Phase 1,Hydrogen Lab Gorlitz,0.6996014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,2.0,0.346506667,2023.0
+Rozenburg Power2Gas Phase 1,Lhyfe-Enerparc Luckau project,0.1990014,Unknown,NLD,0.007,0.001049515,2013.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Rozenburg Power2Gas Phase 1,Linde Hellas - Mandra,0.6998014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,GRC,1.0,0.173253333,2022.0
+Rozenburg Power2Gas Phase 1,"Porto, CUTE",0.6999414,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,PRT,0.3,0.050846087,2003.0
+Rozenburg Power2Gas Phase 1,Methanation at Eichhof,0.6999914,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,0.05,0.007496538,2018.0
+Rozenburg Power2Gas Phase 1,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.6987414000000001,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,6.3,1.067767826,2013.0
+Rozenburg Power2Gas Phase 1,RENOVAGAS,0.69999956,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Rozenburg Power2Gas Phase 1,Refhyne,0.6980014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,10.0,1.499307692,2021.0
+Rozenburg Power2Gas Phase 1,Hynamics Martres-Tolosane,0.6996014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,FRA,2.0,0.338973913,2025.0
+Rozenburg Power2Gas Phase 1,SALCOS - WindH2 Windwasserstoff Salzgitter,0.19950140000000002,Unknown,NLD,0.007,0.001049515,2013.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Rozenburg Power2Gas Phase 1,Utilitas ELY,0.1999589188548,Unknown,NLD,0.007,0.001049515,2013.0,Solar PV,EST,0.212405726,0.036,2025.0
+Rozenburg Power2Gas Phase 1,RIC Energy Valladolid -phase 1,0.1990014,Unknown,NLD,0.007,0.001049515,2013.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Rozenburg Power2Gas Phase 1,Stromlückenfüller 2nd phase,0.6999614000000001,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DEU,0.2,0.029986154,2019.0
+Rozenburg Power2Gas Phase 1,P2G-Biocat - Continued (Ref 508),0.6999014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,DNK,0.5,0.084743478,2015.0
+Rozenburg Power2Gas Phase 1,Energi Hub Kjerlingland,0.6990014,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,NOR,5.0,0.866266667,2025.0
+Rozenburg Power2Gas Phase 1,"Oslo, CHIC",0.6998814,Unknown,NLD,0.007,0.001049515,2013.0,Unknown,NOR,0.6,0.101692174,2013.0
+Narva power plant ELY,H2 research center BTU Cottbus,0.6999991405264,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,0.14,0.023728174,2012.0
+Narva power plant ELY,Rozenburg Power2Gas Phase 1,0.6999725405264,Unknown,EST,0.144297368,0.025,2010.0,Unknown,NLD,0.007,0.001049515,2013.0
+Narva power plant ELY,Hunfeld project ,0.19902885947360002,Unknown,EST,0.144297368,0.025,2010.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Narva power plant ELY,Hydrogen Lab Gorlitz,0.6996288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,2.0,0.346506667,2023.0
+Narva power plant ELY,Lhyfe-Enerparc Luckau project,0.19902885947360002,Unknown,EST,0.144297368,0.025,2010.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Narva power plant ELY,Linde Hellas - Mandra,0.6998288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,GRC,1.0,0.173253333,2022.0
+Narva power plant ELY,"Porto, CUTE",0.6999688594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,PRT,0.3,0.050846087,2003.0
+Narva power plant ELY,Methanation at Eichhof,0.6999811405264,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,0.05,0.007496538,2018.0
+Narva power plant ELY,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.6987688594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,6.3,1.067767826,2013.0
+Narva power plant ELY,RENOVAGAS,0.6999729805264,Unknown,EST,0.144297368,0.025,2010.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Narva power plant ELY,Refhyne,0.6980288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,10.0,1.499307692,2021.0
+Narva power plant ELY,Hynamics Martres-Tolosane,0.6996288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,FRA,2.0,0.338973913,2025.0
+Narva power plant ELY,SALCOS - WindH2 Windwasserstoff Salzgitter,0.1995288594736,Unknown,EST,0.144297368,0.025,2010.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Narva power plant ELY,Utilitas ELY,0.4999863783284,Unknown,EST,0.144297368,0.025,2010.0,Solar PV,EST,0.212405726,0.036,2025.0
+Narva power plant ELY,RIC Energy Valladolid -phase 1,0.19902885947360002,Unknown,EST,0.144297368,0.025,2010.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Narva power plant ELY,Stromlückenfüller 2nd phase,0.6999888594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DEU,0.2,0.029986154,2019.0
+Narva power plant ELY,P2G-Biocat - Continued (Ref 508),0.6999288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,DNK,0.5,0.084743478,2015.0
+Narva power plant ELY,Energi Hub Kjerlingland,0.6990288594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,NOR,5.0,0.866266667,2025.0
+Narva power plant ELY,"Oslo, CHIC",0.6999088594736,Unknown,EST,0.144297368,0.025,2010.0,Unknown,NOR,0.6,0.101692174,2013.0
+Hunfeld project ,H2 research center BTU Cottbus,0.499028,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,0.14,0.023728174,2012.0
+Hunfeld project ,Rozenburg Power2Gas Phase 1,0.1990014,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,NLD,0.007,0.001049515,2013.0
+Hunfeld project ,Narva power plant ELY,0.19902885947360002,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,EST,0.144297368,0.025,2010.0
+Hunfeld project ,Hydrogen Lab Gorlitz,0.4994,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,2.0,0.346506667,2023.0
+Hunfeld project ,Lhyfe-Enerparc Luckau project,0.5,Onshore wind,DEU,5.0,0.866266667,2025.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Hunfeld project ,Linde Hellas - Mandra,0.19920000000000002,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,GRC,1.0,0.173253333,2022.0
+Hunfeld project ,"Porto, CUTE",0.19906000000000001,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,PRT,0.3,0.050846087,2003.0
+Hunfeld project ,Methanation at Eichhof,0.49901,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,0.05,0.007496538,2018.0
+Hunfeld project ,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.49974,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,6.3,1.067767826,2013.0
+Hunfeld project ,RENOVAGAS,0.19900184,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Hunfeld project ,Refhyne,0.499,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,10.0,1.499307692,2021.0
+Hunfeld project ,Hynamics Martres-Tolosane,0.19940000000000002,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,FRA,2.0,0.338973913,2025.0
+Hunfeld project ,SALCOS - WindH2 Windwasserstoff Salzgitter,0.9995,Onshore wind,DEU,5.0,0.866266667,2025.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Hunfeld project ,Utilitas ELY,0.1990424811452,Onshore wind,DEU,5.0,0.866266667,2025.0,Solar PV,EST,0.212405726,0.036,2025.0
+Hunfeld project ,RIC Energy Valladolid -phase 1,0.2,Onshore wind,DEU,5.0,0.866266667,2025.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Hunfeld project ,Stromlückenfüller 2nd phase,0.49904,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DEU,0.2,0.029986154,2019.0
+Hunfeld project ,P2G-Biocat - Continued (Ref 508),0.19910000000000003,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,DNK,0.5,0.084743478,2015.0
+Hunfeld project ,Energi Hub Kjerlingland,0.2,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,NOR,5.0,0.866266667,2025.0
+Hunfeld project ,"Oslo, CHIC",0.19912000000000002,Onshore wind,DEU,5.0,0.866266667,2025.0,Unknown,NOR,0.6,0.101692174,2013.0
+Hydrogen Lab Gorlitz,H2 research center BTU Cottbus,0.9996280000000001,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DEU,0.14,0.023728174,2012.0
+Hydrogen Lab Gorlitz,Rozenburg Power2Gas Phase 1,0.6996014,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,NLD,0.007,0.001049515,2013.0
+Hydrogen Lab Gorlitz,Narva power plant ELY,0.6996288594736,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,EST,0.144297368,0.025,2010.0
+Hydrogen Lab Gorlitz,Hunfeld project ,0.4994,Unknown,DEU,2.0,0.346506667,2023.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Hydrogen Lab Gorlitz,Lhyfe-Enerparc Luckau project,0.4994,Unknown,DEU,2.0,0.346506667,2023.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Hydrogen Lab Gorlitz,Linde Hellas - Mandra,0.6998,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,GRC,1.0,0.173253333,2022.0
+Hydrogen Lab Gorlitz,"Porto, CUTE",0.69966,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,PRT,0.3,0.050846087,2003.0
+Hydrogen Lab Gorlitz,Methanation at Eichhof,0.9996100000000001,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DEU,0.05,0.007496538,2018.0
+Hydrogen Lab Gorlitz,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.99914,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DEU,6.3,1.067767826,2013.0
+Hydrogen Lab Gorlitz,RENOVAGAS,0.69960184,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Hydrogen Lab Gorlitz,Refhyne,0.9984000000000001,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DEU,10.0,1.499307692,2021.0
+Hydrogen Lab Gorlitz,Hynamics Martres-Tolosane,0.7,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,FRA,2.0,0.338973913,2025.0
+Hydrogen Lab Gorlitz,SALCOS - WindH2 Windwasserstoff Salzgitter,0.4999,Unknown,DEU,2.0,0.346506667,2023.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Hydrogen Lab Gorlitz,Utilitas ELY,0.1996424811452,Unknown,DEU,2.0,0.346506667,2023.0,Solar PV,EST,0.212405726,0.036,2025.0
+Hydrogen Lab Gorlitz,RIC Energy Valladolid -phase 1,0.19940000000000002,Unknown,DEU,2.0,0.346506667,2023.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Hydrogen Lab Gorlitz,Stromlückenfüller 2nd phase,0.9996400000000001,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DEU,0.2,0.029986154,2019.0
+Hydrogen Lab Gorlitz,P2G-Biocat - Continued (Ref 508),0.6997,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,DNK,0.5,0.084743478,2015.0
+Hydrogen Lab Gorlitz,Energi Hub Kjerlingland,0.6994,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,NOR,5.0,0.866266667,2025.0
+Hydrogen Lab Gorlitz,"Oslo, CHIC",0.69972,Unknown,DEU,2.0,0.346506667,2023.0,Unknown,NOR,0.6,0.101692174,2013.0
+Lhyfe-Enerparc Luckau project,H2 research center BTU Cottbus,0.499028,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,0.14,0.023728174,2012.0
+Lhyfe-Enerparc Luckau project,Rozenburg Power2Gas Phase 1,0.1990014,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,NLD,0.007,0.001049515,2013.0
+Lhyfe-Enerparc Luckau project,Narva power plant ELY,0.19902885947360002,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,EST,0.144297368,0.025,2010.0
+Lhyfe-Enerparc Luckau project,Hunfeld project ,0.5,Solar PV,DEU,5.0,0.847434783,2024.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Lhyfe-Enerparc Luckau project,Hydrogen Lab Gorlitz,0.4994,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,2.0,0.346506667,2023.0
+Lhyfe-Enerparc Luckau project,Linde Hellas - Mandra,0.19920000000000002,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,GRC,1.0,0.173253333,2022.0
+Lhyfe-Enerparc Luckau project,"Porto, CUTE",0.19906000000000001,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,PRT,0.3,0.050846087,2003.0
+Lhyfe-Enerparc Luckau project,Methanation at Eichhof,0.49901,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,0.05,0.007496538,2018.0
+Lhyfe-Enerparc Luckau project,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.49974,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,6.3,1.067767826,2013.0
+Lhyfe-Enerparc Luckau project,RENOVAGAS,0.19900184,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Lhyfe-Enerparc Luckau project,Refhyne,0.499,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,10.0,1.499307692,2021.0
+Lhyfe-Enerparc Luckau project,Hynamics Martres-Tolosane,0.19940000000000002,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,FRA,2.0,0.338973913,2025.0
+Lhyfe-Enerparc Luckau project,SALCOS - WindH2 Windwasserstoff Salzgitter,0.4995,Solar PV,DEU,5.0,0.847434783,2024.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Lhyfe-Enerparc Luckau project,Utilitas ELY,0.6990424811452001,Solar PV,DEU,5.0,0.847434783,2024.0,Solar PV,EST,0.212405726,0.036,2025.0
+Lhyfe-Enerparc Luckau project,RIC Energy Valladolid -phase 1,0.7,Solar PV,DEU,5.0,0.847434783,2024.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Lhyfe-Enerparc Luckau project,Stromlückenfüller 2nd phase,0.49904,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DEU,0.2,0.029986154,2019.0
+Lhyfe-Enerparc Luckau project,P2G-Biocat - Continued (Ref 508),0.19910000000000003,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,DNK,0.5,0.084743478,2015.0
+Lhyfe-Enerparc Luckau project,Energi Hub Kjerlingland,0.2,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,NOR,5.0,0.866266667,2025.0
+Lhyfe-Enerparc Luckau project,"Oslo, CHIC",0.19912000000000002,Solar PV,DEU,5.0,0.847434783,2024.0,Unknown,NOR,0.6,0.101692174,2013.0
+Linde Hellas - Mandra,H2 research center BTU Cottbus,0.699828,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,0.14,0.023728174,2012.0
+Linde Hellas - Mandra,Rozenburg Power2Gas Phase 1,0.6998014,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,NLD,0.007,0.001049515,2013.0
+Linde Hellas - Mandra,Narva power plant ELY,0.6998288594736,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,EST,0.144297368,0.025,2010.0
+Linde Hellas - Mandra,Hunfeld project ,0.19920000000000002,Unknown,GRC,1.0,0.173253333,2022.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Linde Hellas - Mandra,Hydrogen Lab Gorlitz,0.6998,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,2.0,0.346506667,2023.0
+Linde Hellas - Mandra,Lhyfe-Enerparc Luckau project,0.19920000000000002,Unknown,GRC,1.0,0.173253333,2022.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Linde Hellas - Mandra,"Porto, CUTE",0.69986,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,PRT,0.3,0.050846087,2003.0
+Linde Hellas - Mandra,Methanation at Eichhof,0.69981,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,0.05,0.007496538,2018.0
+Linde Hellas - Mandra,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.69894,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,6.3,1.067767826,2013.0
+Linde Hellas - Mandra,RENOVAGAS,0.69980184,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Linde Hellas - Mandra,Refhyne,0.6982,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,10.0,1.499307692,2021.0
+Linde Hellas - Mandra,Hynamics Martres-Tolosane,0.6998,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,FRA,2.0,0.338973913,2025.0
+Linde Hellas - Mandra,SALCOS - WindH2 Windwasserstoff Salzgitter,0.19970000000000002,Unknown,GRC,1.0,0.173253333,2022.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Linde Hellas - Mandra,Utilitas ELY,0.1998424811452,Unknown,GRC,1.0,0.173253333,2022.0,Solar PV,EST,0.212405726,0.036,2025.0
+Linde Hellas - Mandra,RIC Energy Valladolid -phase 1,0.19920000000000002,Unknown,GRC,1.0,0.173253333,2022.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Linde Hellas - Mandra,Stromlückenfüller 2nd phase,0.69984,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DEU,0.2,0.029986154,2019.0
+Linde Hellas - Mandra,P2G-Biocat - Continued (Ref 508),0.6999,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,DNK,0.5,0.084743478,2015.0
+Linde Hellas - Mandra,Energi Hub Kjerlingland,0.6992,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,NOR,5.0,0.866266667,2025.0
+Linde Hellas - Mandra,"Oslo, CHIC",0.69992,Unknown,GRC,1.0,0.173253333,2022.0,Unknown,NOR,0.6,0.101692174,2013.0
+"Porto, CUTE",H2 research center BTU Cottbus,0.699968,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,0.14,0.023728174,2012.0
+"Porto, CUTE",Rozenburg Power2Gas Phase 1,0.6999414,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,NLD,0.007,0.001049515,2013.0
+"Porto, CUTE",Narva power plant ELY,0.6999688594736,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,EST,0.144297368,0.025,2010.0
+"Porto, CUTE",Hunfeld project ,0.19906000000000001,Unknown,PRT,0.3,0.050846087,2003.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+"Porto, CUTE",Hydrogen Lab Gorlitz,0.69966,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,2.0,0.346506667,2023.0
+"Porto, CUTE",Lhyfe-Enerparc Luckau project,0.19906000000000001,Unknown,PRT,0.3,0.050846087,2003.0,Solar PV,DEU,5.0,0.847434783,2024.0
+"Porto, CUTE",Linde Hellas - Mandra,0.69986,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,GRC,1.0,0.173253333,2022.0
+"Porto, CUTE",Methanation at Eichhof,0.6999500000000001,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,0.05,0.007496538,2018.0
+"Porto, CUTE","ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.6988,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,6.3,1.067767826,2013.0
+"Porto, CUTE",RENOVAGAS,0.69994184,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,ESP,0.0092,0.00155928,2014.0
+"Porto, CUTE",Refhyne,0.69806,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,10.0,1.499307692,2021.0
+"Porto, CUTE",Hynamics Martres-Tolosane,0.69966,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,FRA,2.0,0.338973913,2025.0
+"Porto, CUTE",SALCOS - WindH2 Windwasserstoff Salzgitter,0.19956000000000002,Unknown,PRT,0.3,0.050846087,2003.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+"Porto, CUTE",Utilitas ELY,0.1999824811452,Unknown,PRT,0.3,0.050846087,2003.0,Solar PV,EST,0.212405726,0.036,2025.0
+"Porto, CUTE",RIC Energy Valladolid -phase 1,0.19906000000000001,Unknown,PRT,0.3,0.050846087,2003.0,Solar PV,ESP,5.0,0.749653846,2024.0
+"Porto, CUTE",Stromlückenfüller 2nd phase,0.69998,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DEU,0.2,0.029986154,2019.0
+"Porto, CUTE",P2G-Biocat - Continued (Ref 508),0.69996,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,DNK,0.5,0.084743478,2015.0
+"Porto, CUTE",Energi Hub Kjerlingland,0.69906,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,NOR,5.0,0.866266667,2025.0
+"Porto, CUTE","Oslo, CHIC",0.69994,Unknown,PRT,0.3,0.050846087,2003.0,Unknown,NOR,0.6,0.101692174,2013.0
+Methanation at Eichhof,H2 research center BTU Cottbus,0.999982,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DEU,0.14,0.023728174,2012.0
+Methanation at Eichhof,Rozenburg Power2Gas Phase 1,0.6999914,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,NLD,0.007,0.001049515,2013.0
+Methanation at Eichhof,Narva power plant ELY,0.6999811405264,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,EST,0.144297368,0.025,2010.0
+Methanation at Eichhof,Hunfeld project ,0.49901,Unknown,DEU,0.05,0.007496538,2018.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Methanation at Eichhof,Hydrogen Lab Gorlitz,0.9996100000000001,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DEU,2.0,0.346506667,2023.0
+Methanation at Eichhof,Lhyfe-Enerparc Luckau project,0.49901,Unknown,DEU,0.05,0.007496538,2018.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Methanation at Eichhof,Linde Hellas - Mandra,0.69981,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,GRC,1.0,0.173253333,2022.0
+Methanation at Eichhof,"Porto, CUTE",0.6999500000000001,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,PRT,0.3,0.050846087,2003.0
+Methanation at Eichhof,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.99875,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DEU,6.3,1.067767826,2013.0
+Methanation at Eichhof,RENOVAGAS,0.69999184,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Methanation at Eichhof,Refhyne,0.9980100000000001,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DEU,10.0,1.499307692,2021.0
+Methanation at Eichhof,Hynamics Martres-Tolosane,0.6996100000000001,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,FRA,2.0,0.338973913,2025.0
+Methanation at Eichhof,SALCOS - WindH2 Windwasserstoff Salzgitter,0.49951,Unknown,DEU,0.05,0.007496538,2018.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Methanation at Eichhof,Utilitas ELY,0.19996751885480002,Unknown,DEU,0.05,0.007496538,2018.0,Solar PV,EST,0.212405726,0.036,2025.0
+Methanation at Eichhof,RIC Energy Valladolid -phase 1,0.19901000000000002,Unknown,DEU,0.05,0.007496538,2018.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Methanation at Eichhof,Stromlückenfüller 2nd phase,0.99997,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DEU,0.2,0.029986154,2019.0
+Methanation at Eichhof,P2G-Biocat - Continued (Ref 508),0.69991,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,DNK,0.5,0.084743478,2015.0
+Methanation at Eichhof,Energi Hub Kjerlingland,0.69901,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,NOR,5.0,0.866266667,2025.0
+Methanation at Eichhof,"Oslo, CHIC",0.69989,Unknown,DEU,0.05,0.007496538,2018.0,Unknown,NOR,0.6,0.101692174,2013.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",H2 research center BTU Cottbus,0.9987680000000001,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DEU,0.14,0.023728174,2012.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Rozenburg Power2Gas Phase 1,0.6987414000000001,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,NLD,0.007,0.001049515,2013.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Narva power plant ELY,0.6987688594736,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,EST,0.144297368,0.025,2010.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Hunfeld project ,0.49974,Unknown,DEU,6.3,1.067767826,2013.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Hydrogen Lab Gorlitz,0.99914,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DEU,2.0,0.346506667,2023.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Lhyfe-Enerparc Luckau project,0.49974,Unknown,DEU,6.3,1.067767826,2013.0,Solar PV,DEU,5.0,0.847434783,2024.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Linde Hellas - Mandra,0.69894,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,GRC,1.0,0.173253333,2022.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)","Porto, CUTE",0.6988,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,PRT,0.3,0.050846087,2003.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Methanation at Eichhof,0.99875,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DEU,0.05,0.007496538,2018.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",RENOVAGAS,0.6987418400000001,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,ESP,0.0092,0.00155928,2014.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Refhyne,0.99926,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DEU,10.0,1.499307692,2021.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Hynamics Martres-Tolosane,0.69914,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,FRA,2.0,0.338973913,2025.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",SALCOS - WindH2 Windwasserstoff Salzgitter,0.49924,Unknown,DEU,6.3,1.067767826,2013.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Utilitas ELY,0.19878248114520003,Unknown,DEU,6.3,1.067767826,2013.0,Solar PV,EST,0.212405726,0.036,2025.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",RIC Energy Valladolid -phase 1,0.19974000000000003,Unknown,DEU,6.3,1.067767826,2013.0,Solar PV,ESP,5.0,0.749653846,2024.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Stromlückenfüller 2nd phase,0.99878,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DEU,0.2,0.029986154,2019.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",P2G-Biocat - Continued (Ref 508),0.69884,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,DNK,0.5,0.084743478,2015.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",Energi Hub Kjerlingland,0.69974,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,NOR,5.0,0.866266667,2025.0
+"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)","Oslo, CHIC",0.69886,Unknown,DEU,6.3,1.067767826,2013.0,Unknown,NOR,0.6,0.101692174,2013.0
+RENOVAGAS,H2 research center BTU Cottbus,0.69997384,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,0.14,0.023728174,2012.0
+RENOVAGAS,Rozenburg Power2Gas Phase 1,0.69999956,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,NLD,0.007,0.001049515,2013.0
+RENOVAGAS,Narva power plant ELY,0.6999729805264,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,EST,0.144297368,0.025,2010.0
+RENOVAGAS,Hunfeld project ,0.19900184,Unknown,ESP,0.0092,0.00155928,2014.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+RENOVAGAS,Hydrogen Lab Gorlitz,0.69960184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,2.0,0.346506667,2023.0
+RENOVAGAS,Lhyfe-Enerparc Luckau project,0.19900184,Unknown,ESP,0.0092,0.00155928,2014.0,Solar PV,DEU,5.0,0.847434783,2024.0
+RENOVAGAS,Linde Hellas - Mandra,0.69980184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,GRC,1.0,0.173253333,2022.0
+RENOVAGAS,"Porto, CUTE",0.69994184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,PRT,0.3,0.050846087,2003.0
+RENOVAGAS,Methanation at Eichhof,0.69999184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,0.05,0.007496538,2018.0
+RENOVAGAS,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.6987418400000001,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,6.3,1.067767826,2013.0
+RENOVAGAS,Refhyne,0.69800184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,10.0,1.499307692,2021.0
+RENOVAGAS,Hynamics Martres-Tolosane,0.69960184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,FRA,2.0,0.338973913,2025.0
+RENOVAGAS,SALCOS - WindH2 Windwasserstoff Salzgitter,0.19950184,Unknown,ESP,0.0092,0.00155928,2014.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+RENOVAGAS,Utilitas ELY,0.1999593588548,Unknown,ESP,0.0092,0.00155928,2014.0,Solar PV,EST,0.212405726,0.036,2025.0
+RENOVAGAS,RIC Energy Valladolid -phase 1,0.49900184000000003,Unknown,ESP,0.0092,0.00155928,2014.0,Solar PV,ESP,5.0,0.749653846,2024.0
+RENOVAGAS,Stromlückenfüller 2nd phase,0.6999618400000001,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DEU,0.2,0.029986154,2019.0
+RENOVAGAS,P2G-Biocat - Continued (Ref 508),0.69990184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,DNK,0.5,0.084743478,2015.0
+RENOVAGAS,Energi Hub Kjerlingland,0.69900184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,NOR,5.0,0.866266667,2025.0
+RENOVAGAS,"Oslo, CHIC",0.69988184,Unknown,ESP,0.0092,0.00155928,2014.0,Unknown,NOR,0.6,0.101692174,2013.0
+Refhyne,H2 research center BTU Cottbus,0.998028,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DEU,0.14,0.023728174,2012.0
+Refhyne,Rozenburg Power2Gas Phase 1,0.6980014,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,NLD,0.007,0.001049515,2013.0
+Refhyne,Narva power plant ELY,0.6980288594736,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,EST,0.144297368,0.025,2010.0
+Refhyne,Hunfeld project ,0.499,Unknown,DEU,10.0,1.499307692,2021.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Refhyne,Hydrogen Lab Gorlitz,0.9984000000000001,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DEU,2.0,0.346506667,2023.0
+Refhyne,Lhyfe-Enerparc Luckau project,0.499,Unknown,DEU,10.0,1.499307692,2021.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Refhyne,Linde Hellas - Mandra,0.6982,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,GRC,1.0,0.173253333,2022.0
+Refhyne,"Porto, CUTE",0.69806,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,PRT,0.3,0.050846087,2003.0
+Refhyne,Methanation at Eichhof,0.9980100000000001,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DEU,0.05,0.007496538,2018.0
+Refhyne,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.99926,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DEU,6.3,1.067767826,2013.0
+Refhyne,RENOVAGAS,0.69800184,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Refhyne,Hynamics Martres-Tolosane,0.6984,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,FRA,2.0,0.338973913,2025.0
+Refhyne,SALCOS - WindH2 Windwasserstoff Salzgitter,0.4985,Unknown,DEU,10.0,1.499307692,2021.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Refhyne,Utilitas ELY,0.1980424811452,Unknown,DEU,10.0,1.499307692,2021.0,Solar PV,EST,0.212405726,0.036,2025.0
+Refhyne,RIC Energy Valladolid -phase 1,0.199,Unknown,DEU,10.0,1.499307692,2021.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Refhyne,Stromlückenfüller 2nd phase,0.99804,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DEU,0.2,0.029986154,2019.0
+Refhyne,P2G-Biocat - Continued (Ref 508),0.6981,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,DNK,0.5,0.084743478,2015.0
+Refhyne,Energi Hub Kjerlingland,0.6990000000000001,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,NOR,5.0,0.866266667,2025.0
+Refhyne,"Oslo, CHIC",0.6981200000000001,Unknown,DEU,10.0,1.499307692,2021.0,Unknown,NOR,0.6,0.101692174,2013.0
+Hynamics Martres-Tolosane,H2 research center BTU Cottbus,0.699628,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,0.14,0.023728174,2012.0
+Hynamics Martres-Tolosane,Rozenburg Power2Gas Phase 1,0.6996014,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,NLD,0.007,0.001049515,2013.0
+Hynamics Martres-Tolosane,Narva power plant ELY,0.6996288594736,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,EST,0.144297368,0.025,2010.0
+Hynamics Martres-Tolosane,Hunfeld project ,0.19940000000000002,Unknown,FRA,2.0,0.338973913,2025.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Hynamics Martres-Tolosane,Hydrogen Lab Gorlitz,0.7,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,2.0,0.346506667,2023.0
+Hynamics Martres-Tolosane,Lhyfe-Enerparc Luckau project,0.19940000000000002,Unknown,FRA,2.0,0.338973913,2025.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Hynamics Martres-Tolosane,Linde Hellas - Mandra,0.6998,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,GRC,1.0,0.173253333,2022.0
+Hynamics Martres-Tolosane,"Porto, CUTE",0.69966,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,PRT,0.3,0.050846087,2003.0
+Hynamics Martres-Tolosane,Methanation at Eichhof,0.6996100000000001,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,0.05,0.007496538,2018.0
+Hynamics Martres-Tolosane,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.69914,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,6.3,1.067767826,2013.0
+Hynamics Martres-Tolosane,RENOVAGAS,0.69960184,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Hynamics Martres-Tolosane,Refhyne,0.6984,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,10.0,1.499307692,2021.0
+Hynamics Martres-Tolosane,SALCOS - WindH2 Windwasserstoff Salzgitter,0.19990000000000002,Unknown,FRA,2.0,0.338973913,2025.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Hynamics Martres-Tolosane,Utilitas ELY,0.1996424811452,Unknown,FRA,2.0,0.338973913,2025.0,Solar PV,EST,0.212405726,0.036,2025.0
+Hynamics Martres-Tolosane,RIC Energy Valladolid -phase 1,0.19940000000000002,Unknown,FRA,2.0,0.338973913,2025.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Hynamics Martres-Tolosane,Stromlückenfüller 2nd phase,0.69964,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DEU,0.2,0.029986154,2019.0
+Hynamics Martres-Tolosane,P2G-Biocat - Continued (Ref 508),0.6997,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,DNK,0.5,0.084743478,2015.0
+Hynamics Martres-Tolosane,Energi Hub Kjerlingland,0.6994,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,NOR,5.0,0.866266667,2025.0
+Hynamics Martres-Tolosane,"Oslo, CHIC",0.69972,Unknown,FRA,2.0,0.338973913,2025.0,Unknown,NOR,0.6,0.101692174,2013.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,H2 research center BTU Cottbus,0.49952799999999997,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,0.14,0.023728174,2012.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Rozenburg Power2Gas Phase 1,0.19950140000000002,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,NLD,0.007,0.001049515,2013.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Narva power plant ELY,0.1995288594736,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,EST,0.144297368,0.025,2010.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Hunfeld project ,0.9995,Onshore wind,DEU,2.5,0.374826923,2021.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Hydrogen Lab Gorlitz,0.4999,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,2.0,0.346506667,2023.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Lhyfe-Enerparc Luckau project,0.4995,Onshore wind,DEU,2.5,0.374826923,2021.0,Solar PV,DEU,5.0,0.847434783,2024.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Linde Hellas - Mandra,0.19970000000000002,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,GRC,1.0,0.173253333,2022.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,"Porto, CUTE",0.19956000000000002,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,PRT,0.3,0.050846087,2003.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Methanation at Eichhof,0.49951,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,0.05,0.007496538,2018.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.49924,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,6.3,1.067767826,2013.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,RENOVAGAS,0.19950184,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,ESP,0.0092,0.00155928,2014.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Refhyne,0.4985,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,10.0,1.499307692,2021.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Hynamics Martres-Tolosane,0.19990000000000002,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,FRA,2.0,0.338973913,2025.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Utilitas ELY,0.1995424811452,Onshore wind,DEU,2.5,0.374826923,2021.0,Solar PV,EST,0.212405726,0.036,2025.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,RIC Energy Valladolid -phase 1,0.1995,Onshore wind,DEU,2.5,0.374826923,2021.0,Solar PV,ESP,5.0,0.749653846,2024.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Stromlückenfüller 2nd phase,0.49954,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DEU,0.2,0.029986154,2019.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,P2G-Biocat - Continued (Ref 508),0.1996,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,DNK,0.5,0.084743478,2015.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,Energi Hub Kjerlingland,0.1995,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,NOR,5.0,0.866266667,2025.0
+SALCOS - WindH2 Windwasserstoff Salzgitter,"Oslo, CHIC",0.19962000000000002,Onshore wind,DEU,2.5,0.374826923,2021.0,Unknown,NOR,0.6,0.101692174,2013.0
+Utilitas ELY,H2 research center BTU Cottbus,0.1999855188548,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,0.14,0.023728174,2012.0
+Utilitas ELY,Rozenburg Power2Gas Phase 1,0.1999589188548,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,NLD,0.007,0.001049515,2013.0
+Utilitas ELY,Narva power plant ELY,0.4999863783284,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,EST,0.144297368,0.025,2010.0
+Utilitas ELY,Hunfeld project ,0.1990424811452,Solar PV,EST,0.212405726,0.036,2025.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Utilitas ELY,Hydrogen Lab Gorlitz,0.1996424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,2.0,0.346506667,2023.0
+Utilitas ELY,Lhyfe-Enerparc Luckau project,0.6990424811452001,Solar PV,EST,0.212405726,0.036,2025.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Utilitas ELY,Linde Hellas - Mandra,0.1998424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,GRC,1.0,0.173253333,2022.0
+Utilitas ELY,"Porto, CUTE",0.1999824811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,PRT,0.3,0.050846087,2003.0
+Utilitas ELY,Methanation at Eichhof,0.19996751885480002,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,0.05,0.007496538,2018.0
+Utilitas ELY,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.19878248114520003,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,6.3,1.067767826,2013.0
+Utilitas ELY,RENOVAGAS,0.1999593588548,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Utilitas ELY,Refhyne,0.1980424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,10.0,1.499307692,2021.0
+Utilitas ELY,Hynamics Martres-Tolosane,0.1996424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,FRA,2.0,0.338973913,2025.0
+Utilitas ELY,SALCOS - WindH2 Windwasserstoff Salzgitter,0.1995424811452,Solar PV,EST,0.212405726,0.036,2025.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Utilitas ELY,RIC Energy Valladolid -phase 1,0.6990424811452001,Solar PV,EST,0.212405726,0.036,2025.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Utilitas ELY,Stromlückenfüller 2nd phase,0.1999975188548,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DEU,0.2,0.029986154,2019.0
+Utilitas ELY,P2G-Biocat - Continued (Ref 508),0.1999424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,DNK,0.5,0.084743478,2015.0
+Utilitas ELY,Energi Hub Kjerlingland,0.1990424811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,NOR,5.0,0.866266667,2025.0
+Utilitas ELY,"Oslo, CHIC",0.1999224811452,Solar PV,EST,0.212405726,0.036,2025.0,Unknown,NOR,0.6,0.101692174,2013.0
+RIC Energy Valladolid -phase 1,H2 research center BTU Cottbus,0.199028,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,0.14,0.023728174,2012.0
+RIC Energy Valladolid -phase 1,Rozenburg Power2Gas Phase 1,0.1990014,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,NLD,0.007,0.001049515,2013.0
+RIC Energy Valladolid -phase 1,Narva power plant ELY,0.19902885947360002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,EST,0.144297368,0.025,2010.0
+RIC Energy Valladolid -phase 1,Hunfeld project ,0.2,Solar PV,ESP,5.0,0.749653846,2024.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+RIC Energy Valladolid -phase 1,Hydrogen Lab Gorlitz,0.19940000000000002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,2.0,0.346506667,2023.0
+RIC Energy Valladolid -phase 1,Lhyfe-Enerparc Luckau project,0.7,Solar PV,ESP,5.0,0.749653846,2024.0,Solar PV,DEU,5.0,0.847434783,2024.0
+RIC Energy Valladolid -phase 1,Linde Hellas - Mandra,0.19920000000000002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,GRC,1.0,0.173253333,2022.0
+RIC Energy Valladolid -phase 1,"Porto, CUTE",0.19906000000000001,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,PRT,0.3,0.050846087,2003.0
+RIC Energy Valladolid -phase 1,Methanation at Eichhof,0.19901000000000002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,0.05,0.007496538,2018.0
+RIC Energy Valladolid -phase 1,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.19974000000000003,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,6.3,1.067767826,2013.0
+RIC Energy Valladolid -phase 1,RENOVAGAS,0.49900184000000003,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,ESP,0.0092,0.00155928,2014.0
+RIC Energy Valladolid -phase 1,Refhyne,0.199,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,10.0,1.499307692,2021.0
+RIC Energy Valladolid -phase 1,Hynamics Martres-Tolosane,0.19940000000000002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,FRA,2.0,0.338973913,2025.0
+RIC Energy Valladolid -phase 1,SALCOS - WindH2 Windwasserstoff Salzgitter,0.1995,Solar PV,ESP,5.0,0.749653846,2024.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+RIC Energy Valladolid -phase 1,Utilitas ELY,0.6990424811452001,Solar PV,ESP,5.0,0.749653846,2024.0,Solar PV,EST,0.212405726,0.036,2025.0
+RIC Energy Valladolid -phase 1,Stromlückenfüller 2nd phase,0.19904,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DEU,0.2,0.029986154,2019.0
+RIC Energy Valladolid -phase 1,P2G-Biocat - Continued (Ref 508),0.19910000000000003,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,DNK,0.5,0.084743478,2015.0
+RIC Energy Valladolid -phase 1,Energi Hub Kjerlingland,0.2,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,NOR,5.0,0.866266667,2025.0
+RIC Energy Valladolid -phase 1,"Oslo, CHIC",0.19912000000000002,Solar PV,ESP,5.0,0.749653846,2024.0,Unknown,NOR,0.6,0.101692174,2013.0
+Stromlückenfüller 2nd phase,H2 research center BTU Cottbus,0.9999880000000001,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DEU,0.14,0.023728174,2012.0
+Stromlückenfüller 2nd phase,Rozenburg Power2Gas Phase 1,0.6999614000000001,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,NLD,0.007,0.001049515,2013.0
+Stromlückenfüller 2nd phase,Narva power plant ELY,0.6999888594736,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,EST,0.144297368,0.025,2010.0
+Stromlückenfüller 2nd phase,Hunfeld project ,0.49904,Unknown,DEU,0.2,0.029986154,2019.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Stromlückenfüller 2nd phase,Hydrogen Lab Gorlitz,0.9996400000000001,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DEU,2.0,0.346506667,2023.0
+Stromlückenfüller 2nd phase,Lhyfe-Enerparc Luckau project,0.49904,Unknown,DEU,0.2,0.029986154,2019.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Stromlückenfüller 2nd phase,Linde Hellas - Mandra,0.69984,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,GRC,1.0,0.173253333,2022.0
+Stromlückenfüller 2nd phase,"Porto, CUTE",0.69998,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,PRT,0.3,0.050846087,2003.0
+Stromlückenfüller 2nd phase,Methanation at Eichhof,0.99997,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DEU,0.05,0.007496538,2018.0
+Stromlückenfüller 2nd phase,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.99878,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DEU,6.3,1.067767826,2013.0
+Stromlückenfüller 2nd phase,RENOVAGAS,0.6999618400000001,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Stromlückenfüller 2nd phase,Refhyne,0.99804,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DEU,10.0,1.499307692,2021.0
+Stromlückenfüller 2nd phase,Hynamics Martres-Tolosane,0.69964,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,FRA,2.0,0.338973913,2025.0
+Stromlückenfüller 2nd phase,SALCOS - WindH2 Windwasserstoff Salzgitter,0.49954,Unknown,DEU,0.2,0.029986154,2019.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Stromlückenfüller 2nd phase,Utilitas ELY,0.1999975188548,Unknown,DEU,0.2,0.029986154,2019.0,Solar PV,EST,0.212405726,0.036,2025.0
+Stromlückenfüller 2nd phase,RIC Energy Valladolid -phase 1,0.19904,Unknown,DEU,0.2,0.029986154,2019.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Stromlückenfüller 2nd phase,P2G-Biocat - Continued (Ref 508),0.69994,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,DNK,0.5,0.084743478,2015.0
+Stromlückenfüller 2nd phase,Energi Hub Kjerlingland,0.69904,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,NOR,5.0,0.866266667,2025.0
+Stromlückenfüller 2nd phase,"Oslo, CHIC",0.69992,Unknown,DEU,0.2,0.029986154,2019.0,Unknown,NOR,0.6,0.101692174,2013.0
+P2G-Biocat - Continued (Ref 508),H2 research center BTU Cottbus,0.699928,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,0.14,0.023728174,2012.0
+P2G-Biocat - Continued (Ref 508),Rozenburg Power2Gas Phase 1,0.6999014,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,NLD,0.007,0.001049515,2013.0
+P2G-Biocat - Continued (Ref 508),Narva power plant ELY,0.6999288594736,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,EST,0.144297368,0.025,2010.0
+P2G-Biocat - Continued (Ref 508),Hunfeld project ,0.19910000000000003,Unknown,DNK,0.5,0.084743478,2015.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+P2G-Biocat - Continued (Ref 508),Hydrogen Lab Gorlitz,0.6997,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,2.0,0.346506667,2023.0
+P2G-Biocat - Continued (Ref 508),Lhyfe-Enerparc Luckau project,0.19910000000000003,Unknown,DNK,0.5,0.084743478,2015.0,Solar PV,DEU,5.0,0.847434783,2024.0
+P2G-Biocat - Continued (Ref 508),Linde Hellas - Mandra,0.6999,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,GRC,1.0,0.173253333,2022.0
+P2G-Biocat - Continued (Ref 508),"Porto, CUTE",0.69996,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,PRT,0.3,0.050846087,2003.0
+P2G-Biocat - Continued (Ref 508),Methanation at Eichhof,0.69991,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,0.05,0.007496538,2018.0
+P2G-Biocat - Continued (Ref 508),"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.69884,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,6.3,1.067767826,2013.0
+P2G-Biocat - Continued (Ref 508),RENOVAGAS,0.69990184,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,ESP,0.0092,0.00155928,2014.0
+P2G-Biocat - Continued (Ref 508),Refhyne,0.6981,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,10.0,1.499307692,2021.0
+P2G-Biocat - Continued (Ref 508),Hynamics Martres-Tolosane,0.6997,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,FRA,2.0,0.338973913,2025.0
+P2G-Biocat - Continued (Ref 508),SALCOS - WindH2 Windwasserstoff Salzgitter,0.1996,Unknown,DNK,0.5,0.084743478,2015.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+P2G-Biocat - Continued (Ref 508),Utilitas ELY,0.1999424811452,Unknown,DNK,0.5,0.084743478,2015.0,Solar PV,EST,0.212405726,0.036,2025.0
+P2G-Biocat - Continued (Ref 508),RIC Energy Valladolid -phase 1,0.19910000000000003,Unknown,DNK,0.5,0.084743478,2015.0,Solar PV,ESP,5.0,0.749653846,2024.0
+P2G-Biocat - Continued (Ref 508),Stromlückenfüller 2nd phase,0.69994,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,DEU,0.2,0.029986154,2019.0
+P2G-Biocat - Continued (Ref 508),Energi Hub Kjerlingland,0.6991,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,NOR,5.0,0.866266667,2025.0
+P2G-Biocat - Continued (Ref 508),"Oslo, CHIC",0.69998,Unknown,DNK,0.5,0.084743478,2015.0,Unknown,NOR,0.6,0.101692174,2013.0
+Energi Hub Kjerlingland,H2 research center BTU Cottbus,0.699028,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,0.14,0.023728174,2012.0
+Energi Hub Kjerlingland,Rozenburg Power2Gas Phase 1,0.6990014,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,NLD,0.007,0.001049515,2013.0
+Energi Hub Kjerlingland,Narva power plant ELY,0.6990288594736,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,EST,0.144297368,0.025,2010.0
+Energi Hub Kjerlingland,Hunfeld project ,0.2,Unknown,NOR,5.0,0.866266667,2025.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+Energi Hub Kjerlingland,Hydrogen Lab Gorlitz,0.6994,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,2.0,0.346506667,2023.0
+Energi Hub Kjerlingland,Lhyfe-Enerparc Luckau project,0.2,Unknown,NOR,5.0,0.866266667,2025.0,Solar PV,DEU,5.0,0.847434783,2024.0
+Energi Hub Kjerlingland,Linde Hellas - Mandra,0.6992,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,GRC,1.0,0.173253333,2022.0
+Energi Hub Kjerlingland,"Porto, CUTE",0.69906,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,PRT,0.3,0.050846087,2003.0
+Energi Hub Kjerlingland,Methanation at Eichhof,0.69901,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,0.05,0.007496538,2018.0
+Energi Hub Kjerlingland,"ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.69974,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,6.3,1.067767826,2013.0
+Energi Hub Kjerlingland,RENOVAGAS,0.69900184,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,ESP,0.0092,0.00155928,2014.0
+Energi Hub Kjerlingland,Refhyne,0.6990000000000001,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,10.0,1.499307692,2021.0
+Energi Hub Kjerlingland,Hynamics Martres-Tolosane,0.6994,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,FRA,2.0,0.338973913,2025.0
+Energi Hub Kjerlingland,SALCOS - WindH2 Windwasserstoff Salzgitter,0.1995,Unknown,NOR,5.0,0.866266667,2025.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+Energi Hub Kjerlingland,Utilitas ELY,0.1990424811452,Unknown,NOR,5.0,0.866266667,2025.0,Solar PV,EST,0.212405726,0.036,2025.0
+Energi Hub Kjerlingland,RIC Energy Valladolid -phase 1,0.2,Unknown,NOR,5.0,0.866266667,2025.0,Solar PV,ESP,5.0,0.749653846,2024.0
+Energi Hub Kjerlingland,Stromlückenfüller 2nd phase,0.69904,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DEU,0.2,0.029986154,2019.0
+Energi Hub Kjerlingland,P2G-Biocat - Continued (Ref 508),0.6991,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,DNK,0.5,0.084743478,2015.0
+Energi Hub Kjerlingland,"Oslo, CHIC",0.99912,Unknown,NOR,5.0,0.866266667,2025.0,Unknown,NOR,0.6,0.101692174,2013.0
+"Oslo, CHIC",H2 research center BTU Cottbus,0.699908,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,0.14,0.023728174,2012.0
+"Oslo, CHIC",Rozenburg Power2Gas Phase 1,0.6998814,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,NLD,0.007,0.001049515,2013.0
+"Oslo, CHIC",Narva power plant ELY,0.6999088594736,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,EST,0.144297368,0.025,2010.0
+"Oslo, CHIC",Hunfeld project ,0.19912000000000002,Unknown,NOR,0.6,0.101692174,2013.0,Onshore wind,DEU,5.0,0.866266667,2025.0
+"Oslo, CHIC",Hydrogen Lab Gorlitz,0.69972,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,2.0,0.346506667,2023.0
+"Oslo, CHIC",Lhyfe-Enerparc Luckau project,0.19912000000000002,Unknown,NOR,0.6,0.101692174,2013.0,Solar PV,DEU,5.0,0.847434783,2024.0
+"Oslo, CHIC",Linde Hellas - Mandra,0.69992,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,GRC,1.0,0.173253333,2022.0
+"Oslo, CHIC","Porto, CUTE",0.69994,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,PRT,0.3,0.050846087,2003.0
+"Oslo, CHIC",Methanation at Eichhof,0.69989,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,0.05,0.007496538,2018.0
+"Oslo, CHIC","ETOGAS, Solar Fuel Beta-plant AUDI, Werlte (Audi e-gas)",0.69886,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,6.3,1.067767826,2013.0
+"Oslo, CHIC",RENOVAGAS,0.69988184,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,ESP,0.0092,0.00155928,2014.0
+"Oslo, CHIC",Refhyne,0.6981200000000001,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,10.0,1.499307692,2021.0
+"Oslo, CHIC",Hynamics Martres-Tolosane,0.69972,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,FRA,2.0,0.338973913,2025.0
+"Oslo, CHIC",SALCOS - WindH2 Windwasserstoff Salzgitter,0.19962000000000002,Unknown,NOR,0.6,0.101692174,2013.0,Onshore wind,DEU,2.5,0.374826923,2021.0
+"Oslo, CHIC",Utilitas ELY,0.1999224811452,Unknown,NOR,0.6,0.101692174,2013.0,Solar PV,EST,0.212405726,0.036,2025.0
+"Oslo, CHIC",RIC Energy Valladolid -phase 1,0.19912000000000002,Unknown,NOR,0.6,0.101692174,2013.0,Solar PV,ESP,5.0,0.749653846,2024.0
+"Oslo, CHIC",Stromlückenfüller 2nd phase,0.69992,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DEU,0.2,0.029986154,2019.0
+"Oslo, CHIC",P2G-Biocat - Continued (Ref 508),0.69998,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,DNK,0.5,0.084743478,2015.0
+"Oslo, CHIC",Energi Hub Kjerlingland,0.99912,Unknown,NOR,0.6,0.101692174,2013.0,Unknown,NOR,5.0,0.866266667,2025.0

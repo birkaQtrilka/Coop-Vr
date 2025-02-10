@@ -28,7 +28,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             Log.Do("Entered game room\nMember count: " + MemberCount());
             EventBus<SKObjectAdded>.Event += OnObjectCreated;
 
-            string filePath = "Assets\\Documents\\sample_data_3.csv";
+            string filePath = "Assets\\Documents\\europe_data.csv";
             
             // Create a FileHandler instance
             var fileHandler = new FileHandler(filePath);
@@ -37,7 +37,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             var graphPoints = fileHandler.ReadGraphPointsFromCsv();
 
             // Scale the graph points
-            fileHandler.ScaleGraphPoints(graphPoints, 100f);
+            fileHandler.ScaleGraphPoints(graphPoints, 10f);
             var graph = new Graph();
             graph.SetGraphPoints(graphPoints);
 
@@ -55,6 +55,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 SafeForEachMember((m) => m.SendMessage(response));
 
             });
+            Log.Do("Object ID: " + response.ToString());
         }
 
         public override void OnExit()
@@ -62,6 +63,11 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             EventBus<SKObjectAdded>.Event -= OnObjectCreated;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="sender"></param>
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
             if (message is CreateObjectRequest objCreate)//SHOULD HAVE PARENT ID
@@ -107,9 +113,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                         stopped = move.stopped,
                     };
                     Log.Do("Member count: " + MemberCount() + "   ");
+                    Log.Do("Object ID: " + response.ObjectID.ToString());
+                    //_objects[move.ObjectID].GetComponent<Relationship>().Update()
+                    
+                    component.OnMove?.Invoke(component);
+
                     context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
                 } 
-
             }
         }
 

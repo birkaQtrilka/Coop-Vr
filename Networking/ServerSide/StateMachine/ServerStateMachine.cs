@@ -20,10 +20,10 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _canRunFixedUpdate = true;
 
         public ServerStateMachine()
-        {
+        {   
             Log.Do("Server started on port 55555");
 
-            _listener = new TcpListener(IPAddress.Any, 55555);
+            _listener = new TcpListener(IPAddress.Any, 5000);
             _listener.Start();
 
             _states = new()

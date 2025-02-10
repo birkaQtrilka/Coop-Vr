@@ -3,8 +3,8 @@ namespace Coop_Vr.Networking.Messages
 {
     public class MoveRequestResponse : IMessage
     {
-        public int ObjectID;
-        public int SenderID;
+        public int ObjectID; // server
+        public int SenderID; // Client
         public PosComponent Position;
 
         public bool stopped;

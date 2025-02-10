@@ -13,25 +13,54 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
         public void GenerateGraphPoints()
         {
-            for (int i = 0; i < _graphPoints.Count; i++)
+            foreach (var graphPoint in _graphPoints)
             {
                 //is added automatically to the scene
+                var moveComponent = new Move();
+
                 _ = new SkObject
                 (
                     parentID: gameObject.ID,
-                    components:
-                    new List<Component>()
+                    components: new List<Component>
                     {
                         new PosComponent(),
-                        _graphPoints[i],
-                        new ModelComponent()
+                        graphPoint,
+                        new ModelComponent
                         {
                             MeshName = "sphere",
                         },
-                        new Move()
+                        moveComponent
                     }
-
                 );
+
+                moveComponent.OnMove += onMove;
+            }
+        }
+
+        // When moving the object this function will be called
+        void onMove(Move move)
+        {
+            var movingPoint = move.gameObject.GetComponent<GraphPoint>();
+            float threshold = 5.0f; // Example threshold
+
+            foreach (var point in _graphPoints)
+            {
+                if (point != movingPoint)
+                {
+                    // Calculate distance between movingPoint and point
+                    float distance = MathF.Sqrt(
+                        MathF.Pow(movingPoint.X - point.X, 2) +
+                        MathF.Pow(movingPoint.Y - point.Y, 2) +
+                        MathF.Pow(movingPoint.Z - point.Z, 2)
+                    );
+
+                    // Trigger an event if the distance is below the threshold
+                    if (distance < threshold)
+                    {
+                        Log.Do($"Points are within {threshold} units: {distance}");
+                        // Add your event handling code here
+                    }
+                }
             }
         }
 
