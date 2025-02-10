@@ -14,7 +14,7 @@ namespace Coop_Vr.Networking.ClientSide
         bool stoppedMoving;
         Material mat;
 
-        public Action<Move> OnMove;
+        public Action<Move, MoveRequestResponse> OnMove;
 
         public override void Serialize(Packet pPacket)
         {

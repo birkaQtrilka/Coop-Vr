@@ -19,8 +19,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _changedState;
         bool _canRunFixedUpdate = true;
 
+        public static ServerStateMachine Instance { get; private set; }
+
         public ServerStateMachine()
-        {   
+        {
+            Instance = this;
+
             Log.Do("Server started on port 55555");
 
             _listener = new TcpListener(IPAddress.Any, 5000);

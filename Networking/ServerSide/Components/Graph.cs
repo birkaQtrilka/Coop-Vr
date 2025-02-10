@@ -1,4 +1,6 @@
 ﻿using Coop_Vr.Networking.ClientSide;
+using Coop_Vr.Networking.Messages;
+using Coop_Vr.Networking.ServerSide.StateMachine;
 using StereoKit;
 using System;
 using System.Collections.Generic;
@@ -38,30 +40,47 @@ namespace Coop_Vr.Networking.ServerSide.Components
         }
 
         // When moving the object this function will be called
-        void onMove(Move move)
+        void onMove(Move move, MoveRequestResponse msg)
         {
             var movingPoint = move.gameObject.GetComponent<GraphPoint>();
             float threshold = 5.0f; // Example threshold
 
-            foreach (var point in _graphPoints)
+            foreach (GraphPoint point in _graphPoints)
             {
-                if (point != movingPoint)
-                {
-                    // Calculate distance between movingPoint and point
-                    float distance = MathF.Sqrt(
-                        MathF.Pow(movingPoint.X - point.X, 2) +
-                        MathF.Pow(movingPoint.Y - point.Y, 2) +
-                        MathF.Pow(movingPoint.Z - point.Z, 2)
-                    );
+                if (point == movingPoint) continue;
+                // Calculate distance between movingPoint and point
+                float distance = MathF.Sqrt(
+                    MathF.Pow(movingPoint.X - point.X, 2) +
+                    MathF.Pow(movingPoint.Y - point.Y, 2) +
+                    MathF.Pow(movingPoint.Z - point.Z, 2)
+                );
 
-                    // Trigger an event if the distance is below the threshold
-                    if (distance < threshold)
-                    {
-                        Log.Do($"Points are within {threshold} units: {distance}");
-                        // Add your event handling code here
-                    }
+                // Trigger an event if the distance is below the threshold
+                if (distance < threshold)
+                {
+                    Log.Do($"Points are within {threshold} units: {distance}");
+                    // Add your event handling code here
+
+                    SendMessage(move,msg,point);
                 }
             }
+        }
+
+        void SendMessage(Move move, MoveRequestResponse msg, GraphPoint point)
+        {
+            if (msg.stopped)//terminating ownership
+                move.MoverClientID = -1;
+            else//claiming / continuing ownership 
+                move.MoverClientID = msg.SenderID;
+
+            var response = new MoveRequestResponse()
+            {
+                ObjectID = point.gameObject.ID,
+                SenderID = msg.SenderID,
+                Position = point.gameObject.Transform,
+                stopped = msg.stopped,
+            };
+            ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m => m.SendMessage(response));
         }
 
         public override void Update()

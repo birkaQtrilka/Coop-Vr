@@ -114,9 +114,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     };
                     Log.Do("Member count: " + MemberCount() + "   ");
                     Log.Do("Object ID: " + response.ObjectID.ToString());
-                    //_objects[move.ObjectID].GetComponent<Relationship>().Update()
-                    
-                    component.OnMove?.Invoke(component);
+                    component.OnMove?.Invoke(component, response);
 
                     context.CurrentRoom.SafeForEachMember((m) => m.SendMessage(response));
                 } 
