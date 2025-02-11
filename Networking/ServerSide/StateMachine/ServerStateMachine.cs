@@ -32,9 +32,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         bool _canRunFixedUpdate = true;
 
         readonly List<ClientHeart> _clientHearts = new();
-        Queue<IMessage> _mesageQueue = new();
+        Queue<IMessage> _messageQueue = new();
 
-
+        
         public ServerStateMachine()
         {
             Log.Do("Server started on port 55555");
@@ -101,7 +101,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
         public void SendMessage(IMessage msg)
         {
-            _mesageQueue.Enqueue(msg);
+            _messageQueue.Enqueue(msg);
         }
 
         public async Task FixedUpdate()
@@ -112,9 +112,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
                 CurrentRoom.FixedUpdate();
 
-                while(_mesageQueue.Count > 0)
+                while(_messageQueue.Count > 0)
                 {
-                    var msg = _mesageQueue.Dequeue();
+                    var msg = _messageQueue.Dequeue();
                     CurrentRoom.SafeForEachMember(c => c.SendMessage(msg));
                 }
 
