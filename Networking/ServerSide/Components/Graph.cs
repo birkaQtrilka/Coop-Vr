@@ -43,25 +43,25 @@ namespace Coop_Vr.Networking.ServerSide.Components
         void onMove(Move move, MoveRequestResponse msg)
         {
             var movingPoint = move.gameObject.GetComponent<GraphPoint>();
-            float threshold = 5.0f; // Example threshold
+
 
             foreach (GraphPoint point in _graphPoints)
             {
                 if (point == movingPoint) continue;
-                // Calculate distance between movingPoint and point
-                float distance = MathF.Sqrt(
-                    MathF.Pow(movingPoint.X - point.X, 2) +
-                    MathF.Pow(movingPoint.Y - point.Y, 2) +
-                    MathF.Pow(movingPoint.Z - point.Z, 2)
-                );
-
-                // Trigger an event if the distance is below the threshold
-                if (distance < threshold)
                 {
-                    Log.Do($"Points are within {threshold} units: {distance}");
-                    // Add your event handling code here
+                    // Update the position of the other point based on the moving point
+                    point.X = movingPoint.X + .1f; // Example adjustment
+                    point.Y = movingPoint.Y - .1f; // Example adjustment
+                    point.Z = movingPoint.Z + .1f; // Example adjustment
 
-                    SendMessage(move,msg,point);
+                    point.gameObject.Transform.pose = new Pose(
+                        point.X,
+                        point.Y,
+                        point.Z,
+                        Quat.Identity
+                    );
+
+                    SendMessage(move, msg, point);
                 }
             }
         }

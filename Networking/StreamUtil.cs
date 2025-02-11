@@ -17,8 +17,6 @@ namespace Coop_Vr.Networking
 	 */
     public static class StreamUtil
     {
-
-
         /**
 		 * Writes the size of the given byte array into the stream and then the bytes themselves.
 		 */
