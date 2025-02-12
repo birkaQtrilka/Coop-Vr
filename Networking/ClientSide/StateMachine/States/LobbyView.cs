@@ -6,14 +6,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {
     public class LobbyView : Room<ClientStateMachine>
     {
-        //wrap this into own "gameObject" class
-        string title = "Text Input";
-        string description = "";
 
         Pose windowPose = new Pose(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
 
-        bool showHeader = true;
-        float slider = 0.5f;
         //baller hotspot
         //string text = "192.168.144.33";
         //stefan house
@@ -26,7 +21,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         bool _pressedConectToServer;
         bool _conectedToServer;
 
-        bool _test = true;
+        //bool _test = true;
 
         public LobbyView(ClientStateMachine context) : base(context)
         {
@@ -38,6 +33,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public override void OnExit()
         {
+            _conectedToServer = false;
+            _pressedConectToServer = false;
+            _connectingTask = null;
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
@@ -58,9 +56,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 if (_connectingTask.IsCompleted)
                 {
                     _connectingTask = null;
-                    if(_test)
+                    //if(_test)
                         context.SendMessage(new PlayerJoinRequest());
-                    _test = false;
+                    //_test = false;
                 }
             }
 
@@ -73,7 +71,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         void DrawJoinWindow()
         {
-            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 50) * U.cm, showHeader ? UIWin.Normal : UIWin.Body);
+            UI.WindowBegin("Window", ref windowPose, new Vec2(50, 50) * U.cm,UIWin.Normal);
 
             Vec2 inputSize = V.XY(20 * U.cm, 0);
 
@@ -84,10 +82,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 _pressedConectToServer = true;
                 _connectingTask = context.ConnectToServerAsync(text);
             }
-            if (UI.Button("Find Lobby") )
-            {
-                _test = true;
-            }
+            //if (UI.Button("Find Lobby") )
+            //{
+            //    _test = true;
+            //}
 
             UI.HSeparator();
 

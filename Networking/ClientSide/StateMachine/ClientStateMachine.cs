@@ -94,8 +94,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public async Task ConnectToServerAsync(string Ip)
         {
-            //while(_server == null)
-            //{
+           // while (_server == null)
+           // {
                 try
                 {
                     var client = new TcpClient();
@@ -107,8 +107,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 {
                     Log.Do(e.Message);
                 }
-            //}
-            await Task.Delay(100);
+          //  }
+             await Task.Delay(100);
         }
 
         public void Update()

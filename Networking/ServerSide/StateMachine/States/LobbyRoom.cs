@@ -1,7 +1,4 @@
-﻿
-using Coop_Vr.Networking.ClientSide;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {

@@ -35,6 +35,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             EventBus<SKObjectCreated>.Event -= OnSkObjectCreated;
             EventBus<SKObjectGetter>.Event -= ObjectGet;
 
+            ResetData();
+        }
+
+        void ResetData()
+        {
             _objects.Clear();
 
             _root.ForEach(c => {
