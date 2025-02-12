@@ -42,36 +42,50 @@ namespace Coop_Vr.Networking.ServerSide.Components
         // When moving the object this function will be called
         void onMove(Move move, MoveRequestResponse msg)
         {
+            //return;
             var movingPoint = move.gameObject.GetComponent<GraphPoint>();
-
+            var moverPos = msg.Position.pose.position;
+            List<IMessage> msgList = new List<IMessage>();
 
             foreach (GraphPoint point in _graphPoints)
             {
+                //int clrCode;
                 if (point == movingPoint) continue;
-                {
+                    //    clrCode = 0;
+                    //else
+                    //    clrCode = 1;
+
+                    //IMessage response = new ChangeColorMsg()
+                    //{
+                    //    ColorCode = clrCode,
+                    //    ObjID = point.gameObject.ID,
+                    //};
+
+                    ////ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m => m.SendMessage(response));
+
                     // Update the position of the other point based on the moving point
-                    point.X = movingPoint.X + .1f; // Example adjustment
-                    point.Y = movingPoint.Y - .1f; // Example adjustment
-                    point.Z = movingPoint.Z + .1f; // Example adjustment
+                point.gameObject.Transform.pose = new Pose(
+                    moverPos.x + .1f,
+                    moverPos.y - .1f,
+                    moverPos.z + .1f,
+                    Quat.Identity
+                );
 
-                    point.gameObject.Transform.pose = new Pose(
-                        point.X,
-                        point.Y,
-                        point.Z,
-                        Quat.Identity
-                    );
-
-                    SendMessage(move, msg, point);
-                }
+                msgList.Add( SendMessage(move, msg, point) );
             }
+            ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m =>
+            {
+                foreach (var msg in msgList) m.SendMessage(msg);
+            });
+
         }
 
-        void SendMessage(Move move, MoveRequestResponse msg, GraphPoint point)
+        IMessage SendMessage(Move move, MoveRequestResponse msg, GraphPoint point)
         {
             if (msg.stopped)//terminating ownership
                 move.MoverClientID = -1;
             else//claiming / continuing ownership 
-                move.MoverClientID = msg.SenderID;
+                move.MoverClientID = msg.SenderID; // server is owner
 
             var response = new MoveRequestResponse()
             {
@@ -79,8 +93,9 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 SenderID = msg.SenderID,
                 Position = point.gameObject.Transform,
                 stopped = msg.stopped,
+                alsoMoveSender = true,
             };
-            ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m => m.SendMessage(response));
+            return response;
         }
 
         public override void Update()

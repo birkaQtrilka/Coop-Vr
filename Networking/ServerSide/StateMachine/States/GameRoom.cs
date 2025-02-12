@@ -1,11 +1,7 @@
 ﻿using Coop_Vr.Networking.ClientSide;
 using Coop_Vr.Networking.ServerSide.Components;
 using Coop_Vr.Networking.Messages;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
@@ -96,9 +92,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                 obj.Transform.pose = move.Position.pose;
                 var component = obj.GetComponent<Move>();
                 bool hasNoOwner = component.MoverClientID == -1;
-
-                //will probably bug out if owner leaves the game
-                if (hasNoOwner || move.SenderID == component.MoverClientID)//is same Owner
+                bool isMovedBySender = move.SenderID == component.MoverClientID;
+                //in case two clients grab the object "at once", this prevents from juggling between owners
+                if (hasNoOwner || isMovedBySender)
                 {
                     if(move.stopped)//terminating ownership
                         component.MoverClientID = -1;
