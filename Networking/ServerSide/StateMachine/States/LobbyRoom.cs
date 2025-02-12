@@ -8,7 +8,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
     public class LobbyRoom : Room<ServerStateMachine>
     {
         const int MIN_PLAYERS = 2;
-        List<TcpChanel> readyPlayers = new();
+        readonly List<TcpChanel> _readyPlayers = new();
         static int playerId;
 
         public LobbyRoom(ServerStateMachine context) : base(context)
@@ -23,20 +23,21 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         public override void OnExit()
         {
             Log.Do("exited lobby room");
+            _readyPlayers.Clear();
 
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
-            if (message is PlayerJoinRequest request)
+            if (message is PlayerJoinRequest)
             {
-                readyPlayers.Add(sender);
+                _readyPlayers.Add(sender);
                 Log.Do($"PlayerJoinRequest: {sender}");
 
-                if (readyPlayers.Count >= MIN_PLAYERS)
+                if (_readyPlayers.Count >= MIN_PLAYERS)
                 {
                     Room<ServerStateMachine> gameRoom = context.GetRoom<GameRoom>();
-                    foreach (TcpChanel player in readyPlayers)
+                    foreach (TcpChanel player in _readyPlayers)
                     {
                         RemoveMember(player);
                         gameRoom.AddMember(player);

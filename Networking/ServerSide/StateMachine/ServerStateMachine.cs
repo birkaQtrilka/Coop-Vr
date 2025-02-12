@@ -33,6 +33,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
         readonly List<ClientHeart> _clientHearts = new();
         Queue<IMessage> _messageQueue = new();
+        Queue<Action> _afterFixedUpdate = new();
 
         
         public ServerStateMachine()
@@ -104,13 +105,27 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             _messageQueue.Enqueue(msg);
         }
 
-        public async Task FixedUpdate()
+        async Task FixedUpdate()
         {
-            while (_canRunFixedUpdate)
+            while (true)
             {
                 await Task.Delay(MySettings.FixedUpdateDelay);
 
                 CurrentRoom.FixedUpdate();
+
+                while (_afterFixedUpdate.Count > 0)
+                {
+                    var action = _afterFixedUpdate.Dequeue();
+                    try
+                    {
+                        action();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Do("AAAAAAAAAAAAAAAaa");
+                    }
+                }
 
                 while(_messageQueue.Count > 0)
                 {
@@ -126,6 +141,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             while(_canRunFixedUpdate)
             {
                 await Task.Delay(MySettings.HeartBeatDelay);
+
+                if (_clientHearts.Count == 0) continue;
+
                 HeartBeat heartBeatMsg = new();
                 Log.Enabled = false;
                 
@@ -148,8 +166,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
                 if (overdueHeartBeat || clientedDisconnected)
                 {
-                    //ResetServer();
-                    Log.Do("Reset!!!!!!!!!!!");
+                    _clientHearts.RemoveAt(i);
+                    ResetServer();
                     return;
                 }
                 else
@@ -159,12 +177,38 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
         void ResetServer()
         {
+            Log.Do("Reset!!!!!!!!!!!");
             SendMessage(new ResetMsg());
-            CurrentRoom.SafeForEachMember(client =>
+            //forgeting to re add members
+
+            var referenceCopy = CurrentRoom;//gameRoom
+            NextAction(() =>
             {
-                CurrentRoom.RemoveMember(client);
+                ChangeTo(typeof(LobbyRoom));
+
+                NextAction(() =>
+                referenceCopy.SafeForEachMember(client =>
+                {
+                    referenceCopy.RemoveMember(client);
+                }));
+
+
+                NextAction(() =>
+                    CurrentRoom.SafeForEachMember(client =>
+                    {
+                        CurrentRoom.AddMember(client);
+                    })
+                );
+
             });
-            ChangeTo<LobbyRoom>();
+
+            
+
+        }
+
+        void NextAction(Action action)
+        {
+            _afterFixedUpdate.Enqueue(action);
         }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>
@@ -175,11 +219,16 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
         public void ChangeTo<T>()
         {
+            _afterFixedUpdate.Enqueue(()=> ChangeTo(typeof(T)));
+        }
+
+        void ChangeTo(Type room)
+        {
             _changedState = true;
-            Room<ServerStateMachine> newState = _states[typeof(T)];
+            Room<ServerStateMachine> newState = _states[room];
             CurrentRoom.OnExit();
             CurrentRoom = newState;
-            newState.OnEnter();
+            CurrentRoom.OnEnter();
         }
     }
 }
