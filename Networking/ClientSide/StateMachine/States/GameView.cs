@@ -59,6 +59,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 SkObject obj = _objects[move.ObjectID];
                 obj.GetComponent<Move>().HandleResponese(move);
             }
+            else if (message is ChangeColorMsg clrMsg)
+            {
+
+                SkObject obj = _objects[clrMsg.ObjectID];
+                obj.GetComponent<ModelComponent>().color = clrMsg.GetColor();
+
+            }
         }
 
         void OnObjectCreated(SkObject obj)

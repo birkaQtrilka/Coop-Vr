@@ -10,7 +10,7 @@ namespace Coop_Vr.Networking.ClientSide
 
         ModelComponent modelComponent;
         bool isMoving;
-        bool stoppedMoving;
+        bool stoppedMoving = true;
 
         public override void Serialize(Packet pPacket)
         {
@@ -29,8 +29,20 @@ namespace Coop_Vr.Networking.ClientSide
 
         public override void Update()
         {
-            if (MoverClientID != -1 && ClientStateMachine.MessageSender.ID != MoverClientID)
+            bool hasOwner = MoverClientID != -1;
+            bool moverIsNotOwnedByMe = hasOwner && ClientStateMachine.MessageSender.ID != MoverClientID;
+            
+            if (moverIsNotOwnedByMe)
+                modelComponent.color = Color.HSV(0, 1, 1);
+            else
+                modelComponent.color = Color.HSV(0.333f, 1, 1);
+
+            if (moverIsNotOwnedByMe)
+            {
                 return;
+            }
+
+            Log.Do("Moving");
 
             isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
 
@@ -69,19 +81,20 @@ namespace Coop_Vr.Networking.ClientSide
             if(move.stopped)
             {
                 MoverClientID = -1;
+                stoppedMoving = true;
                 return;
             }
 
-            if (move.SenderID == ClientStateMachine.MessageSender.ID)
+            bool movedByMe = move.SenderID == ClientStateMachine.MessageSender.ID;
+            MoverClientID = move.SenderID;
+
+            if (movedByMe && !move.alsoMoveSender)
             {
                 Log.Do("want to change pos but it is sender");
-                MoverClientID = ClientStateMachine.MessageSender.ID;
-
                 return;
             }
-            //make a clock that calculates the refresh rate
+            //make a clock that calculates the refresh rate?
             gameObject.Transform.QueueInterpolate(move.Position.pose);
-            MoverClientID = move.SenderID;
         }
         
 }
