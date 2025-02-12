@@ -35,35 +35,22 @@ namespace Coop_Vr.Networking.ServerSide.Components
                     }
                 );
 
-                moveComponent.OnMove += onMove;
+                moveComponent.OnMove += OnMove;
             }
         }
 
         // When moving the object this function will be called
-        void onMove(Move move, MoveRequestResponse msg)
+        void OnMove(Move move, MoveRequestResponse msg)
         {
-            //return;
             var movingPoint = move.gameObject.GetComponent<GraphPoint>();
             var moverPos = msg.Position.pose.position;
-            List<IMessage> msgList = new List<IMessage>();
+            List<IMessage> msgList = new();
 
             foreach (GraphPoint point in _graphPoints)
             {
-                //int clrCode;
                 if (point == movingPoint) continue;
-                    //    clrCode = 0;
-                    //else
-                    //    clrCode = 1;
 
-                    //IMessage response = new ChangeColorMsg()
-                    //{
-                    //    ColorCode = clrCode,
-                    //    ObjID = point.gameObject.ID,
-                    //};
-
-                    ////ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m => m.SendMessage(response));
-
-                    // Update the position of the other point based on the moving point
+                // Update the position of the other point based on the moving point
                 point.gameObject.Transform.pose = new Pose(
                     moverPos.x + .1f,
                     moverPos.y - .1f,
