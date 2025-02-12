@@ -32,20 +32,16 @@ namespace Coop_Vr.Networking.ClientSide
             bool hasOwner = MoverClientID != -1;
             bool moverIsNotOwnedByMe = hasOwner && ClientStateMachine.MessageSender.ID != MoverClientID;
             
-            if (moverIsNotOwnedByMe)
-                modelComponent.color = Color.HSV(0, 1, 1);
-            else
-                modelComponent.color = Color.HSV(0.333f, 1, 1);
+            //if (moverIsNotOwnedByMe)
+            //    modelComponent.color = Color.HSV(0, 1, 1);
+            //else
+            //    modelComponent.color = Color.HSV(0.333f, 1, 1);
 
             if (moverIsNotOwnedByMe)
-            {
                 return;
-            }
 
-            Log.Do("Moving");
 
             isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
-
         }
 
         public override void FixedUpdate()

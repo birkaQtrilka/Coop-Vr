@@ -60,8 +60,6 @@ namespace Coop_Vr.Networking.ServerSide.Components
             //model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
-            //UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
-
             Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y,0) ;
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
