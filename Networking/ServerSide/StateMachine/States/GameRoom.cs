@@ -50,15 +50,10 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectMsg objCreate)
             {
-                EventBus<SKObjectCreated>.Publish(new SKObjectCreated(objCreate.NewObj, objCreate.ParentID));
-
-                var response = new CreateObjectMsg()
-                {
-                    NewObj = objCreate.NewObj,
-                    ParentID = objCreate.ParentID,
-                    SenderID = objCreate.SenderID,
-                };
-                context.SendMessage(response);
+                EventBus<SKObjectCreated>.Publish
+                (
+                    new SKObjectCreated(objCreate.NewObj, objCreate.ParentID, objCreate.SenderID)
+                );
             }
             else if (message is ChangePositionRequest changePositionRequest)
             {
@@ -112,6 +107,14 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             _objects.Add(obj.ID, obj);
             obj.Init();
             _objects[evnt.ParentID].AddChild(obj, false);
+
+            var response = new CreateObjectMsg()
+            {
+                NewObj = obj,
+                ParentID = evnt.ParentID,
+                SenderID = evnt.SenderID,
+            };
+            context.SendMessage(response);
         }
 
         void OnObjectAdded(SKObjectAdded evnt)
@@ -129,7 +132,10 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         void ObjectGet(SKObjectGetter getter)
         {
-            getter.ReturnedObj = () => _objects[getter.ID];
+            getter.ReturnedObj = () => {
+                if (!_objects.ContainsKey(getter.ID)) return null;
+                return _objects[getter.ID];
+            };
         }
 
         public override void Update()

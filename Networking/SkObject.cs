@@ -73,6 +73,7 @@ namespace Coop_Vr.Networking
 
         public SkObject GetParent()
         {
+            //the server or client state machine listens to this event and returns the object from id
             var getter = new SKObjectGetter(_parentID);
             EventBus<SKObjectGetter>.Publish(getter);
             return getter.ReturnedObj();

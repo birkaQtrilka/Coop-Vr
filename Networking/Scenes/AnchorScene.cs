@@ -30,14 +30,24 @@ namespace Coop_Vr.Networking.Scenes
                     }
                 );
 
-            var createObjInstruction = new CreateObjectMsg() { NewObj = point, ParentID = -1, SenderID = -9999 };
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                room.Context.SendMessage(createObjInstruction);
-
-            });
+            var point2 = new SkObject
+                (
+                    parentID: point.ID,
+                    components:
+                    new List<Component>()
+                    {
+                        new PosComponent(){Position = StereoKit.Vec3.Forward},
+                        new GraphPoint(),
+                        new ModelComponent()
+                        {
+                            MeshName = "cube",
+                        },
+                        new Move()
+                    }
+                );
+            //TO DO:
+            //Automatically add to root DONE
+            //Send message on add child
         }
 
         public override void OnStop()

@@ -12,7 +12,7 @@ namespace Coop_Vr.Networking
             get => _modelMatrix.Pose;
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
+                _modelMatrix.Decompose(out _, out _, out var s);
                 _modelMatrix = Matrix.TRS(value.position, value.orientation, s);
                 UpdateMatrix();
             }
@@ -33,7 +33,7 @@ namespace Coop_Vr.Networking
             get => _modelMatrix.Scale;
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
+                _modelMatrix.Decompose(out var p, out var r, out _);
                 _modelMatrix = Matrix.TRS(p, r, value);
                 UpdateMatrix();
             }
@@ -44,7 +44,7 @@ namespace Coop_Vr.Networking
             get => _modelMatrix.Rotation;
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
+                _modelMatrix.Decompose(out var p, out _, out var s);
                 _modelMatrix = Matrix.TRS(p, value, s);
                 UpdateMatrix();
             }
@@ -57,27 +57,62 @@ namespace Coop_Vr.Networking
         bool _isPlaying = false;
 
         public Matrix ModelMatrix => _modelMatrix;
-        Matrix _modelMatrix;
+        Matrix _modelMatrix = Matrix.Identity;
 
 
         void UpdateMatrix(PosComponent parent = null)
         {
-            //parent ??= gameObject.GetParent().Transform;
-            //_modelMatrix = parent.ModelMatrix * ModelMatrix;
+            parent ??= gameObject?.GetParent()?.Transform;
+            if(parent == null)
+            {
+                _modelMatrix = Matrix.Identity;
+                return;
+            }
+            _modelMatrix = parent.ModelMatrix * ModelMatrix;
 
-            //gameObject.ForEach(obj => obj.Transform.UpdateMatrix(this));
+            gameObject.ForEach(obj => obj.Transform.UpdateMatrix(this));
         }
 
         public void OnObjAdded()
         {
             UpdateMatrix();
-            var parent = gameObject.GetParent().Transform;
-            _modelMatrix = parent.ModelMatrix * ModelMatrix;
         }
 
         public void OnObjRemoved(SkObject from)
         {
             _modelMatrix = from.Transform.ModelMatrix.Inverse * ModelMatrix;
+        }
+
+        public void QueueInterpolate(Pose p)
+        {
+            if (_interpolationQueue.Count > MAX_QUEUE_COUNT)
+                _interpolationQueue.Dequeue();
+            _interpolationQueue.Enqueue(p);
+            _isPlaying = true;
+            _startPose = Pose;
+            _currTime = 0;
+
+        }
+
+        public bool QueueIsEmpty()
+        {
+            return _interpolationQueue.Count == 0;
+        }
+
+        public override void Update()
+        {
+            if (!_isPlaying) return;
+
+            _currTime += Time.Step;
+            if (_currTime < _time)
+            {
+                Pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
+                return;
+            }
+            _startPose = Pose;
+            _currTime = 0;
+            _interpolationQueue.Dequeue();
+            _isPlaying = _interpolationQueue.Count > 0;
         }
 
         public override void Deserialize(Packet pPacket)
@@ -122,37 +157,7 @@ namespace Coop_Vr.Networking
             pPacket.Write(scale.y);
             pPacket.Write(scale.z);
         }
-        public void QueueInterpolate(Pose p)
-        {
-            if (_interpolationQueue.Count > MAX_QUEUE_COUNT)
-                _interpolationQueue.Dequeue();
-            _interpolationQueue.Enqueue(p);
-            _isPlaying = true;
-            _startPose = Pose;
-            _currTime = 0;
-
-        }
-
-        public bool QueueIsEmpty()
-        {
-            return _interpolationQueue.Count == 0;
-        }
-
-        public override void Update()
-        {
-            if (!_isPlaying) return;
-
-            _currTime += Time.Step;
-            if (_currTime < _time)
-            {
-                Pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
-                return;
-            }
-            _startPose = Pose;
-            _currTime = 0;
-            _interpolationQueue.Dequeue();
-            _isPlaying = _interpolationQueue.Count > 0;
-        }
+        
     }
 }
 

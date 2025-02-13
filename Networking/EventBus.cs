@@ -18,10 +18,12 @@ namespace Coop_Vr.Networking
     {
         public readonly SkObject Obj;
         public readonly int ParentID; 
-        public SKObjectCreated(SkObject obj, int parentID = -1)//-1 is the id of the root
+        public readonly int SenderID; //in case the object is created by a client
+        public SKObjectCreated(SkObject obj, int parentID = -1, int senderID = MySettings.SERVER_ID)//-1 is the id of the root
         {
             Obj = obj;
             ParentID = parentID;
+            SenderID = senderID;
         }
     }
 

@@ -107,31 +107,31 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
         async Task FixedUpdate()
         {
-            while (true)
+            while (_canRunFixedUpdate)
             {
                 await Task.Delay(MySettings.FixedUpdateDelay);
-
-                CurrentRoom.FixedUpdate();
-
-                while (_afterFixedUpdate.Count > 0)
+                try
                 {
-                    var action = _afterFixedUpdate.Dequeue();
-                    try
+                    CurrentRoom.FixedUpdate();
+
+                    while (_afterFixedUpdate.Count > 0)
                     {
+                        var action = _afterFixedUpdate.Dequeue();
                         action();
 
                     }
-                    catch (Exception ex)
+
+                    while (_messageQueue.Count > 0)
                     {
-                        Log.Do("AAAAAAAAAAAAAAAaa");
+                        var msg = _messageQueue.Dequeue();
+                        CurrentRoom.SafeForEachMember(c => { if (c.Connected) c.SendMessage(msg); });
                     }
                 }
-
-                while(_messageQueue.Count > 0)
+                catch (Exception ex)
                 {
-                    var msg = _messageQueue.Dequeue();
-                    CurrentRoom.SafeForEachMember(c => c.SendMessage(msg));
+                    Log.Do(ex);
                 }
+                
 
             }
         }
@@ -173,42 +173,22 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 else
                     client.LastHeartBeat = currentTime;
             }
+            
         }
 
         void ResetServer()
         {
             Log.Do("Reset!!!!!!!!!!!");
             SendMessage(new ResetMsg());
-            //forgeting to re add members
-
-            var referenceCopy = CurrentRoom;//gameRoom
-            NextAction(() =>
-            {
-                ChangeTo(typeof(LobbyRoom));
-
-                NextAction(() =>
-                referenceCopy.SafeForEachMember(client =>
+            //the message will happen after removing and adding clients to the new room
+            //I need to skip a frame, so the message is first sent to the clients of current room, then move the clients
+            //into the lobby where there can potentially be more clients
+            _afterFixedUpdate.Enqueue(() => 
+                _afterFixedUpdate.Enqueue(() =>
                 {
-                    referenceCopy.RemoveMember(client);
-                }));
-
-
-                NextAction(() =>
-                    CurrentRoom.SafeForEachMember(client =>
-                    {
-                        CurrentRoom.AddMember(client);
-                    })
-                );
-
-            });
-
-            
-
-        }
-
-        void NextAction(Action action)
-        {
-            _afterFixedUpdate.Enqueue(action);
+                    ChangeTo(typeof(LobbyRoom), true);
+                })
+            );
         }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>
@@ -222,13 +202,24 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             _afterFixedUpdate.Enqueue(()=> ChangeTo(typeof(T)));
         }
 
-        void ChangeTo(Type room)
+        void ChangeTo(Type room, bool moveClients = false)
         {
             _changedState = true;
             Room<ServerStateMachine> newState = _states[room];
             CurrentRoom.OnExit();
+
+            if(moveClients)
+                CurrentRoom.SafeForEachMember(client =>
+                {
+                    newState.AddMember(client);
+                    CurrentRoom.RemoveMember(client);
+
+                });
+
             CurrentRoom = newState;
             CurrentRoom.OnEnter();
         }
+
+        
     }
 }
