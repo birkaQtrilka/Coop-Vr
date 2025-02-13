@@ -9,7 +9,7 @@ namespace Coop_Vr.Networking.ClientSide
         private ModelComponent modelComponent;
         public int MoverClientID = -1;
         bool isMoving;
-        bool stoppedMoving = false;
+        bool stoppedMoving = true;
 
         public override void Serialize(Packet pPacket)
         {
@@ -31,11 +31,11 @@ namespace Coop_Vr.Networking.ClientSide
             if (MoverClientID != -1 && ClientStateMachine.MessageSender.ID != MoverClientID)
                 return;
 
-            Pose copy = gameObject.Transform.Pose;
+            Pose copy = gameObject.Transform.LocalPose;
 
-            isMoving = UI.Handle(gameObject.ID.ToString(), ref copy, modelComponent.bounds);
+            isMoving = UI.Handle(gameObject.ID.ToString(), ref copy, modelComponent.bounds * gameObject.Transform.LocalScale);
 
-            gameObject.Transform.Pose = copy;
+            gameObject.Transform.LocalPose = copy;
         }
 
         public override void FixedUpdate()
@@ -88,7 +88,7 @@ namespace Coop_Vr.Networking.ClientSide
                 return;
             }
 
-            gameObject.Transform.QueueInterpolate(move.Position.Pose);
+            gameObject.Transform.QueueInterpolate(move.Position.LocalPose);
             MoverClientID = move.SenderID;
         }
 

@@ -53,7 +53,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             }
             else if (message is ChangePositionRequest changePositionRequest)
             {
-                _objects[changePositionRequest.ObjectID].Transform.Pose = changePositionRequest.position.Pose;
+                _objects[changePositionRequest.ObjectID].Transform.LocalPose = changePositionRequest.position.LocalPose;
 
                 var response = new ChangePositionResponse()
                 {
@@ -68,7 +68,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             else if (message is MoveRequestResponse move)
             {
                 SkObject obj = _objects[move.ObjectID];
-                obj.Transform.Pose = move.Position.Pose;
+                obj.Transform.LocalPose = move.Position.LocalPose;
                 var component = obj.GetComponent<Move>();
                 bool hasNoOwner = component.MoverClientID == -1;
 

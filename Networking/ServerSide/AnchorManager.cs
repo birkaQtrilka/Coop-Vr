@@ -5,8 +5,6 @@ namespace Coop_Vr.Networking.ServerSide
 {
     public class AnchorManager 
     {
-        string title = "Anchors";
-        string description = "This demo uses StereoKit's Anchor API to add, remove, and load spatial anchors that are locked to local physical locations. These can be used for persisting locations across sessions, or increasing the stability of your experiences!";
 
         List<Anchor> anchors = new List<Anchor>();
         Anchor selected = null;

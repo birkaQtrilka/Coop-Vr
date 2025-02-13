@@ -52,14 +52,12 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public override void Update()
         {
             float scale = CalculateScale();
-            gameObject.Transform.Scale = new Vec3(scale);
+            gameObject.Transform.LocalScale = new Vec3(scale);
 
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
-            var poseCopy = spherePose.Pose;
-            UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country", "Unknown")}", ref poseCopy, new Bounds(spherePose.Scale));
-            spherePose.Pose = poseCopy;
+            var poseCopy = spherePose.LocalPose;
 
             Vec3 labelPosition = gameObject.Transform.ModelMatrix * new Vec3(0, 1f, 0);
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");

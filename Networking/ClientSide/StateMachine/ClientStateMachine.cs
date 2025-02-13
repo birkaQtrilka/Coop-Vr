@@ -94,8 +94,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public async Task ConnectToServerAsync(string Ip)
         {
-           // while (_server == null)
-           // {
+            while (_server == null)
+            {
                 try
                 {
                     var client = new TcpClient();
@@ -107,8 +107,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 {
                     Log.Do(e.Message);
                 }
-          //  }
-             await Task.Delay(100);
+                await Task.Delay(100);
+            }
         }
 
         public void Update()
@@ -123,7 +123,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 }
                 else if (msg is ResetMsg)
                 {
-                    //ResetClient();
+                    ChangeTo<LobbyView>();
+
                     Log.Do("Reset!!");
                 }
                 else
@@ -140,20 +141,18 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             _current.Update();
         }
 
-        void ResetClient()
-        {
-            _current.SafeForEachMember(member =>
-            {
-                _current.RemoveMember(member);
-            });
-            ChangeTo<LobbyView>();
-        }
-
         public async Task FixedUpdate()
         {
             while (_canFixedUpdate)
             {
                 await Task.Delay(MySettings.FixedUpdateDelay);
+
+                if (_changedScene)
+                {
+                    _changedScene = false;
+                    continue; 
+                }
+
 
                 _current.FixedUpdate();
 
@@ -163,11 +162,20 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
         }
 
-        public void ChangeTo<T>()
+        public void ChangeTo<T>(/*bool moveClients = false*/)
         {
             _changedScene = true;
             var newState = _scenes[typeof(T)];
             _current.OnExit();
+
+            //if (moveClients)
+            //    _current.SafeForEachMember(client =>
+            //    {
+            //        newState.AddMember(client);
+            //        _current.RemoveMember(client);
+
+            //    });
+
             _current = newState;
             newState.OnEnter();
         }

@@ -50,7 +50,7 @@ namespace Coop_Vr.Networking
 
         public override void Update()
         {
-            mesh.Draw(material, gameObject.Transform.ModelMatrix, color);
+            mesh.Draw(material, gameObject.Transform.GetWorldMatrix(), color);
         }
     }
 }

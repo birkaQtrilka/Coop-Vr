@@ -7,107 +7,163 @@ namespace Coop_Vr.Networking
     {
         public const int MAX_QUEUE_COUNT = 6;
 
-        public Pose Pose
+        public Pose LocalPose
         {
-            get => _modelMatrix.Pose;
+            get => new(_localPosition, _localRotation);
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
-                _modelMatrix = Matrix.TRS(value.position, value.orientation, s);
-                UpdateMatrix();
+                _localPosition = value.position;
+                _localRotation = value.orientation;
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+
             }
         }
 
-        public Vec3 Position
+        Vec3 _localPosition = Vec3.Zero;
+        public Vec3 LocalPosition
         {
-            get => _modelMatrix.Translation;
-            set { 
-                _modelMatrix.Translation = value;
-                UpdateMatrix();
+            get => _localPosition;
+            set
+            {
+                _localPosition = value;
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
             }
         }
 
-        public Vec3 Scale
+        Vec3 _localScale = Vec3.One;
+        public Vec3 LocalScale
         {
-            get => _modelMatrix.Scale;
+            get => _localScale;
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
-                _modelMatrix = Matrix.TRS(p, r, value);
-                UpdateMatrix();
+                _localScale = value;
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+
             }
         }
 
-        public Quat Rotation
+        Quat _localRotation = Quat.Identity;
+        public Quat LocalRotation
         {
-            get => _modelMatrix.Rotation;
+            get => _localRotation;
             set
             {
-                _modelMatrix.Decompose(out var p, out var r, out var s);
-                _modelMatrix = Matrix.TRS(p, value, s);
-                UpdateMatrix();
+                _localRotation = value;
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+
             }
         }
+
+        public Vec3 WorldPosition
+        {
+            get => GetWorldMatrix().Translation;
+            set
+            {
+                var parent = gameObject.GetParent()?.Transform;
+                if (parent == null)
+                {
+                    _localPosition = value; // No parent, so world position is the local position.
+                }
+                else
+                {
+                    // Transform the world position to local space.
+                    _localPosition = parent.GetWorldMatrix().Inverse.Transform(value);
+                }
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+            }
+        }
+
+        bool _modelMatrixDirty = true;
+        bool _worldMatrixDirty = true;
 
         readonly Queue<Pose> _interpolationQueue = new();
         readonly double _time = MySettings.FixedUpdateDelay / 1000.0;
         double _currTime = 0;
         Pose _startPose = Pose.Identity;
         bool _isPlaying = false;
+        
+        Matrix _modelMatrix = Matrix.Identity;
+        Matrix _cachedWorldMatrix = Matrix.Identity;
 
-        public Matrix ModelMatrix => _modelMatrix;
-        Matrix _modelMatrix;
-
-
-        void UpdateMatrix(PosComponent parent = null)
+        public Matrix ModelMatrix
         {
-            //parent ??= gameObject.GetParent().Transform;
-            //_modelMatrix = parent.ModelMatrix * ModelMatrix;
+            get
+            {
+                if(!_modelMatrixDirty) return _modelMatrix;
+                
+                _modelMatrix = Matrix.TRS(_localPosition, _localRotation, _localScale);
+                _modelMatrixDirty = false;
+                return _modelMatrix;
+            }
+        }
 
-            //gameObject.ForEach(obj => obj.Transform.UpdateMatrix(this));
+        public Matrix GetWorldMatrix()
+        {
+            if (!_worldMatrixDirty) return _cachedWorldMatrix;
+            _worldMatrixDirty = false;
+
+            var parent = gameObject.GetParent().Transform;
+
+            _cachedWorldMatrix = ModelMatrix;
+            if (parent == null) return ModelMatrix;
+            _cachedWorldMatrix = parent.GetWorldMatrix() * ModelMatrix;
+
+            return _cachedWorldMatrix;
+        }
+
+        void PropagateWorldMatrixDirty()
+        {
+            _worldMatrixDirty = true;
+            gameObject.ForEach(child => child.Transform.PropagateWorldMatrixDirty());
         }
 
         public void OnObjAdded()
         {
-            UpdateMatrix();
-            var parent = gameObject.GetParent().Transform;
-            _modelMatrix = parent.ModelMatrix * ModelMatrix;
+            var copy = WorldPosition;
+            _worldMatrixDirty = true;
+            WorldPosition = copy;
+
+            gameObject.ForEach(child => child.Transform.OnObjAdded());
 
         }
 
         public void OnObjRemoved(SkObject from)
         {
-            _modelMatrix = from.Transform.ModelMatrix.Inverse * ModelMatrix;
+            _worldMatrixDirty = true;
         }
 
         public override void Deserialize(Packet pPacket)
         {
-            _modelMatrix = Matrix.TRS(
-                new Vec3(
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat()
-                    ),
-                new Quat(
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat()
-                    ),
-                new Vec3(
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat(),
-                    pPacket.ReadFloat()
-                    )
-                );
-
+            _localPosition = new Vec3(
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat()
+            );
+            _localRotation = new Quat(
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat()
+            );
+            _localScale = new Vec3(
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat(),
+                pPacket.ReadFloat()
+            );
+            _modelMatrixDirty = true;
+            _worldMatrixDirty = true;
         }
 
         public override void Serialize(Packet pPacket)
         {
-            var pos = Position;
-            var rot = Rotation;
-            var scale = Scale;
+            var pos = LocalPosition;
+            var rot = LocalRotation;
+            var scale = LocalScale;
 
             pPacket.Write(pos.x);
             pPacket.Write(pos.y);
@@ -122,13 +178,14 @@ namespace Coop_Vr.Networking
             pPacket.Write(scale.y);
             pPacket.Write(scale.z);
         }
+
         public void QueueInterpolate(Pose p)
         {
             if(_interpolationQueue.Count > MAX_QUEUE_COUNT)
                 _interpolationQueue.Dequeue();
             _interpolationQueue.Enqueue(p);
             _isPlaying = true;
-            _startPose = Pose;
+            _startPose = LocalPose;
             _currTime = 0;
 
         }
@@ -145,10 +202,10 @@ namespace Coop_Vr.Networking
             _currTime += Time.Step;
             if (_currTime < _time) 
             {
-                Pose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
+                LocalPose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
                 return;
             }
-            _startPose = Pose;
+            _startPose = LocalPose;
             _currTime = 0;
             _interpolationQueue.Dequeue();
             _isPlaying = _interpolationQueue.Count > 0;

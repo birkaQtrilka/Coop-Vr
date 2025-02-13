@@ -16,8 +16,16 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         public GameView(ClientStateMachine context) : base(context)
         {
-            //the root
-            _root = new SkObject() { ID = -1, Components = new() { new PosComponent() } };
+            //the root. Every object is relative to this object
+            _root = new SkObject() 
+            { 
+                ID = -1, 
+                Components = new() { 
+                    new PosComponent(), 
+                    new ClientMoveObj() 
+                } 
+            };
+
             _objects.Add(-1, _root);
             _root.Init();
         }
@@ -66,6 +74,16 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             });
         }
 
+        void OnObjectCreated(SkObject obj)
+        {
+            obj.Init();
+            
+            obj.ForEach(child => OnObjectCreated(child));
+
+            _objects.Add(obj.ID, obj);
+            _objects[obj.ParentID].AddChild(obj, false);
+        }
+
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
         {
             if (message is CreateObjectMsg createdObject)
@@ -85,7 +103,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     return;
                 }
                 SkObject obj = _objects[changePosition.ObjectID];
-                obj.Transform.Pose = changePosition.PosComponent.Pose;
+                obj.Transform.LocalPose = changePosition.PosComponent.LocalPose;
             }
             else if (message is MoveRequestResponse move)
             {
@@ -97,16 +115,13 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 
         void ObjectGet(SKObjectGetter getter)
         {
-            getter.ReturnedObj = () => _objects[getter.ID];
+            getter.ReturnedObj = () => {
+                if (!_objects.ContainsKey(getter.ID)) return null;
+                return _objects[getter.ID];
+            };
         }
 
-        void OnObjectCreated(SkObject obj)
-        {
-            obj.Init();
-            _objects[obj.ParentID].AddChild(obj, false);
-            _objects.Add(obj.ID, obj);
-            obj.ForEach(child => OnObjectCreated(child));
-        }
+        
 
         public override void Update()
         {
@@ -135,7 +150,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 var newObj =
                     new SkObject(components: new()
                     {
-                        new PosComponent() { Pose = new Pose(3,0,0)},
+                        new PosComponent() { LocalPose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "sphere"},
                         new Move()
                     });
@@ -143,7 +158,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 var newObj2 =
                     new SkObject(components: new()
                     {
-                        new PosComponent() { Pose = new Pose(3,0,0)},
+                        new PosComponent() { LocalPose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
                         new Move()
                     });
@@ -158,7 +173,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 var newObj =
                     new SkObject(components: new()
                     {
-                        new PosComponent() { Pose = new Pose(3,0,0)},
+                        new PosComponent() { LocalPose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
                         new Move()
                     });
