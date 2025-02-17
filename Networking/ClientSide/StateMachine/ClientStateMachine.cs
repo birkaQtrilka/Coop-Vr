@@ -153,7 +153,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                     continue; 
                 }
 
-
                 _current.FixedUpdate();
 
                 while (_mesageQueue.Count > 0)
@@ -162,20 +161,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
         }
 
-        public void ChangeTo<T>(/*bool moveClients = false*/)
+        public void ChangeTo<T>()
         {
             _changedScene = true;
             var newState = _scenes[typeof(T)];
             _current.OnExit();
-
-            //if (moveClients)
-            //    _current.SafeForEachMember(client =>
-            //    {
-            //        newState.AddMember(client);
-            //        _current.RemoveMember(client);
-
-            //    });
-
             _current = newState;
             newState.OnEnter();
         }

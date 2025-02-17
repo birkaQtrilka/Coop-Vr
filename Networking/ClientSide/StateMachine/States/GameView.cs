@@ -17,7 +17,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         public GameView(ClientStateMachine context) : base(context)
         {
             //the root. Every object is relative to this object
-            _root = new SkObject() 
+            _root = new SkObject(parentID: -98127) //id is random negative number so it's cannot have a parent 
             { 
                 ID = -1, 
                 Components = new() { 
@@ -33,14 +33,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         public override void OnEnter()
         {
             //_anchorManager.Initialize();
-            EventBus<SKObjectCreated>.Event += OnSkObjectCreated;
+            EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectGetter>.Event += ObjectGet;
 
         }
 
         public override void OnExit()
         {
-            EventBus<SKObjectCreated>.Event -= OnSkObjectCreated;
+            EventBus<SKObjectCreated>.Event -= OnLocalObjectCreated;
             EventBus<SKObjectGetter>.Event -= ObjectGet;
 
             ResetData();
@@ -57,7 +57,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             _objects.Add(-1, _root);
         }
 
-        void OnSkObjectCreated(SKObjectCreated evnt)
+        void OnLocalObjectCreated(SKObjectCreated evnt)
         {
             var obj = evnt.Obj;
             int temporaryID = Random.Shared.Next(0, int.MaxValue);
@@ -74,14 +74,19 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             });
         }
 
-        void OnObjectCreated(SkObject obj)
+        void OnRemoteObjectCreated(SkObject obj)
         {
-            obj.Init();
-            
-            obj.ForEach(child => OnObjectCreated(child));
-
-            _objects.Add(obj.ID, obj);
+            OnRemoteObjectCreatedRecursive(obj);
             _objects[obj.ParentID].AddChild(obj, false);
+        }
+
+        void OnRemoteObjectCreatedRecursive(SkObject obj, bool addToPool = true)
+        {
+            if(addToPool)
+                _objects.Add(obj.ID, obj);
+            obj.Init();
+            obj.ForEach(child => OnRemoteObjectCreatedRecursive(child));
+            obj.Start();
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
@@ -92,7 +97,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 //the object has already set its children in the deserialization loop
                 if (createdObject.SenderID == context.ID) return;
 
-                OnObjectCreated(createdObject.NewObj);
+                OnRemoteObjectCreated(createdObject.NewObj);
                 Log.Do("received object: " + createdObject.NewObj.ID);
             }
             else if (message is ChangePositionResponse changePosition)
@@ -102,11 +107,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                     Log.Do("want to change pos but it is sender");
                     return;
                 }
+                Log.Do("Change position obj id: " + changePosition.ObjectID);
+
                 SkObject obj = _objects[changePosition.ObjectID];
                 obj.Transform.LocalPose = changePosition.PosComponent.LocalPose;
             }
             else if (message is MoveRequestResponse move)
             {
+                Log.Do("move, obj id: " + move.ObjectID);
 
                 SkObject obj = _objects[move.ObjectID];
                 obj.GetComponent<Move>().HandleResponese(move);

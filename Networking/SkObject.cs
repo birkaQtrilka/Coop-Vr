@@ -21,6 +21,12 @@ namespace Coop_Vr.Networking
             Components = new();
         }
 
+        public SkObject(int parentID)
+        {
+            _parentID = parentID;
+            Components = new();
+        }
+
         //use when want to place in scene on creation
         public SkObject(int parentID = -1, List<Component> components = null)
         {
@@ -31,13 +37,20 @@ namespace Coop_Vr.Networking
             EventBus<SKObjectCreated>.Publish(new SKObjectCreated(this, parentID));
         }
 
-
         public void Init()
         {
             Transform = GetComponent<PosComponent>();
             foreach (Component component in Components)
             {
                 component.Init(this);
+            }
+        }
+
+        public void Start()
+        {
+            foreach (Component component in Components)
+            {
+                component.Start();
             }
         }
 

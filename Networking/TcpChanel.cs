@@ -20,10 +20,8 @@ namespace Coop_Vr.Networking
 
         public void SendMessage(IMessage msg)
         {
-            Log.Do("Sending:" + msg);
             Packet outPacket = new();
             outPacket.Write(msg);
-            Log.Do("Bytes: " + outPacket.GetBytes().Length);
             StreamUtil.Write(_client.GetStream(), outPacket.GetBytes());
         }
 
@@ -32,7 +30,6 @@ namespace Coop_Vr.Networking
             byte[] inBytes = StreamUtil.Read(_client.GetStream());
             Packet inPacket = new(inBytes);
             ISerializable inObject = inPacket.ReadObject();
-            Log.Do("receiving " + inObject.ToString());
             if (inObject is IMessage msg) return msg;
 
             Console.WriteLine("received packet with wrong format (not inheriting IMessage)");

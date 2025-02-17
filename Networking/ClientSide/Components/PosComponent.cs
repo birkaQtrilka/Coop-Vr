@@ -107,11 +107,11 @@ namespace Coop_Vr.Networking
             if (!_worldMatrixDirty) return _cachedWorldMatrix;
             _worldMatrixDirty = false;
 
-            var parent = gameObject.GetParent().Transform;
+            var parent = gameObject.GetParent()?.Transform;
 
             _cachedWorldMatrix = ModelMatrix;
             if (parent == null) return ModelMatrix;
-            _cachedWorldMatrix = parent.GetWorldMatrix() * ModelMatrix;
+            _cachedWorldMatrix = ModelMatrix * parent.GetWorldMatrix();
 
             return _cachedWorldMatrix;
         }
@@ -120,6 +120,11 @@ namespace Coop_Vr.Networking
         {
             _worldMatrixDirty = true;
             gameObject.ForEach(child => child.Transform.PropagateWorldMatrixDirty());
+        }
+
+        public override void Start()
+        {
+            OnObjAdded();
         }
 
         public void OnObjAdded()
