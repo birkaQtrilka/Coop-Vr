@@ -1,4 +1,5 @@
-﻿namespace Coop_Vr.Networking.Messages
+﻿
+namespace Coop_Vr.Networking.Messages
 {
     public class HeartBeat : IMessage
     {

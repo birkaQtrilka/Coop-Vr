@@ -7,7 +7,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     public class LobbyView : Room<ClientStateMachine>
     {
 
-        Pose windowPose = new Pose(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
+        Pose windowPose = new(-.2f, 0, -0.6f, Quat.LookDir(0, 0, 1));
 
         //baller hotspot
         //string text = "192.168.144.33";

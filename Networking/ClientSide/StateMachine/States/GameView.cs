@@ -1,8 +1,6 @@
 ﻿using Coop_Vr.Networking.Messages;
 using StereoKit;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine.States
 {

@@ -30,14 +30,21 @@ namespace Coop_Vr.Networking.Scenes
                     }
                 );
 
-            var createObjInstruction = new CreateObjectMsg() { NewObj = point, ParentID = -1 };
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                room.SafeForEachMember((m) => m.SendMessage(createObjInstruction));
-
-            });
+            var point2 = new SkObject
+                (
+                    parentID: point.ID,
+                    components:
+                    new List<Component>()
+                    {
+                        new PosComponent(){Position = StereoKit.Vec3.Forward},
+                        new GraphPoint(),
+                        new ModelComponent()
+                        {
+                            MeshName = "cube",
+                        },
+                        new Move()
+                    }
+                );
         }
 
         public override void OnStop()

@@ -6,7 +6,8 @@ namespace Coop_Vr.Networking
     {
         public SkObject NewObj;
         public int ParentID = -1;
-        public int SenderID = -1;
+        public int SenderID;
+
         public void Deserialize(Packet pPacket)
         {
             NewObj = new();

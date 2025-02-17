@@ -37,6 +37,7 @@ namespace Coop_Vr.Networking
             EventBus<SKObjectCreated>.Publish(new SKObjectCreated(this, parentID));
         }
 
+
         public void Init()
         {
             Transform = GetComponent<PosComponent>();
@@ -56,7 +57,7 @@ namespace Coop_Vr.Networking
 
         public void ForEach(Action<SkObject> method)
         {
-            for (int i = 0; i < _children.Count; i++)
+            for (int i = _children.Count - 1; i >= 0; i--)
             {
                 method(_children[i]);
             }

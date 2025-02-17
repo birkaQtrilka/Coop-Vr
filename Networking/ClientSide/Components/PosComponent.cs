@@ -179,9 +179,9 @@ namespace Coop_Vr.Networking
             pPacket.Write(rot.z);
             pPacket.Write(rot.w);
 
-            pPacket.Write(scale.x);
-            pPacket.Write(scale.y);
-            pPacket.Write(scale.z);
+        public void OnObjRemoved(SkObject from)
+        {
+            _modelMatrix = from.Transform.ModelMatrix.Inverse * ModelMatrix;
         }
 
         public void QueueInterpolate(Pose p)
@@ -194,7 +194,7 @@ namespace Coop_Vr.Networking
             _currTime = 0;
 
         }
-        
+
         public bool QueueIsEmpty()
         {
             return _interpolationQueue.Count == 0;
@@ -205,7 +205,7 @@ namespace Coop_Vr.Networking
             if (!_isPlaying) return;
 
             _currTime += Time.Step;
-            if (_currTime < _time) 
+            if (_currTime < _time)
             {
                 LocalPose = Pose.Lerp(_startPose, _interpolationQueue.Peek(), (float)(_currTime / _time));
                 return;

@@ -9,22 +9,6 @@ using Coop_Vr.Networking.Messages;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
-    public class MessageSender
-    {
-        public readonly int ID;
-        readonly Action<IMessage> _message;
-
-        public MessageSender(Action<IMessage> method, int id)
-        {
-            _message = method;
-            ID = id;
-        }
-
-        public void SendMessage(IMessage msg)
-        {
-            _message?.Invoke(msg);
-        }
-    }
 
     public class ClientStateMachine
     {
@@ -45,7 +29,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public ClientStateMachine()
         {
-
             _scenes = new()
             {
                 { typeof(LobbyView), new LobbyView(this)},
@@ -113,7 +96,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         public void Update()
         {
-
             if (_server != null && _server.HasMessage())
             {
                 IMessage msg = _server.GetMessage();
