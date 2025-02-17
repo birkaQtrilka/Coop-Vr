@@ -9,29 +9,30 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
     {
         Pose windowPos = Pose.Identity;
         readonly Dictionary<int, SkObject> _objects = new();
-        readonly SkObject _root;
+        SkObject _root;
 
         //AnchorManager _anchorManager = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
-            //the root. Every object is relative to this object
-            _root = new SkObject(parentID: -98127) //id is random negative number so it's cannot have a parent 
-            { 
-                ID = -1, 
-                Components = new() { 
-                    new PosComponent(), 
-                    new ClientMoveObj() 
-                } 
-            };
-
-            _objects.Add(-1, _root);
-            _root.Init();
         }
 
         public override void OnEnter()
         {
+            _root = new SkObject(parentID: -98127) //id is random negative number so it's cannot have a parent 
+            {
+                ID = -1,
+                Components = new() {
+                    new PosComponent(),
+                    new ClientMoveObj()
+                }
+            };
+
+            _objects.Add(-1, _root);
+            _root.Init();
+
             //_anchorManager.Initialize();
+
             EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectGetter>.Event += ObjectGet;
 
@@ -53,7 +54,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 _root.RemoveChild(c, false);
             });
 
-            _objects.Add(-1, _root);
+            _root = null;
+            
         }
 
         void OnLocalObjectCreated(SKObjectCreated evnt)
@@ -128,8 +130,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             };
         }
 
-        
-
         public override void Update()
         {
             //_anchorManager.Step();
@@ -154,6 +154,8 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             if (UI.Button("Add object sphere"))
             {
                 Log.Do("request to add sphere");
+                //Change this to the server similar system. Better yet. Make, CreationManager and use it in both endpoints
+
                 var newObj =
                     new SkObject(components: new()
                     {
@@ -169,7 +171,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                         new ModelComponent() { MeshName = "cube"},
                         new Move()
                     });
-
                 
                 newObj.AddChild(newObj2, true);
             }

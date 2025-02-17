@@ -6,6 +6,8 @@ using Coop_Vr.Networking.ClientSide.StateMachine.States;
 using System.Threading.Tasks;
 using Coop_Vr.Networking.ServerSide;
 using Coop_Vr.Networking.Messages;
+using Coop_Vr.Networking.ServerSide.StateMachine;
+using StereoKit;
 
 namespace Coop_Vr.Networking.ClientSide.StateMachine
 {
@@ -25,7 +27,9 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
         bool _canFixedUpdate = true;
 
-        Queue<IMessage> _mesageQueue = new();
+        readonly Queue<IMessage> _mesageQueue = new();
+        public bool IsConnected => _server.Connected;
+        double _lastHeartBeat;
 
         public ClientStateMachine()
         {
@@ -60,21 +64,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             _mesageQueue.Enqueue(msg);
         }
 
-        public void ConnectToServer(string Ip)
-        {
-            try
-            {
-                var client = new TcpClient();
-                client.Connect(Ip, 55555);
-                _server = new TcpChanel(client);
-                Log.Do("Connected to server.");
-            }
-            catch (Exception e)
-            {
-                Log.Do(e.Message);
-            }
-        }
-
         public async Task ConnectToServerAsync(string Ip)
         {
             while (_server == null)
@@ -101,12 +90,12 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 IMessage msg = _server.GetMessage();
                 if (msg is HeartBeat beat)
                 {
+                    _lastHeartBeat = Time.Total;
                     SendMessage(beat);
                 }
                 else if (msg is ResetMsg)
                 {
-                    ChangeTo<LobbyView>();
-
+                    Disconnect();
                     Log.Do("Reset!!");
                 }
                 else
@@ -119,8 +108,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 _changedScene = false;
                 return;
             }
-
             _current.Update();
+
+            HeartBeatLoop();
+
         }
 
         public async Task FixedUpdate()
@@ -129,18 +120,45 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             {
                 await Task.Delay(MySettings.FixedUpdateDelay);
 
-                if (_changedScene)
+                try
                 {
-                    _changedScene = false;
-                    continue; 
+                    if (_changedScene)
+                    {
+                        _changedScene = false;
+                        continue;
+                    }
+
+                    _current.FixedUpdate();
+                    if (_server == null || !IsConnected) continue;
+
+                    while (_mesageQueue.Count > 0)
+                        _server.SendMessage(_mesageQueue.Dequeue());
                 }
-
-                _current.FixedUpdate();
-
-                while (_mesageQueue.Count > 0)
-                    _server.SendMessage(_mesageQueue.Dequeue());
-
+                catch (Exception e)
+                {
+                    Log.Do(e);
+                }
             }
+        }
+        
+
+        void HeartBeatLoop()
+        {
+            if(_server == null)
+            {
+                _lastHeartBeat = Time.Total;
+                return;
+            }
+
+            if (Time.Total - _lastHeartBeat < MySettings.MaxTimeForHeartBeat) return;
+            
+            Disconnect();
+        }
+
+        public void Disconnect()
+        {
+            _server = null;
+            ChangeTo<LobbyView>();
         }
 
         public void ChangeTo<T>()
