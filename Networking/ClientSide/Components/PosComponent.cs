@@ -119,6 +119,7 @@ namespace Coop_Vr.Networking
         void PropagateWorldMatrixDirty()
         {
             _worldMatrixDirty = true;
+            if(gameObject != null) //when the position is set before init
             gameObject.ForEach(child => child.Transform.PropagateWorldMatrixDirty());
         }
 
@@ -178,10 +179,6 @@ namespace Coop_Vr.Networking
             pPacket.Write(rot.y);
             pPacket.Write(rot.z);
             pPacket.Write(rot.w);
-
-        public void OnObjRemoved(SkObject from)
-        {
-            _modelMatrix = from.Transform.ModelMatrix.Inverse * ModelMatrix;
         }
 
         public void QueueInterpolate(Pose p)

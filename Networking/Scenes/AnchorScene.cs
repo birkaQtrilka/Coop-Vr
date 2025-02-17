@@ -36,7 +36,7 @@ namespace Coop_Vr.Networking.Scenes
                     components:
                     new List<Component>()
                     {
-                        new PosComponent(){Position = StereoKit.Vec3.Forward},
+                        new PosComponent(){ LocalPosition = StereoKit.Vec3.Forward},
                         new GraphPoint(),
                         new ModelComponent()
                         {

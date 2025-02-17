@@ -76,7 +76,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             }
             else if (message is ChangePositionRequest changePositionRequest)
             {
-                _objects[changePositionRequest.ObjectID].Transform.Pose = changePositionRequest.position.Pose;
+                _objects[changePositionRequest.ObjectID].Transform.LocalPose = changePositionRequest.position.LocalPose;
 
                 var response = new ChangePositionResponse()
                 {
