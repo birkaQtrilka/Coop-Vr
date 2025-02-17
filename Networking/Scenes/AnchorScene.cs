@@ -45,9 +45,6 @@ namespace Coop_Vr.Networking.Scenes
                         new Move()
                     }
                 );
-            //TO DO:
-            //Automatically add to root DONE
-            //Send message on add child
         }
 
         public override void OnStop()

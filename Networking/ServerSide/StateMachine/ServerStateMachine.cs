@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Coop_Vr.Networking.Messages;
 using StereoKit;
+using System.Collections.Concurrent;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine
 {
@@ -30,10 +31,11 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         readonly TcpListener _listener;
         bool _changedState;
         bool _canRunFixedUpdate = true;
+        double _lastHeartBeat;
 
         readonly List<ClientHeart> _clientHearts = new();
-        Queue<IMessage> _messageQueue = new();
-        Queue<Action> _afterFixedUpdate = new();
+        readonly ConcurrentQueue<IMessage> _messageQueue = new();
+        readonly ConcurrentQueue<Action> _afterFixedUpdate = new();
 
         
         public ServerStateMachine()
@@ -52,7 +54,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             CurrentRoom = _states[typeof(LobbyRoom)];
             CurrentRoom.OnEnter();
             _ = FixedUpdate();
-            _ = HeartBeatLoop();
 
         }
 
@@ -66,10 +67,10 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             while (_listener.Pending())
             {
                 var newClient = new TcpChanel(_listener.AcceptTcpClient());
+                _clientHearts.Add(new ClientHeart(newClient, Time.Total));
                 _states[typeof(LobbyRoom)].AddMember(newClient);
                 Log.Do("Accepted new client.");
                 //there is no client removing system
-                _clientHearts.Add(new ClientHeart(newClient, Time.Total));
             }
         }
 
@@ -98,60 +99,27 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             }
 
             CurrentRoom.Update();
-        }
-
-        public void SendMessage(IMessage msg)
-        {
-            _messageQueue.Enqueue(msg);
-        }
-
-        async Task FixedUpdate()
-        {
-            while (_canRunFixedUpdate)
+            try
             {
-                await Task.Delay(MySettings.FixedUpdateDelay);
-                try
-                {
-                    CurrentRoom.FixedUpdate();
 
-                    while (_afterFixedUpdate.Count > 0)
-                    {
-                        var action = _afterFixedUpdate.Dequeue();
-                        action();
-
-                    }
-
-                    while (_messageQueue.Count > 0)
-                    {
-                        var msg = _messageQueue.Dequeue();
-                        CurrentRoom.SafeForEachMember(c => { if (c.Connected) c.SendMessage(msg); });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Log.Do(ex);
-                }
-                
-
+                HeartBeatLoop();
+            }
+            catch (Exception ex)
+            {
+                Log.Do(ex);
             }
         }
 
-        async Task HeartBeatLoop()
+        void HeartBeatLoop()
         {
-            while(_canRunFixedUpdate)
-            {
-                await Task.Delay(MySettings.HeartBeatDelay);
+            if (_clientHearts.Count == 0 || Time.Total - _lastHeartBeat < MySettings.HeartBeatDelay) return;
+            _lastHeartBeat = Time.Total;
 
-                if (_clientHearts.Count == 0) continue;
+            HeartBeat heartBeatMsg = new();
 
-                HeartBeat heartBeatMsg = new();
-                Log.Enabled = false;
-                
-                SendMessage(heartBeatMsg);
-
-                Log.Enabled = true;
-                CheckClientHeart();
-            }
+            SendMessage(heartBeatMsg);
+            Log.Do("HearBeat");
+            CheckClientHeart();
         }
 
         void CheckClientHeart()
@@ -173,7 +141,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
                 else
                     client.LastHeartBeat = currentTime;
             }
-            
+
         }
 
         void ResetServer()
@@ -183,12 +151,49 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             //the message will happen after removing and adding clients to the new room
             //I need to skip a frame, so the message is first sent to the clients of current room, then move the clients
             //into the lobby where there can potentially be more clients
-            _afterFixedUpdate.Enqueue(() => 
+            _afterFixedUpdate.Enqueue(() =>
                 _afterFixedUpdate.Enqueue(() =>
                 {
                     ChangeTo(typeof(LobbyRoom), true);
                 })
             );
+        }
+
+        public void SendMessage(IMessage msg)
+        {
+            _messageQueue.Enqueue(msg);
+        }
+
+        async Task FixedUpdate()
+        {
+            while (_canRunFixedUpdate)
+            {
+                await Task.Delay(MySettings.FixedUpdateDelay);
+                try
+                {
+                    CurrentRoom.FixedUpdate();
+
+                    while (!_afterFixedUpdate.IsEmpty)
+                    {
+                        if (!_afterFixedUpdate.TryDequeue(out var action)) continue;
+                        action();
+
+                    }
+
+                    while (!_messageQueue.IsEmpty)
+                    {
+                        if (!_messageQueue.TryDequeue(out var msg)) continue;
+
+                        CurrentRoom.SafeForEachMember(c => { if (c.Connected) c.SendMessage(msg); });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Log.Do(ex);
+                }
+                
+
+            }
         }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>

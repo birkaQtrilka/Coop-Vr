@@ -13,10 +13,26 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         SkObject _root;
         Scene _currentScene;
 
+        //related to sending objects
+        //int is obj id, bool is representing if it will be sent or not 
+        readonly Dictionary<int, SendingObjectsData> _sendingObjects = new();
+        readonly struct SendingObjectsData
+        {
+            public readonly bool HasParent;
+            public readonly SKObjectCreated EventData;
+
+            public SendingObjectsData(bool hasParent, SKObjectCreated eventData)
+            {
+                HasParent = hasParent;
+                EventData = eventData;
+            }
+        }
+
         public GameRoom(ServerStateMachine context) : base(context)
         {
             _currentScene = new AnchorScene(this);
-            _root = new SkObject() { ID = -1, Components = new() { new PosComponent() } };
+            //id is random negative number so it's cannot have a parent 
+            _root = new SkObject(-974327) { ID = -1, Components = new() { new PosComponent() } };
             _objects.Add(-1, _root);
             _root.Init();
         }
@@ -50,10 +66,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             if (message is CreateObjectMsg objCreate)
             {
+                Log.Do("Receive create object, id: " + objCreate.NewObj.ID);
+
                 EventBus<SKObjectCreated>.Publish
                 (
                     new SKObjectCreated(objCreate.NewObj, objCreate.ParentID, objCreate.SenderID)
                 );
+
             }
             else if (message is ChangePositionRequest changePositionRequest)
             {
@@ -91,7 +110,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                         Position = move.Position,
                         stopped = move.stopped,
                     };
-                    Log.Do("Member count: " + MemberCount() + "   ");
+                    Log.Do("Receive, send Move. ID: " + move.ObjectID);
                     context.SendMessage(response);
                 }
 
@@ -108,13 +127,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             obj.Init();
             _objects[evnt.ParentID].AddChild(obj, false);
 
-            var response = new CreateObjectMsg()
-            {
-                NewObj = obj,
-                ParentID = evnt.ParentID,
-                SenderID = evnt.SenderID,
-            };
-            context.SendMessage(response);
+            //has parent refers to a parent in the sendingObject queue, it doesn't care if it has a parent outside it
+            //because that parent was already sent through the network
+            //do object create loop. Find root, if there is one. Only send the root to reduce send count
+            bool hasParent = _sendingObjects.ContainsKey(obj.ParentID);
+            
+            _sendingObjects.Add(obj.ID, new SendingObjectsData(hasParent, evnt));
         }
 
         void OnObjectAdded(SKObjectAdded evnt)
@@ -138,8 +156,28 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             };
         }
 
+        void ProcessSendingObjects()
+        {
+            foreach (SendingObjectsData data in _sendingObjects.Values)
+            {
+                if (data.HasParent) continue;
+
+                var response = new CreateObjectMsg()
+                {
+                    NewObj = data.EventData.Obj,
+                    ParentID = data.EventData.ParentID,
+                    SenderID = data.EventData.SenderID,
+                };
+                Log.Do("Send create object, id: " + response.NewObj.ID);
+
+                context.SendMessage(response);
+            }
+            _sendingObjects.Clear();
+        }
+
         public override void Update()
         {
+            ProcessSendingObjects();
         }
     }
 }

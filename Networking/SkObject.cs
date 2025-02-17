@@ -20,6 +20,12 @@ namespace Coop_Vr.Networking
         {
             Components = new();
         }
+        
+        public SkObject(int parentId)
+        {
+            
+            Components = new();
+        }
 
         //use when want to place in scene on creation
         public SkObject(int parentID = -1, List<Component> components = null)

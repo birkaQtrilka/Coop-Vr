@@ -5,7 +5,7 @@ namespace Coop_Vr
     {
         public const int SERVER_ID = -1;
         public const int FixedUpdateDelay = 50;//milliseconds
-        public const int HeartBeatDelay = 200;//milliseconds
-        public const int MaxTimeForHeartBeat = 1;//seconds
+        public const double HeartBeatDelay = 0.2f;//secpnds
+        public const double MaxTimeForHeartBeat = 1;//seconds
     }
 }
