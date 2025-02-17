@@ -101,7 +101,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             CurrentRoom.Update();
             try
             {
-
                 HeartBeatLoop();
             }
             catch (Exception ex)

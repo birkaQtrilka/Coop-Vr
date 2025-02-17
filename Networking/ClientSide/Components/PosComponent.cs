@@ -179,6 +179,10 @@ namespace Coop_Vr.Networking
             pPacket.Write(rot.y);
             pPacket.Write(rot.z);
             pPacket.Write(rot.w);
+
+            pPacket.Write(scale.x);
+            pPacket.Write(scale.y);
+            pPacket.Write(scale.z);
         }
 
         public void QueueInterpolate(Pose p)
