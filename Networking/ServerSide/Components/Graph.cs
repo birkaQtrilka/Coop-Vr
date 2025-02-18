@@ -1,4 +1,6 @@
 ﻿using Coop_Vr.Networking.ClientSide;
+using Coop_Vr.Networking.Messages;
+using Coop_Vr.Networking.ServerSide.StateMachine;
 using StereoKit;
 using System.Collections.Generic;
 
@@ -14,6 +16,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         {
             for (int i = 0; i < _graphPoints.Count; i++)
             {
+                var moveComponent = new Move();
                 //is added automatically to the scene
                 _ = new SkObject
                 (
@@ -27,10 +30,51 @@ namespace Coop_Vr.Networking.ServerSide.Components
                         {
                             MeshName = "sphere",
                         },
-                        new Move()
+                        moveComponent
                     }
                 );
+                moveComponent.OnMove += OnMove;
             }
+        }
+
+        // When moving the object this function will be called
+        void OnMove(Move move, MoveRequestResponse msg)
+        {
+            var movingPoint = move.gameObject.GetComponent<GraphPoint>();
+            var moverPos = msg.Position.LocalPosition;
+
+            foreach (GraphPoint point in _graphPoints)
+            {
+                if (point == movingPoint) continue;
+
+                // Update the position of the other point based on the moving point
+                point.gameObject.Transform.LocalPosition = new(
+                    moverPos.x + .1f,
+                    moverPos.y - .1f,
+                    moverPos.z + .1f
+                );
+
+                ServerStateMachine.MessageSender.SendMessage(SendMessage(move, msg, point));
+            }
+
+        }
+
+        IMessage SendMessage(Move move, MoveRequestResponse msg, GraphPoint point)
+        {
+            if (msg.stopped)//terminating ownership
+                move.MoverClientID = -1;
+            else//claiming / continuing ownership 
+                move.MoverClientID = msg.SenderID; // server is owner
+
+            var response = new MoveRequestResponse()
+            {
+                ObjectID = point.gameObject.ID,
+                SenderID = msg.SenderID,
+                Position = point.gameObject.Transform,
+                stopped = msg.stopped,
+                alsoMoveSender = true,
+            };
+            return response;
         }
 
         public override void Update()

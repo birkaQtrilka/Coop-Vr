@@ -1,11 +1,15 @@
 ﻿using Coop_Vr.Networking.ClientSide.StateMachine;
 using Coop_Vr.Networking.Messages;
 using StereoKit;
+using System;
 
 namespace Coop_Vr.Networking.ClientSide
 {
     public class Move : Component
     {
+        //will be called by game server to signal other scripts on server side 
+        public Action<Move, MoveRequestResponse> OnMove;
+
         private ModelComponent modelComponent;
         public int MoverClientID = -1;
         bool isMoving;

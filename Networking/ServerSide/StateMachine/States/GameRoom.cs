@@ -80,8 +80,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             else if (message is MoveRequestResponse move)
             {
                 SkObject obj = _objects[move.ObjectID];
-                obj.Transform.LocalPose = move.Position.LocalPose;
                 var component = obj.GetComponent<Move>();
+                obj.Transform.LocalPose = move.Position.LocalPose;
                 bool hasNoOwner = component.MoverClientID == -1;
 
                 //will probably bug out if owner leaves the game
@@ -101,6 +101,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     };
                     Log.Do("Receive, send Move. ID: " + move.ObjectID);
                     context.SendMessage(response);
+
+                    component.OnMove?.Invoke(component, move);
                 }
 
             }
