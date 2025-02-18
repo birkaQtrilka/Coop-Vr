@@ -40,7 +40,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
 
                 // Calculate influence scores using XRFomula
-                var influenceScores = CalculateInfluenceScore(records, 4);
+                var influenceScores = CalculateInfluenceScore(records, 3);
 
                 // Create GraphPoint objects from the influence scores
                 foreach (var score in influenceScores)
@@ -73,23 +73,19 @@ namespace Coop_Vr.Networking.ServerSide.Components
                     {
                         var project2 = records[j];
 
-                        // Technology similarity (T_ij)
-                        double T = project1["Technology"].Equals(project2["Technology"]) ? 1 : 0;
+                        double technologySimilarity = project1["Technology"].Equals(project2["Technology"]) ? 1 : 0;
+                        double geographicSimilarity = project1["Country"].Equals(project2["Country"]) ? 1 : 0;
+                        double capacity1 = double.TryParse(project1["Capacity (kt H2/y)"]?.ToString(), out double c1) ? c1 : 0;
+                        double capacity2 = double.TryParse(project2["Capacity (kt H2/y)"]?.ToString(), out double c2) ? c2 : 0;
+                        double capacitySimilarity = 1 - Math.Abs(capacity1 - capacity2) / maxCapacity;
 
-                        // Geography similarity (G_ij)
-                        double G = project1["Country"].Equals(project2["Country"]) ? 1 : 0;
-
-                        // Capacity similarity (C_ij)
-                        double C = 1 - Math.Abs((double.TryParse(project1["Capacity (kt H2/y)"]?.ToString(), out double capacity1) ? capacity1 : 0) -
-                                                (double.TryParse(project2["Capacity (kt H2/y)"]?.ToString(), out double capacity2) ? capacity2 : 0)) / maxCapacity;
-
-                        // Calculate influence score
-                        double S = 0.5 * T + 0.3 * G + 0.2 * C;
+                        double score = 0.5 * technologySimilarity + 0.3 * geographicSimilarity + 0.2 * capacitySimilarity;
 
                         influenceScores.Add(new Dictionary<string, object>
                         {
+                            { "MaxCapacity", maxCapacity},
                             { "Project1", project1["Project Name"] },
-                            { "Score", S },
+                            { "Score", score },
                             { "Technology1", project1["Technology"] },
                             { "Country1", project1["Country"] },
                             { "Capacity1", project1["Capacity (kt H2/y)"] },
@@ -125,27 +121,41 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 point.X = (point.X - xMin) / (xMax - xMin) * scale;
                 point.Y = (point.Y - yMin) / (yMax - yMin) * scale;
                 point.Z = (point.Z - zMin) / (zMax - zMin) * scale;
+                point.ExtraInfo["xMin"] = xMin.ToString();
+                point.ExtraInfo["xMax"] = xMax.ToString();
+                point.ExtraInfo["zMin"] = zMin.ToString();
+                point.ExtraInfo["zMax"] = zMax.ToString();
             }
         }
 
-        /// <summary>
-        /// Reverse the scaling of the graph points
-        /// </summary>
-        /// <param name="points"></param>
-        /// <param name="scale"></param>
-        public void ReverseScaleGraphPoints(List<GraphPoint> points, float scale)
+        ///// <summary>
+        ///// Reverse the scaling of the graph points
+        ///// </summary>
+        ///// <param name="points"></param>
+        ///// <param name="scale"></param>
+        //public void ReverseScaleGraphPoints(List<GraphPoint> points, float scale)
+        //{
+        //    if (points == null || !points.Any()) return;
+
+        //    // Apply normalization
+        //    foreach (var point in points)
+        //    {
+        //        point.X = point.X * (point.ExtraInfo["xMax"] - point.ExtraInfo["xMax"]) / scale + xMin;
+        //        point.Y = point.Y * (yMax - yMin) / scale + yMin;
+        //        point.Z = point.Z * (zMax - zMin) / scale + zMin;
+        //    }
+        //}
+
+        public (float X, float Z) ReverseScale(GraphPoint point, float X, float Z, float scale)
         {
-            if (points == null || !points.Any()) return;
+            float xMin = float.Parse(point.ExtraInfo["xMin"]);
+            float xMax = float.Parse(point.ExtraInfo["xMax"]);
+            float zMin = float.Parse(point.ExtraInfo["zMin"]);
+            float zMax = float.Parse(point.ExtraInfo["zMax"]);
 
-            var (xMin, xMax, yMin, yMax, zMin, zMax) = GetMinMaxValues(points);
-
-            // Apply normalization
-            foreach (var point in points)
-            {
-                point.X = point.X * (xMax - xMin) / scale + xMin;
-                point.Y = point.Y * (yMax - yMin) / scale + yMin;
-                point.Z = point.Z * (zMax - zMin) / scale + zMin;
-            }
+            X = point.X * (xMax - xMin) / scale + xMin;
+            Z = point.Z * (zMax - zMin) / scale + zMin;
+            return (X, Z);
         }
 
         /// <summary>

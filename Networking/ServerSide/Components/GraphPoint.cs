@@ -31,10 +31,10 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
             foreach (var key in record.Keys)
             {
-                if (key != "Capacity1" && key != "Investment1" && key != "Score")
-                {
-                    graphPoint.ExtraInfo[key] = record[key]?.ToString();
-                }
+                //if (key != "Capacity1" && key != "Investment1" && key != "Score")
+                //{
+                graphPoint.ExtraInfo[key] = record[key]?.ToString();
+                //}
             }
 
             return graphPoint;
@@ -63,11 +63,11 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
             UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country1", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
 
-            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y,0) ;
+            Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y, 0);
             string label = ExtraInfo.GetValueOrDefault("Country1", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = spherePose.pose.position + new Vec3(0,  -1f * spherePose.scale.y, 0);
+            Vec3 coordPosition = spherePose.pose.position + new Vec3(0, -1f * spherePose.scale.y, 0);
             string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 

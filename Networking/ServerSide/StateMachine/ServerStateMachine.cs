@@ -25,7 +25,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         {
             Instance = this;
 
-            Log.Do("Server started on port 55555");
+            Log.Do("Server started on port 5000");
 
             _listener = new TcpListener(IPAddress.Any, 5000);
             _listener.Start();

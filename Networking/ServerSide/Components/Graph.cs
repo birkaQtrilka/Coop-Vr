@@ -42,10 +42,40 @@ namespace Coop_Vr.Networking.ServerSide.Components
         // When moving the object this function will be called
         void OnMove(Move move, MoveRequestResponse msg)
         {
+            // Get the GraphPoint component of the moving object
             var movingPoint = move.gameObject.GetComponent<GraphPoint>();
-            var moverPos = msg.Position.pose.position;
-            List<IMessage> msgList = new();
 
+            // File path for data (if needed for further processing)
+            string filePath = "Assets\\Documents\\europe_data.csv";
+
+            // Create a FileHandler instance
+            var fileHandler = new FileHandler(filePath);
+
+            // Get the new position of the moving object
+            var moverPos = msg.Position.pose.position;
+
+           
+
+
+            // TODO: Get the exact position of Moving Point after moving
+            // TODO: Get X and Z values from the new position
+            // Example of how to use the new position and reverse scale
+            var scaledCapacity = moverPos.x; // X - Capacity1
+            var scaledInvestment = moverPos.z; // Z - Investment1
+
+            // Reverse scale the position (if needed)
+            (float unscaledX, float unscaledZ) = fileHandler.ReverseScale(movingPoint, scaledCapacity, scaledInvestment, 10f);
+
+            // Log the new position
+            Log.Do(unscaledX);
+            Log.Do(unscaledZ);
+
+            // TODO: Update new X and Z values to the dataset
+            // TODO: Recalculate the Y value based on the new X and Z values
+            // TODO: Update graph points based on the new values
+
+            // Update other points based on the moving point
+            List<IMessage> msgList = new();
             foreach (GraphPoint point in _graphPoints)
             {
                 if (point == movingPoint) continue;
@@ -58,13 +88,14 @@ namespace Coop_Vr.Networking.ServerSide.Components
                     Quat.Identity
                 );
 
-                msgList.Add( SendMessage(move, msg, point) );
+                msgList.Add(SendMessage(move, msg, point));
             }
+
+            // Send messages to other members in the current room
             ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m =>
             {
                 foreach (var msg in msgList) m.SendMessage(msg);
             });
-
         }
 
         IMessage SendMessage(Move move, MoveRequestResponse msg, GraphPoint point)

@@ -3,6 +3,8 @@ using Coop_Vr.Networking.ServerSide.Components;
 using Coop_Vr.Networking.Messages;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
@@ -33,7 +35,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             var graphPoints = fileHandler.ReadGraphPointsFromCsv();
 
             // Scale the graph points
-            fileHandler.ScaleGraphPoints(graphPoints, 10f);
+            fileHandler.ScaleGraphPoints(graphPoints, 10f); 
+
             var graph = new Graph();
             graph.SetGraphPoints(graphPoints);
 
