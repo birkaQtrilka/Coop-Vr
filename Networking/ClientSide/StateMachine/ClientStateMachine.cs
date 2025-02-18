@@ -30,6 +30,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
         readonly Queue<IMessage> _mesageQueue = new();
         public bool IsConnected => _server.Connected;
         double _lastHeartBeat;
+        double _lastFixedUpdate;
 
         public ClientStateMachine()
         {
@@ -42,7 +43,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
 
             _current = _scenes[typeof(LobbyView)];
             _current.OnEnter();
-            _ = FixedUpdate();
 
         }
 
@@ -111,34 +111,34 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             _current.Update();
 
             HeartBeatLoop();
+            FixedUpdate();
 
         }
 
-        public async Task FixedUpdate()
+        public void FixedUpdate()
         {
-            while (_canFixedUpdate)
+            if (Time.Total - _lastFixedUpdate < 0.05f) return;
+            _lastFixedUpdate = Time.Total;
+
+            try
             {
-                await Task.Delay(MySettings.FixedUpdateDelay);
-
-                try
+                if (_changedScene)
                 {
-                    if (_changedScene)
-                    {
-                        _changedScene = false;
-                        continue;
-                    }
-
-                    _current.FixedUpdate();
-                    if (_server == null || !IsConnected) continue;
-
-                    while (_mesageQueue.Count > 0)
-                        _server.SendMessage(_mesageQueue.Dequeue());
+                    _changedScene = false;
+                    return;
                 }
-                catch (Exception e)
-                {
-                    Log.Do(e);
-                }
+
+                _current.FixedUpdate();
+                if (_server == null || !IsConnected) return;
+
+                while (_mesageQueue.Count > 0)
+                    _server.SendMessage(_mesageQueue.Dequeue());
             }
+            catch (Exception e)
+            {
+                Log.Do(e);
+            }
+            
         }
         
 

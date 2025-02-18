@@ -31,11 +31,11 @@ namespace Coop_Vr.Networking.ClientSide
             if (MoverClientID != -1 && ClientStateMachine.MessageSender.ID != MoverClientID)
                 return;
 
-            Pose copy = new Pose(gameObject.Transform.WorldPosition, Quat.Identity);
+            Pose copy = gameObject.Transform.WorldPose;
             //should be world Pose
-            isMoving = UI.Handle(gameObject.ID.ToString(), ref copy, modelComponent.bounds * gameObject.Transform.LocalScale);
+            isMoving = UI.Handle(gameObject.ID.ToString(), ref copy, modelComponent.bounds * gameObject.Transform.WorldScale);
             
-            gameObject.Transform.WorldPosition = copy.position;
+            gameObject.Transform.WorldPose = copy;
         }
 
         public override void FixedUpdate()

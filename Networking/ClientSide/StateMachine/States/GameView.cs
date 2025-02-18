@@ -1,4 +1,5 @@
 ﻿using Coop_Vr.Networking.Messages;
+using Coop_Vr.Networking.ServerSide.StateMachine.States;
 using StereoKit;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         readonly Dictionary<int, SkObject> _objects = new();
         SkObject _root;
 
-        //AnchorManager _anchorManager = new();
+        readonly Dictionary<int, SKObjectCreated> _sendingObjects = new();
 
         public GameView(ClientStateMachine context) : base(context)
         {
@@ -31,17 +32,17 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             _objects.Add(-1, _root);
             _root.Init();
 
-            //_anchorManager.Initialize();
-
             EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectGetter>.Event += ObjectGet;
-
+            EventBus<SKObjectAdded>.Event += OnObjectAdded;
+            _root.Start();
         }
 
         public override void OnExit()
         {
             EventBus<SKObjectCreated>.Event -= OnLocalObjectCreated;
             EventBus<SKObjectGetter>.Event -= ObjectGet;
+            EventBus<SKObjectAdded>.Event -= OnObjectAdded;
 
             ResetData();
         }
@@ -55,24 +56,48 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             });
 
             _root = null;
-            
+            _sendingObjects.Clear();
         }
 
         void OnLocalObjectCreated(SKObjectCreated evnt)
         {
             var obj = evnt.Obj;
             int temporaryID = Random.Shared.Next(0, int.MaxValue);
-            _objects[obj.ParentID].AddChild(obj, false);
             obj.ID = temporaryID;
 
             _objects.Add(obj.ID, obj);
             obj.Init();
-            context.SendMessage(new CreateObjectMsg()
+            _objects[obj.ParentID].AddChild(obj, false);
+
+            obj.Start();
+
+            AddToSendObjectsQueue(obj, evnt);
+        }
+
+        void AddToSendObjectsQueue(SkObject obj, SKObjectCreated evnt)
+        {
+            _sendingObjects.Add(obj.ID, evnt);
+        }
+
+        void ProcessSendingObjects()
+        {
+            foreach (SKObjectCreated data in _sendingObjects.Values)
             {
-                NewObj = evnt.Obj,
-                ParentID = evnt.ParentID,
-                SenderID = context.ID
-            });
+                bool hasParent = _sendingObjects.ContainsKey(data.Obj.ParentID);
+
+                if (hasParent) continue;
+
+                var response = new CreateObjectMsg()
+                {
+                    NewObj = data.Obj,
+                    ParentID = data.Obj.ParentID,
+                    SenderID = context.ID,
+                };
+                Log.Do("Send create object, id: " + response.NewObj.ID);
+
+                context.SendMessage(response);
+            }
+            _sendingObjects.Clear();
         }
 
         void OnRemoteObjectCreated(SkObject obj)
@@ -88,6 +113,11 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             obj.Init();
             obj.ForEach(child => OnRemoteObjectCreatedRecursive(child));
             obj.Start();
+        }
+
+        void OnObjectAdded(SKObjectAdded evnt)
+        {
+            _objects[evnt.OldParentID].RemoveChild(evnt.AddedObj);
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
@@ -133,11 +163,10 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         public override void Update()
         {
             //_anchorManager.Step();
-
-            DrawWindow();
-
             _root.Update();
 
+            DrawWindow();
+            ProcessSendingObjects();
         }
 
         public override void FixedUpdate()
@@ -159,20 +188,30 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 var newObj =
                     new SkObject(components: new()
                     {
-                        new PosComponent() { LocalPose = new Pose(3,0,0)},
+                        new PosComponent() { LocalPose = new Pose(3,0,0), LocalScale = new Vec3(.3f,.3f,.3f)},
                         new ModelComponent() { MeshName = "sphere"},
                         new Move()
                     });
                 
                 var newObj2 =
-                    new SkObject(components: new()
+                    new SkObject(parentID: newObj.ID,
+                    components: new()
                     {
                         new PosComponent() { LocalPose = new Pose(3,0,0)},
                         new ModelComponent() { MeshName = "cube"},
                         new Move()
                     });
-                
-                newObj.AddChild(newObj2, true);
+                var newObj3 =
+                    new SkObject(
+                    components: new()
+                    {
+                        new PosComponent() { LocalPose = new Pose(3,0,0)},
+                        new ModelComponent() { MeshName = "cube"},
+                        new Move()
+                    });
+                //no need to send another message to server since it will the object will already have the child 
+                //when the message exits the queue
+                newObj2.AddChild(newObj3,false);
             }
             UI.HSeparator();
 

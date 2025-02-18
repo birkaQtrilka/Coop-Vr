@@ -68,10 +68,20 @@ namespace Coop_Vr.Networking
             if (obj.ID == ID || obj == null) return;
 
             _children.Add(obj);
-            if(networked) 
-                EventBus<SKObjectAdded>.Publish(new SKObjectAdded(obj, obj._parentID, ID));
+            obj._parentID = ID;
+            var parent = GetParent();
+            parent?.SafeRemove(obj);
 
-            obj.Transform.OnObjAdded();
+            //if(networked) 
+            //    EventBus<SKObjectAdded>.Publish(new SKObjectAdded(obj, oldParentID, obj.ParentID));
+
+            obj.Transform?.OnObjAdded();
+        }
+
+        void SafeRemove(SkObject obj)
+        {
+            int childIndex = _children.IndexOf(obj);
+            if (childIndex != -1) _children.RemoveAt(childIndex);
         }
 
         public void RemoveChild(SkObject obj, bool networked = true)

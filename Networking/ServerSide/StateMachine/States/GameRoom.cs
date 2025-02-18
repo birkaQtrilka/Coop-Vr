@@ -15,18 +15,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         //related to sending objects
         //int is obj id, bool is representing if it will be sent or not 
-        readonly Dictionary<int, SendingObjectsData> _sendingObjects = new();
-        readonly struct SendingObjectsData
-        {
-            public readonly bool HasParent;
-            public readonly SKObjectCreated EventData;
-
-            public SendingObjectsData(bool hasParent, SKObjectCreated eventData)
-            {
-                HasParent = hasParent;
-                EventData = eventData;
-            }
-        }
+        readonly Dictionary<int, SKObjectCreated> _sendingObjects = new();
 
         public GameRoom(ServerStateMachine context) : base(context)
         {
@@ -126,13 +115,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             _objects.Add(obj.ID, obj);
             obj.Init();
             _objects[evnt.ParentID].AddChild(obj, false);
-
+            obj.Start();
             //has parent refers to a parent in the sendingObject queue, it doesn't care if it has a parent outside it
             //because that parent was already sent through the network
             //do object create loop. Find root, if there is one. Only send the root to reduce send count
-            bool hasParent = _sendingObjects.ContainsKey(obj.ParentID);
             
-            _sendingObjects.Add(obj.ID, new SendingObjectsData(hasParent, evnt));
+            _sendingObjects.Add(obj.ID, evnt);
         }
 
         void OnObjectAdded(SKObjectAdded evnt)
@@ -158,15 +146,17 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         void ProcessSendingObjects()
         {
-            foreach (SendingObjectsData data in _sendingObjects.Values)
+            foreach (SKObjectCreated data in _sendingObjects.Values)
             {
-                if (data.HasParent) continue;
+                bool hasParent = _sendingObjects.ContainsKey(data.ParentID);
+
+                if (hasParent) continue;
 
                 var response = new CreateObjectMsg()
                 {
-                    NewObj = data.EventData.Obj,
-                    ParentID = data.EventData.ParentID,
-                    SenderID = data.EventData.SenderID,
+                    NewObj = data.Obj,
+                    ParentID = data.ParentID,
+                    SenderID = data.SenderID,
                 };
                 Log.Do("Send create object, id: " + response.NewObj.ID);
 
