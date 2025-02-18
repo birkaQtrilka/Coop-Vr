@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Coop_Vr.Networking.Messages;
 using StereoKit;
 using System.Collections.Concurrent;
+using Coop_Vr.Networking.ClientSide.StateMachine;
 
 namespace Coop_Vr.Networking.ServerSide.StateMachine
 {
@@ -37,11 +38,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         readonly ConcurrentQueue<IMessage> _messageQueue = new();
         readonly ConcurrentQueue<Action> _afterFixedUpdate = new();
         double _lastFixedUpdate;
+        public static MessageSender MessageSender { get; private set; }
 
 
         public ServerStateMachine()
         {
             Log.Do("Server started on port 55555");
+            MessageSender ??= new(SendMessage, -1);
 
             _listener = new TcpListener(IPAddress.Any, 55555);
             _listener.Start();

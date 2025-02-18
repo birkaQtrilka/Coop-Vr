@@ -57,13 +57,13 @@ namespace Coop_Vr.Networking.ServerSide.Components
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
-            var poseCopy = spherePose.LocalPose;
 
-            Vec3 labelPosition = gameObject.Transform.ModelMatrix * new Vec3(0, 1f, 0);
+            Vec3 labelPosition = gameObject.Transform.GetWorldMatrix() * new Vec3(0, .5f, 0) + new Vec3(0, .1f, 0);
             string label = ExtraInfo.GetValueOrDefault("Country", "Point");
             Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
 
-            Vec3 coordPosition = spherePose.ModelMatrix * new Vec3(0, -1f, 0);
+            var poseCopy = spherePose.LocalPose;
+            Vec3 coordPosition = spherePose.GetWorldMatrix() * new Vec3(0, -.5f, 0) - new Vec3(0, .1f, 0);
             string coordinates = $"({poseCopy.position.x:F1}, {poseCopy.position.y:F1}, {poseCopy.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 

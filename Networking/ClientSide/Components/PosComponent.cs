@@ -58,6 +58,30 @@ namespace Coop_Vr.Networking
             }
         }
 
+        public Pose WorldPose
+        {
+            get => GetWorldMatrix().Pose;
+            set
+            {
+                var parent = gameObject.GetParent()?.Transform;
+                if (parent == null)
+                {
+                    _localPosition = value.position; // No parent, so world position is the local position.
+                    _localRotation = value.orientation; 
+                }
+                else
+                {
+                    // Transform the world position to local space.
+                    Matrix worldInverse = parent.GetWorldMatrixInverse();
+                    _localPosition = worldInverse.Transform(value.position);
+                    _localRotation = worldInverse.Rotation * value.orientation;
+
+                }
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+            }
+        }
+
         public Vec3 WorldPosition
         {
             get => GetWorldMatrix().Translation;
@@ -71,15 +95,50 @@ namespace Coop_Vr.Networking
                 else
                 {
                     // Transform the world position to local space.
-                    _localPosition = parent.GetWorldMatrix().Inverse.Transform(value);
+                    _localPosition = parent.GetWorldMatrixInverse().Transform(value);
                 }
                 _modelMatrixDirty = true;
                 PropagateWorldMatrixDirty();
             }
         }
 
-        bool _modelMatrixDirty = true;
-        bool _worldMatrixDirty = true;
+        public Quat WorldRotation
+        {
+            get => GetWorldMatrix().Rotation;
+            set
+            {
+                var parent = gameObject.GetParent()?.Transform;
+                if (parent == null)
+                {
+                    _localRotation = value; // No parent, so world position is the local rotation.
+                }
+                else
+                {
+                    _localRotation = parent.GetWorldMatrixInverse().Rotation * value;
+                }
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+            }
+        }
+
+        public Vec3 WorldScale
+        {
+            get => GetWorldMatrix().Scale;
+            set
+            {
+                var parent = gameObject.GetParent()?.Transform;
+                if (parent == null)
+                {
+                    _localScale = value; // No parent, so world position is the local scale.
+                }
+                else
+                {
+                    _localScale = value / parent.GetWorldMatrix().Scale;
+                }
+                _modelMatrixDirty = true;
+                PropagateWorldMatrixDirty();
+            }
+        }
 
         readonly Queue<Pose> _interpolationQueue = new();
         readonly double _time = MySettings.FixedUpdateDelay / 1000.0;
@@ -89,6 +148,10 @@ namespace Coop_Vr.Networking
         
         Matrix _modelMatrix = Matrix.Identity;
         Matrix _cachedWorldMatrix = Matrix.Identity;
+        Matrix _cachedInverseWorldMatrix = Matrix.Identity;
+        bool _modelMatrixDirty = true;
+        bool _worldMatrixDirty = true;
+        bool _inverseWorldMatrixDirty = true;
 
         public Matrix ModelMatrix
         {
@@ -116,13 +179,22 @@ namespace Coop_Vr.Networking
             return _cachedWorldMatrix;
         }
 
+        public Matrix GetWorldMatrixInverse()
+        {
+            if (!_inverseWorldMatrixDirty) return _cachedInverseWorldMatrix;
+            _inverseWorldMatrixDirty = false;
+
+            _cachedInverseWorldMatrix = GetWorldMatrix().Inverse;
+            return _cachedInverseWorldMatrix;
+        }
+
         void PropagateWorldMatrixDirty()
         {
             _worldMatrixDirty = true;
-            if(gameObject != null) //when the position is set before init
-            gameObject.ForEach(child => child.Transform.PropagateWorldMatrixDirty());
-        }
+            _inverseWorldMatrixDirty = true;
 
+            gameObject?.ForEach(child => child.Transform.PropagateWorldMatrixDirty());
+        }
         public override void Start()
         {
             OnObjAdded();
@@ -130,10 +202,14 @@ namespace Coop_Vr.Networking
 
         public void OnObjAdded()
         {
+            //sometimes this method is called right after the object is allocated with 'new'
+            //the method is called in start to still allow proper initialization
+            if (gameObject == null) return;
+
             var copy = WorldPosition;
             _worldMatrixDirty = true;
             WorldPosition = copy;
-
+            GetWorldMatrixInverse();
             gameObject.ForEach(child => child.Transform.OnObjAdded());
 
         }

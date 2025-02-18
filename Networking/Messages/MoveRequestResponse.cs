@@ -8,6 +8,7 @@ namespace Coop_Vr.Networking.Messages
         public PosComponent Position;
 
         public bool stopped;
+        public bool alsoMoveSender;
 
         public void Deserialize(Packet pPacket)
         {
@@ -16,6 +17,7 @@ namespace Coop_Vr.Networking.Messages
             Position = new();
             Position.Deserialize(pPacket);
             stopped = pPacket.ReadBool();
+            alsoMoveSender = pPacket.ReadBool();
         }
 
         public void Serialize(Packet pPacket)
@@ -24,6 +26,7 @@ namespace Coop_Vr.Networking.Messages
             pPacket.Write(SenderID);
             Position.Serialize(pPacket);
             pPacket.Write(stopped);
+            pPacket.Write(alsoMoveSender);
         }
     }
 }
