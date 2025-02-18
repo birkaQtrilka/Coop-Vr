@@ -36,8 +36,9 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         readonly List<ClientHeart> _clientHearts = new();
         readonly ConcurrentQueue<IMessage> _messageQueue = new();
         readonly ConcurrentQueue<Action> _afterFixedUpdate = new();
+        double _lastFixedUpdate;
 
-        
+
         public ServerStateMachine()
         {
             Log.Do("Server started on port 55555");
@@ -53,7 +54,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
 
             CurrentRoom = _states[typeof(LobbyRoom)];
             CurrentRoom.OnEnter();
-            _ = FixedUpdate();
 
         }
 
@@ -107,6 +107,8 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             {
                 Log.Do(ex);
             }
+            FixedUpdate();
+
         }
 
         void HeartBeatLoop()
@@ -117,7 +119,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             HeartBeat heartBeatMsg = new();
 
             SendMessage(heartBeatMsg);
-            Log.Do("HearBeat");
+            //Log.Do("HearBeat");
             CheckClientHeart();
         }
 
@@ -162,37 +164,35 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
         {
             _messageQueue.Enqueue(msg);
         }
+        
 
-        async Task FixedUpdate()
+        void FixedUpdate()
         {
-            while (_canRunFixedUpdate)
+            if (Time.Total - _lastFixedUpdate < 0.05f) return;
+            _lastFixedUpdate = Time.Total;
+            try
             {
-                await Task.Delay(MySettings.FixedUpdateDelay);
-                try
+                CurrentRoom.FixedUpdate();
+
+                while (!_afterFixedUpdate.IsEmpty)
                 {
-                    CurrentRoom.FixedUpdate();
+                    if (!_afterFixedUpdate.TryDequeue(out var action)) continue;
+                    action();
 
-                    while (!_afterFixedUpdate.IsEmpty)
-                    {
-                        if (!_afterFixedUpdate.TryDequeue(out var action)) continue;
-                        action();
-
-                    }
-
-                    while (!_messageQueue.IsEmpty)
-                    {
-                        if (!_messageQueue.TryDequeue(out var msg)) continue;
-
-                        CurrentRoom.SafeForEachMember(c => { if (c.Connected) c.SendMessage(msg); });
-                    }
                 }
-                catch (Exception ex)
+
+                while (!_messageQueue.IsEmpty)
                 {
-                    Log.Do(ex);
-                }
-                
+                    if (!_messageQueue.TryDequeue(out var msg)) continue;
 
+                    CurrentRoom.SafeForEachMember(c => { if (c.Connected) c.SendMessage(msg); });
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Do(ex);
+            }
+            
         }
 
         public Room<ServerStateMachine> GetRoom<T>() where T : Room<ServerStateMachine>
