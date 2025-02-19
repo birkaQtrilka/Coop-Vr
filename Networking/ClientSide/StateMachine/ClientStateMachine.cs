@@ -151,7 +151,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
 
             if (Time.Total - _lastHeartBeat < MySettings.MaxTimeForHeartBeat) return;
-            
+            _lastHeartBeat = Time.Total;
             Disconnect();
         }
 

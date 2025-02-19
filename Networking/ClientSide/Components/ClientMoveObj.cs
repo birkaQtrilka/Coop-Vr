@@ -27,11 +27,11 @@ namespace Coop_Vr.Networking.ClientSide
         int times;
         public override void FixedUpdate()
         {
-            if(times++ <= 100)
-            {
-                Log.Do("Pinch");
-                gameObject.Transform.LocalPosition += Vec3.Right * .001f;
-            }
+            //if(times++ <= 100)
+            //{
+            //    Log.Do("Pinch");
+            //    gameObject.Transform.LocalPosition += Vec3.Right * .001f;
+            //}
 
             if (!TryGetInputVal(out Vec3 pos)) return;
 

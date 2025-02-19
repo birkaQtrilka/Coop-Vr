@@ -19,7 +19,6 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public GameRoom(ServerStateMachine context) : base(context)
         {
-            _currentScene = new AnchorScene(this);
             //id is random negative number so it's cannot have a parent 
             _root = new SkObject(-974327) { ID = -1, Components = new() { new PosComponent() } };
             _objects.Add(-1, _root);
@@ -28,10 +27,12 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public override void OnEnter()
         {
+
             EventBus<SKObjectCreated>.Event += OnObjectCreated;
             EventBus<SKObjectAdded>.Event += OnObjectAdded;
             EventBus<SKObjectRemoved>.Event += OnObjectRemoved;
             EventBus<SKObjectGetter>.Event += ObjectGet;
+            _currentScene = new GraphScene(this);
             _currentScene.OnStart();
         }
 
