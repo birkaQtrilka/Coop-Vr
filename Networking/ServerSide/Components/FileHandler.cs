@@ -11,19 +11,23 @@ namespace Coop_Vr.Networking.ServerSide.Components
     public class FileHandler
     {
         public string FilePath { get; set; }
+        public List<IDictionary<string, object>> Records { get; set; }
 
         // Constructor to initialize FilePath
         public FileHandler(string filePath)
         {
             FilePath = filePath;
+            Records = new List<IDictionary<string, object>>();
         }
 
+        public FileHandler()
+        {
+        }
 
         // Method to read graph points from the CSV file
         public List<GraphPoint> ReadGraphPointsFromCsv()
         {
             var graphPoints = new List<GraphPoint>();
-            var records = new List<IDictionary<string, object>>();
 
             try
             {
@@ -35,12 +39,12 @@ namespace Coop_Vr.Networking.ServerSide.Components
                     var record = csv.GetRecord<dynamic>() as IDictionary<string, object>;
                     if (record != null)
                     {
-                        records.Add(record);
+                        Records.Add(record);
                     }
                 }
 
                 // Calculate influence scores using XRFomula
-                var influenceScores = CalculateInfluenceScore(records, 3);
+                var influenceScores = CalculateInfluenceScore(Records, 30);
 
                 // Create GraphPoint objects from the influence scores
                 foreach (var score in influenceScores)
@@ -56,8 +60,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
             return graphPoints;
         }
-
-        private IEnumerable<Dictionary<string, object>> CalculateInfluenceScore(List<IDictionary<string, object>> records, int numberOfProject)
+        public IEnumerable<Dictionary<string, object>> CalculateInfluenceScore(List<IDictionary<string, object>> records, int numberOfProject)
         {
             var maxCapacity = records.Max(p => double.TryParse(p["Capacity (kt H2/y)"]?.ToString(), out double capacity) ? capacity : 0);
             var influenceScores = new List<Dictionary<string, object>>();
@@ -146,17 +149,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         //    }
         //}
 
-        public (float X, float Z) ReverseScale(GraphPoint point, float X, float Z, float scale)
-        {
-            float xMin = float.Parse(point.ExtraInfo["xMin"]);
-            float xMax = float.Parse(point.ExtraInfo["xMax"]);
-            float zMin = float.Parse(point.ExtraInfo["zMin"]);
-            float zMax = float.Parse(point.ExtraInfo["zMax"]);
 
-            X = point.X * (xMax - xMin) / scale + xMin;
-            Z = point.Z * (zMax - zMin) / scale + zMin;
-            return (X, Z);
-        }
 
         /// <summary>
         /// Helper method to get min and max values for X, Y, and Z coordinates

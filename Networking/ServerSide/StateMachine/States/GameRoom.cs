@@ -10,6 +10,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 {
     public class GameRoom : Room<ServerStateMachine>
     {
+        Graph Graph;
         public int CurrentId { get; private set; }
 
         Dictionary<int, SkObject> _objects = new();
@@ -19,6 +20,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             _root = new SkObject() { ID = -1 };
             _objects.Add(-1, _root);
+            Graph = new Graph();
         }
 
         public override void OnEnter()
@@ -31,21 +33,23 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             // Create a FileHandler instance
             var fileHandler = new FileHandler(filePath);
 
+            // Set the original records
+            Graph.SetOrigialRecords(fileHandler.Records);
+
             // Read graph points from the CSV file
             var graphPoints = fileHandler.ReadGraphPointsFromCsv();
 
             // Scale the graph points
             fileHandler.ScaleGraphPoints(graphPoints, 10f); 
-
-            var graph = new Graph();
-            graph.SetGraphPoints(graphPoints);
+            
+            Graph.SetGraphPoints(graphPoints);
 
             SkObject graphHolder = new(
                 parentID: -1,
-                new List<Component>() { new PosComponent(), graph }
+                new List<Component>() { new PosComponent(), Graph }
             );
 
-            graph.GenerateGraphPoints();
+            Graph.GenerateGraphPoints();
 
             var response = new CreateObjectResponse() { NewObj = graphHolder, ParentID = -1};
             Task.Run(async () =>
