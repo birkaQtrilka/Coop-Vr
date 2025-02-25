@@ -33,14 +33,6 @@ namespace Coop_Vr.Networking.Scenes
             );
 
             graph.GenerateGraphPoints();
-
-            var response = new CreateObjectMsg() { NewObj = graphHolder, ParentID = -1 };
-            Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                room.Context.SendMessage(response);
-
-            });
         }
 
         public override void OnStop()

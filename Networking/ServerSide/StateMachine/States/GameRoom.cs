@@ -29,7 +29,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
             _objects.Add(-1, _root);
             _root.Init();
-            _currentScene = new AnchorScene(this);
+            _currentScene = new GraphScene(this);
 
             EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectAdded>.Event += OnObjectAdded;
@@ -102,8 +102,15 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     };
                     Log.Do("Receive, send Move. ID: " + move.ObjectID);
                     context.SendMessage(response);
+                    try
+                    {
+                        component.OnMove?.Invoke(component, move);
 
-                    component.OnMove?.Invoke(component, move);
+                    }
+                    catch(System.Exception ex)
+                    {
+                        Log.Do(ex);
+                    }
                 }
 
             }
