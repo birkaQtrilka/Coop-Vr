@@ -20,16 +20,23 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
         public void GenerateGraphPoints()
         {
+
             foreach (var graphPoint in _graphPoints)
             {
                 //is added automatically to the scene
-                var moveComponent = new Move();
+                MakeGraphPointObject(graphPoint);
+            }
+        }
 
-                _ = new SkObject
-                (
-                    parentID: gameObject.ID,
-                    components: new List<Component>
-                    {
+        SkObject MakeGraphPointObject(GraphPoint graphPoint)
+        {
+            var moveComponent = new Move();
+
+            var obj = new SkObject
+            (
+                parentID: gameObject.ID,
+                components: new List<Component>
+                {
                         new PosComponent(),
                         graphPoint,
                         new ModelComponent
@@ -37,10 +44,10 @@ namespace Coop_Vr.Networking.ServerSide.Components
                             MeshName = "sphere",
                         },
                         moveComponent
-                    }
-                );
-                moveComponent.OnMove += OnMove;
-            }
+                }
+            );
+            moveComponent.OnMove += OnMove;
+            return obj;
         }
 
         public (float X, float Z) ReverseScale(GraphPoint point, float X, float Z, float scale)
@@ -129,7 +136,11 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 // Create GraphPoint objects from the influence scores
                 foreach (var score in influenceScores)
                 {
-                    _graphPoints.Add(GraphPoint.FromCsvRecord(score));
+                    //remember that it will not remove the old objects
+                    var newPoint = GraphPoint.FromCsvRecord(score);
+                    _graphPoints.Add(newPoint);
+                    MakeGraphPointObject(newPoint);
+
                 }
 
                 // Update the graph points
@@ -146,6 +157,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         {
             DrawAxes(10);
         }
+
         void DrawAxes(float axisLimit)
         {
             Lines.Add(Vec3.Zero, new Vec3(axisLimit, 0, 0), Color.White, 0.01f); // X-axis
