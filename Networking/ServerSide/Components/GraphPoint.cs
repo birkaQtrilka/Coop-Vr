@@ -15,11 +15,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public float Z { get; set; }
         public Dictionary<string, string> ExtraInfo { get; set; } = new Dictionary<string, string>();
 
-        //not serializable
         public ModelComponent model;
 
-
-        // Factory method to create a GraphPoint from a CSV record  m 
         public static GraphPoint FromCsvRecord(IDictionary<string, object> record)
         {
             var graphPoint = new GraphPoint
@@ -31,10 +28,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
             foreach (var key in record.Keys)
             {
-                //if (key != "Capacity1" && key != "Investment1" && key != "Score")
-                //{
                 graphPoint.ExtraInfo[key] = record[key]?.ToString();
-                //}
             }
 
             return graphPoint;
@@ -48,17 +42,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
             gameObject.Transform.scale = new Vec3(.1f);
         }
 
-        private float CalculateScale()
-        {
-            return Math.Clamp(Y / 50.0f, 0.1f, 2.0f);
-        }
-
-        //render code
         public override void Update()
         {
-            //float scale = CalculateScale();
-
-            model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
             PosComponent spherePose = gameObject.Transform;
 
             UI.Handle($"Sphere-{ExtraInfo.GetValueOrDefault("Country1", "Unknown")}", ref spherePose.pose, new Bounds(spherePose.scale));
@@ -71,13 +56,13 @@ namespace Coop_Vr.Networking.ServerSide.Components
             string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
             Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
 
-            //changing data
-
             Vec3 modelSpace = spherePose.pose.position;
-            //modelMatrix.Translation = modelSpace;
             X = modelSpace.x;
             Y = modelSpace.y;
             Z = modelSpace.z;
+
+            // Change the color of the model based on some condition
+            //model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
         }
 
         public override void Serialize(Packet pPacket)
