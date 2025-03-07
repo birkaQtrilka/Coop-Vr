@@ -132,8 +132,14 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
                 // Calculate influence scores using XRFomula
                 var influenceScores = FileHandler.CalculateInfluenceScore(records, 3);
-
                 // Create GraphPoint objects from the influence scores
+                foreach (var p in _graphPoints)
+                {
+                    ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m =>
+                        m.SendMessage(new RemoveMsg() { ID = p.gameObject.ID, ParentID = gameObject.ID})
+                    );
+                }
+                
                 foreach (var score in influenceScores)
                 {
                     //remember that it will not remove the old objects
@@ -144,7 +150,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
 
                 // Update the graph points
-                FileHandler.ScaleGraphPoints(_graphPoints, 10f);
+                FileHandler.ScaleGraphPoints(_graphPoints, 10f); 
                
             }
             catch (Exception ex)
