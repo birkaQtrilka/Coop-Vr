@@ -44,7 +44,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
 
                 // Calculate influence scores using XRFomula
-                var influenceScores = CalculateInfluenceScore(Records, 30);
+                var influenceScores = CalculateInfluenceScore(Records, 3);
 
                 // Create GraphPoint objects from the influence scores
                 foreach (var score in influenceScores)

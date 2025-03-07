@@ -28,7 +28,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             }
         }
 
-        SkObject MakeGraphPointObject(GraphPoint graphPoint)
+        SkObject MakeGraphPointObject(GraphPoint graphPoint, bool sendMsg = false)
         {
             var moveComponent = new Move();
 
@@ -47,6 +47,16 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
             );
             moveComponent.OnMove += OnMove;
+
+            if(!sendMsg) return obj;
+
+            var createMsg = new CreateObjectResponse()
+            {
+                NewObj = obj,
+                ParentID = gameObject.ID
+            };
+            ServerStateMachine.Instance.CurrentRoom.SafeForEachMember((m) => m.SendMessage(createMsg));
+
             return obj;
         }
 
@@ -71,6 +81,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             // Process the final position when the object stops moving
             if (msg.stopped)
             {
+                Console.WriteLine("In this if already");
                 ProcessGraphPointUpdate(movingPoint, msg.Position.pose.position);
             }
             else
@@ -89,7 +100,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             var scaledInvestment = position.z;
 
             // Reverse scale to get original values
-            (float unscaledX, float unscaledZ) = ReverseScale(point, scaledCapacity, scaledInvestment, 10f);
+            (float unscaledX, float unscaledZ) = ReverseScale(point, scaledCapacity, scaledInvestment, 1f);
 
             // Update the point's data
             point.ExtraInfo["Capacity1"] = unscaledX.ToString();
@@ -139,13 +150,16 @@ namespace Coop_Vr.Networking.ServerSide.Components
                     //remember that it will not remove the old objects
                     var newPoint = GraphPoint.FromCsvRecord(score);
                     _graphPoints.Add(newPoint);
-                    MakeGraphPointObject(newPoint);
-
                 }
 
                 // Update the graph points
-                FileHandler.ScaleGraphPoints(_graphPoints, 10f);
-               
+                FileHandler.ScaleGraphPoints(_graphPoints, 1f);
+
+                foreach (GraphPoint point in _graphPoints)
+                {
+                    MakeGraphPointObject(point, true);
+                }
+
             }
             catch (Exception ex)
             {
@@ -155,7 +169,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
         public override void Update()
         {
-            DrawAxes(10);
+            DrawAxes(1f);
         }
 
         void DrawAxes(float axisLimit)
