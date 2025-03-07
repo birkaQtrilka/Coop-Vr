@@ -27,6 +27,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             Log.Do("Entered game room\nMember count: " + MemberCount());
             EventBus<SKObjectAdded>.Event += OnObjectCreated;
+            EventBus<SKObjectRemoved>.Event += OnObjRemoved ;
 
             string filePath = "Assets\\Documents\\europe_data.csv";
             
@@ -61,9 +62,18 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             Log.Do("Object ID: " + response.ToString());
         }
 
+        void OnObjRemoved(SKObjectRemoved evnt)
+        {
+            //removing from parent
+            _objects[evnt.ParentID].RemoveChild(evnt.Obj);
+            //remove from pool
+            _objects.Remove(evnt.Obj.ID);
+        }
+
         public override void OnExit()
         {
             EventBus<SKObjectAdded>.Event -= OnObjectCreated;
+            EventBus<SKObjectRemoved>.Event -= OnObjRemoved;
         }
 
         /// <summary>

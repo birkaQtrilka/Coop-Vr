@@ -37,13 +37,13 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 parentID: gameObject.ID,
                 components: new List<Component>
                 {
-                        new PosComponent(),
-                        graphPoint,
-                        new ModelComponent
-                        {
-                            MeshName = "sphere",
-                        },
-                        moveComponent
+                    new PosComponent(),
+                    graphPoint,
+                    new ModelComponent
+                    {
+                        MeshName = "sphere",
+                    },
+                    moveComponent
                 }
             );
             moveComponent.OnMove += OnMove;
@@ -150,7 +150,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
                         m.SendMessage(new RemoveMsg() { ID = p.gameObject.ID, ParentID = gameObject.ID})
                     );
                 }
-                
+
+                _graphPoints.Clear();
                 foreach (var score in influenceScores)
                 {
                     //remember that it will not remove the old objects

@@ -26,6 +26,11 @@ namespace Coop_Vr.Networking
             Components = components;
             EventBus<SKObjectAdded>.Publish(new SKObjectAdded(this, parentID));
         }
+        
+        public void RemoveChild(SkObject child)
+        {
+            _children.Remove(child);
+        }
 
         public void Init()
         {

@@ -24,4 +24,15 @@ namespace Coop_Vr.Networking
             ParentID = parentID;
         }
     }
+
+    public readonly struct SKObjectRemoved : IEvent
+    {
+        public readonly SkObject Obj;
+        public readonly int ParentID;
+        public SKObjectRemoved(SkObject obj, int parentID = -1)//-1 is the id of the root
+        {
+            Obj = obj;
+            ParentID = parentID;
+        }
+    }
 }
