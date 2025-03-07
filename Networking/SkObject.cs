@@ -45,7 +45,10 @@ namespace Coop_Vr.Networking
             }
         }
 
-
+        public void RemoveChild(SkObject child)
+        {
+            _children.Remove(child);
+        }
 
         public void AddChild(SkObject obj)
         {

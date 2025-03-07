@@ -66,6 +66,14 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 obj.GetComponent<ModelComponent>().color = clrMsg.GetColor();
 
             }
+            else if (message is RemoveMsg removeMsg)
+            {
+                var obj = _objects[removeMsg.ID];
+                //removing from parent
+                _objects[removeMsg.ParentID].RemoveChild(obj);
+                //remove from pool
+                _objects.Remove(removeMsg.ID);
+            }
         }
 
         void OnObjectCreated(SkObject obj)
