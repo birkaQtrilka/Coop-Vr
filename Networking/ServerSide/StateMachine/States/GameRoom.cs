@@ -27,7 +27,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             Log.Do("Entered game room\nMember count: " + MemberCount());
             EventBus<SKObjectAdded>.Event += OnObjectCreated;
-            EventBus<SKObjectRemoved>.Event += OnObjRemoved ;
+            EventBus<SKObjectRemoved>.Event += OnObjRemoved;
 
             string filePath = "Assets\\Documents\\europe_data.csv";
             
