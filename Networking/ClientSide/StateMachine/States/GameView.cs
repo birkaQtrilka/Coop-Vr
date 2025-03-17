@@ -55,7 +55,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             }
             else if (message is MoveRequestResponse move)
             {
-
+                if (!_objects.ContainsKey(move.ObjectID)) return;
                 SkObject obj = _objects[move.ObjectID];
                 obj.GetComponent<Move>().HandleResponese(move);
             }
@@ -87,7 +87,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
         {
             //_anchorManager.Step();
 
-            DrawWindow();
+            //DrawWindow();
 
             _root.Update();
 
