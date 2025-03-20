@@ -4,6 +4,7 @@ using Coop_Vr.Networking.ServerSide.StateMachine;
 using StereoKit;
 using System;
 using System.Collections.Generic;
+using Coop_Vr.config;
 
 namespace Coop_Vr.Networking.ServerSide.Components
 {
@@ -142,7 +143,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
 
                 // Calculate influence scores using XRFomula
-                var influenceScores = FileHandler.CalculateInfluenceScore(records, 3);
+                var influenceScores = FileHandler.CalculateInfluenceScore(records, config.Config.NUMBEROFPROJECT);
                 // Create GraphPoint objects from the influence scores
                 foreach (var p in _graphPoints)
                 {
@@ -160,7 +161,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
                 }
 
                 // Update the graph points
-                FileHandler.ScaleGraphPoints(_graphPoints, 1f);
+                FileHandler.ScaleGraphPoints(_graphPoints, config.Config.SCALE);
 
                 foreach (GraphPoint point in _graphPoints)
                 {

@@ -41,7 +41,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             var graphPoints = fileHandler.ReadGraphPointsFromCsv();
 
             // Scale the graph points
-            fileHandler.ScaleGraphPoints(graphPoints, 1f); 
+            fileHandler.ScaleGraphPoints(graphPoints, config.Config.SCALE); 
             
             Graph.SetGraphPoints(graphPoints);
 

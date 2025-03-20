@@ -1,5 +1,9 @@
-﻿public static class Config
+﻿
+namespace Coop_Vr.config
 {
-    public const double SCALE = 10f;
-    public static readonly int MAXCAPACITY = 100; // Set the value here
+    public static class Config
+    {
+        public const float SCALE = 5.0f;
+        public const int NUMBEROFPROJECT = 10; // Set the value here
+    }
 }
