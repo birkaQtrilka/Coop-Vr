@@ -64,7 +64,10 @@ namespace Coop_Vr.Networking
                     totalBytesRead += bytesRead;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Log.Do(e);
+            }
 
             return (totalBytesRead == pByteCount) ? bytes : null;
         }

@@ -90,6 +90,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 IMessage msg = _server.GetMessage();
                 if (msg is HeartBeat beat)
                 {
+                    Log.Do("HB");
                     _lastHeartBeat = Time.Total;
                     SendMessage(beat);
                 }
@@ -140,7 +141,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
             
         }
-        
 
         void HeartBeatLoop()
         {
