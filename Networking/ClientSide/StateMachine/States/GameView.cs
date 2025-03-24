@@ -59,21 +59,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
             _sendingObjects.Clear();
         }
 
-        void OnLocalObjectCreated(SKObjectCreated evnt)
-        {
-            var obj = evnt.Obj;
-            int temporaryID = Random.Shared.Next(0, int.MaxValue);
-            obj.ID = temporaryID;
-
-            _objects.Add(obj.ID, obj);
-            obj.Init();
-            _objects[obj.ParentID].AddChild(obj, false);
-
-            obj.Start();
-
-            AddToSendObjectsQueue(obj, evnt);
-        }
-
         void AddToSendObjectsQueue(SkObject obj, SKObjectCreated evnt)
         {
             _sendingObjects.Add(obj.ID, evnt);
@@ -98,6 +83,21 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine.States
                 context.SendMessage(response);
             }
             _sendingObjects.Clear();
+        }
+
+        void OnLocalObjectCreated(SKObjectCreated evnt)
+        {
+            var obj = evnt.Obj;
+            int temporaryID = Random.Shared.Next(0, int.MaxValue);
+            obj.ID = temporaryID;
+
+            _objects.Add(obj.ID, obj);
+            obj.Init();
+            _objects[obj.ParentID].AddChild(obj, false);
+
+            obj.Start();
+
+            AddToSendObjectsQueue(obj, evnt);
         }
 
         void OnRemoteObjectCreated(SkObject obj)

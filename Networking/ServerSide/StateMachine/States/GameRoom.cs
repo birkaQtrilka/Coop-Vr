@@ -119,6 +119,11 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         void OnRemoteObjectCreated(SKObjectCreated evnt)
         {
             SkObject obj = evnt.Obj;
+            if (_objects.ContainsKey(obj.ID))
+            {
+                Log.Do($"obj with ID: {obj.ID} already exists, changing ID");
+                obj.ID = CurrentId++;
+            }    
             OnRemoteObjectCreatedRecursive(obj);
             _objects[obj.ParentID].AddChild(obj, false);
             _sendingObjects.Add(obj.ID, evnt);
