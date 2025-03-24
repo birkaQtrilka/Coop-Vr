@@ -17,7 +17,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
         //not serializable
         public ModelComponent model;
-
+        public const float INVERSE_POSITION_SCALE = .1f;
+        public const float POSITION_SCALE = 10f;
         // Factory method to create a GraphPoint from a CSV record
         public static GraphPoint FromCsvRecord(IDictionary<string, object> record)
         {
@@ -43,7 +44,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         {
             model = gameObject.GetComponent<ModelComponent>();
 
-            gameObject.Transform.pose = new Pose(new Vec3(X, Y, Z));
+            gameObject.Transform.pose = new Pose(new Vec3(X, Y, Z) * INVERSE_POSITION_SCALE);
             gameObject.Transform.scale = new Vec3(.1f);
         }
 
@@ -163,9 +164,9 @@ namespace Coop_Vr.Networking.ServerSide.Components
         private void UpdateModelColor(Vec3 position)
         {
             // Update position variables and set color based on Z position
-            X = position.x;
-            Y = position.y;
-            Z = position.z;
+            X = position.x * POSITION_SCALE;
+            Y = position.y * POSITION_SCALE;
+            Z = position.z * POSITION_SCALE;
             model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
         }
 

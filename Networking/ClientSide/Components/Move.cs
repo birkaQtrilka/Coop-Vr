@@ -35,7 +35,7 @@ namespace Coop_Vr.Networking.ClientSide
             if (moverIsNotOwnedByMe)
                 return;
 
-            isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds);
+            isMoving = UI.Handle(gameObject.ID.ToString(), ref gameObject.Transform.pose, modelComponent.bounds *.2f);
         }
 
         public override void FixedUpdate()
