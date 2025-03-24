@@ -122,6 +122,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine
             HeartBeat heartBeatMsg = new();
 
             SendMessage(heartBeatMsg);
+
             //Log.Do("HearBeat");
             CheckClientHeart();
         }

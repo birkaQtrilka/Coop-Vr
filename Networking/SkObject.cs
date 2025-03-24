@@ -92,6 +92,11 @@ namespace Coop_Vr.Networking
             obj.Transform.OnObjRemoved(this);
         }
 
+        public void Destroy()
+        {
+            EventBus<SKObjectRemoved>.Publish(new SKObjectRemoved(this));
+        }
+
         public SkObject GetParent()
         {
             var getter = new SKObjectGetter(_parentID);

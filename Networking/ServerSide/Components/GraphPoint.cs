@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Coop_Vr.Networking.ServerSide.Components
 {
@@ -14,25 +15,20 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public float Z { get; set; }
         public Dictionary<string, string> ExtraInfo { get; set; } = new Dictionary<string, string>();
 
-        //not serializable
         public ModelComponent model;
 
-        // Factory method to create a GraphPoint from a CSV record
         public static GraphPoint FromCsvRecord(IDictionary<string, object> record)
         {
             var graphPoint = new GraphPoint
             {
-                X = record.ContainsKey("X") ? float.Parse(record["X"].ToString(), CultureInfo.InvariantCulture) : 0,
-                Y = record.ContainsKey("Y") ? float.Parse(record["Y"].ToString(), CultureInfo.InvariantCulture) : 0,
-                Z = record.ContainsKey("Z") ? float.Parse(record["Z"].ToString(), CultureInfo.InvariantCulture) : 0,
+                X = record.ContainsKey("Capacity1") ? float.Parse(record["Capacity1"].ToString(), CultureInfo.InvariantCulture) : 0,
+                Y = record.ContainsKey("Score") ? float.Parse(record["Score"].ToString(), CultureInfo.InvariantCulture) : 0,
+                Z = record.ContainsKey("Investment1") ? float.Parse(record["Investment1"].ToString(), CultureInfo.InvariantCulture) : 0,
             };
 
             foreach (var key in record.Keys)
             {
-                if (key != "X" && key != "Y" && key != "Z")
-                {
-                    graphPoint.ExtraInfo[key] = record[key]?.ToString();
-                }
+                graphPoint.ExtraInfo[key] = record[key]?.ToString();
             }
 
             return graphPoint;
@@ -41,37 +37,156 @@ namespace Coop_Vr.Networking.ServerSide.Components
         public override void Start()
         {
             model = gameObject.GetComponent<ModelComponent>();
-        }
 
-        private float CalculateScale()
-        {
-            return Math.Clamp(Y / 50.0f, 0.1f, 2.0f);
+            gameObject.Transform.LocalPosition = new Vec3(X, Y, Z);
+            gameObject.Transform.LocalScale = new Vec3(.1f);
         }
 
         //render code
+        // Class-level variables to track popup state
+        private bool showPopup = false;
+        //private float popupTimer = 0f;
+        //private const float POPUP_DURATION = 5.0f; // Show popup for 5 seconds
+
         public override void Update()
         {
-            float scale = CalculateScale();
-            gameObject.Transform.LocalScale = new Vec3(scale);
-
-            model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
+            // Get the sphere's position and transform information
             PosComponent spherePose = gameObject.Transform;
+            Vec3 spherePosition = spherePose.LocalPosition;
+            Vec3 sphereScale = spherePose.LocalScale;
 
+            // Display label and coordinates with positions based on sphere scale
+            RenderLabels(spherePosition, sphereScale);
 
-            Vec3 labelPosition = gameObject.Transform.GetWorldMatrix() * new Vec3(0, .5f, 0) + new Vec3(0, .1f, 0);
-            string label = ExtraInfo.GetValueOrDefault("Country", "Point");
-            Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
+            // Handle the information button
+            HandleInfoButton(spherePosition);
 
-            var poseCopy = spherePose.LocalPose;
-            Vec3 coordPosition = spherePose.GetWorldMatrix() * new Vec3(0, -.5f, 0) - new Vec3(0, .1f, 0);
-            string coordinates = $"({poseCopy.position.x:F1}, {poseCopy.position.y:F1}, {poseCopy.position.z:F1})";
-            Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
+            // Handle popup display if needed
+            if (showPopup)
+            {
+                DisplayPopup(spherePosition, sphereScale);
+            }
 
-            //local pos
-            X = poseCopy.position.x;
-            Y = poseCopy.position.y;
-            Z = poseCopy.position.z;
+            // Update model color based on position
+            UpdateModelColor(spherePosition);
         }
+
+        private void RenderLabels(Vec3 position, Vec3 scale)
+        {
+            // Project name label above the sphere
+            string label = ExtraInfo.GetValueOrDefault("Project1", "Project1");
+            Text.Add(label,
+                     Matrix.TR(position + new Vec3(0, scale.y, 0), Quat.FromAngles(0, 180, 0)),
+                     TextAlign.TopCenter);
+
+            // Coordinates label below the sphere
+            string coordinates = $"({position.x:F1}, {position.y:F1}, {position.z:F1})";
+            Text.Add(coordinates,
+                     Matrix.TR(position + new Vec3(0, -scale.y, 0), Quat.FromAngles(0, 180, 0)),
+                     TextAlign.BottomCenter);
+        }
+
+        private void HandleInfoButton(Vec3 position)
+        {
+            // Define consistent button parameters
+            Vec3 buttonPosition = position + new Vec3(0.001f, -0.02f, 0.001f);
+            Vec2 buttonSize = new Vec2(0.05f, 0.05f);
+            Quat buttonRotation = Quat.FromAngles(0, 180, 0);
+
+            // Create a transformation matrix that includes position and rotation
+            Matrix buttonTransform = Matrix.TR(buttonPosition, buttonRotation);
+
+            // Begin a UI area with the transformation
+            UI.PushSurface(new Pose(buttonPosition, buttonRotation));
+
+            // Create the button
+            bool clicked = UI.Button("Info", buttonSize);
+
+            // End the UI area
+            UI.PopSurface();
+
+            // Handle button click
+            if (clicked)
+            {
+                showPopup = true;
+            }
+        }
+
+        private void DisplayPopup(Vec3 position, Vec3 scale)
+        {
+            // Position the popup in front of the sphere
+            Vec3 popupPosition = position + new Vec3(0.15f, scale.y + 0.5f, 0.15f);
+            Quat popupRotation = Quat.FromAngles(0, 180, 0);
+            Pose popupPose = new Pose(popupPosition, popupRotation);
+
+            UI.WindowBegin("Object Information", ref popupPose);
+
+            // Project coordinates information
+            UI.Label($"Max Capacity: {ExtraInfo.GetValueOrDefault("MaxCapcity", "")}");
+            UI.Label($"X - Capacity Project 1: {ExtraInfo.GetValueOrDefault("Capacity1", "Unknown")}");
+            UI.Label($"Y - Influence Score: {ExtraInfo.GetValueOrDefault("Score", "Unknown")}");
+            UI.Label($"Z - Investment Project 1: {ExtraInfo.GetValueOrDefault("Investment1", "Unknown")}");
+            UI.HSeparator();
+
+            // Project 1 details
+            DisplayProjectDetails("1");
+            UI.HSeparator();
+
+            // Project 2 details
+            DisplayProjectDetails("2");
+
+            // Close button
+            if (UI.Button("Close"))
+            {
+                showPopup = false;
+            }
+
+            UI.WindowEnd();
+        }
+
+        private void DisplayProjectDetails(string projectNum)
+        {
+            UI.Label($"Project {projectNum}: {ExtraInfo.GetValueOrDefault($"Project{projectNum}", "Unknown")}");
+            UI.Label($"Capacity Project {projectNum}: {ExtraInfo.GetValueOrDefault($"Capacity{projectNum}", "Unknown")}");
+            UI.Label($"Investment Project {projectNum}: {ExtraInfo.GetValueOrDefault($"Investment{projectNum}", "Unknown")}");
+            UI.Label($"Date Project {projectNum}: {ExtraInfo.GetValueOrDefault($"Date{projectNum}", "Unknown")}");
+            UI.Label($"Technology Project {projectNum}: {ExtraInfo.GetValueOrDefault($"Technology{projectNum}", "Unknown")}");
+        }
+
+        private void UpdateModelColor(Vec3 position)
+        {
+            // Update position variables and set color based on Z position
+            X = position.x;
+            Y = position.y;
+            Z = position.z;
+            model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
+        }
+
+
+
+        //public override void Update()
+        //{
+        //    //float scale = CalculateScale();
+
+        //    model.color = Color.HSV((Z + 10) / 20.0f, 1.0f, 1.0f);
+        //    PosComponent spherePose = gameObject.Transform;
+
+        //    Vec3 labelPosition = spherePose.pose.position + new Vec3(0, 1f * spherePose.scale.y, 0);
+        //    string label = ExtraInfo.GetValueOrDefault("Country1", "PointS");
+        //    Text.Add(label, Matrix.TR(labelPosition, Quat.FromAngles(0, 180, 0)), TextAlign.TopCenter);
+
+        //    Vec3 coordPosition = spherePose.pose.position + new Vec3(0, -1f * spherePose.scale.y, 0);
+        //    string coordinates = $"({spherePose.pose.position.x:F1}, {spherePose.pose.position.y:F1}, {spherePose.pose.position.z:F1})";
+        //    Text.Add(coordinates, Matrix.TR(coordPosition, Quat.FromAngles(0, 180, 0)), TextAlign.BottomCenter);
+
+        //    //changing data
+
+        //    Vec3 modelSpace = spherePose.pose.position;
+        //    //modelMatrix.Translation = modelSpace;
+        //    X = modelSpace.x;
+        //    Y = modelSpace.y;
+        //    Z = modelSpace.z;
+        //}
 
         public override void Serialize(Packet pPacket)
         {
@@ -79,7 +194,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             pPacket.Write(Y);
             pPacket.Write(Z);
 
-            pPacket.Write(ExtraInfo.Count);
+            pPacket.Write(ExtraInfo.Count());
             foreach (var item in ExtraInfo)
             {
                 pPacket.Write(item.Key);

@@ -34,10 +34,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectAdded>.Event += OnObjectAdded;
             EventBus<SKObjectRemoved>.Event += OnObjectRemoved;
+            EventBus<SKObjectDestroyed>.Event += OnObjectDestroyed; ;
             EventBus<SKObjectGetter>.Event += ObjectGet;
             _currentScene.OnStart();
             _root.Start();
         }
+
+        
 
         public override void OnExit()
         {
@@ -168,6 +171,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             //_objects[evnt.RemovedObj.ParentID].RemoveChild(evnt.RemovedObj);
             _root.AddChild(evnt.RemovedObj);
             //send response
+        }
+
+        void OnObjectDestroyed(SKObjectDestroyed obj)
+        {
+            var parent = obj.DestroyedObj.GetParent();
+            parent.RemoveChild(obj.DestroyedObj, false);
+            _objects.Remove(obj.DestroyedObj.ID);
         }
 
         void ObjectGet(SKObjectGetter getter)
