@@ -13,6 +13,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
         List<GraphPoint> _graphPoints;
         private List<IDictionary<string, object>> _originalRecords;
         public void SetGraphPoints(List<GraphPoint> p) => _graphPoints = p;
+        public const float POSITION_SCALE = 10f;
 
         public void SetOrigialRecords(List<IDictionary<string, object>> original)
         {
@@ -82,7 +83,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
             // Process the final position when the object stops moving
             if (msg.stopped)
             {
-                Console.WriteLine("In this if already");
+                //Console.WriteLine("In this if already");
                 ProcessGraphPointUpdate(movingPoint, msg.Position.pose.position);
             }
             else
@@ -97,8 +98,8 @@ namespace Coop_Vr.Networking.ServerSide.Components
         private void ProcessGraphPointUpdate(GraphPoint point, Vec3 position)
         {
             // Get X and Z values from the position
-            var scaledCapacity = position.x;
-            var scaledInvestment = position.z;
+            var scaledCapacity = position.x * POSITION_SCALE;
+            var scaledInvestment = position.z * POSITION_SCALE;
 
             // Reverse scale to get original values
             (float unscaledX, float unscaledZ) = ReverseScale(point, scaledCapacity, scaledInvestment, 1f);
@@ -144,7 +145,7 @@ namespace Coop_Vr.Networking.ServerSide.Components
 
                 // Calculate influence scores using XRFomula
                 var influenceScores = FileHandler.CalculateInfluenceScore(records, config.Config.NUMBEROFPROJECT);
-                // Create GraphPoint objects from the influence scores
+                // Removing old objects
                 foreach (var p in _graphPoints)
                 {
                     ServerStateMachine.Instance.CurrentRoom.SafeForEachMember(m =>
