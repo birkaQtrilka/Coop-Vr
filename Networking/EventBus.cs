@@ -49,6 +49,16 @@ namespace Coop_Vr.Networking
         }
     }
 
+    public readonly struct SKObjectDestroyed : IEvent
+    {
+        public readonly SkObject DestroyedObj;
+
+        public SKObjectDestroyed(SkObject obj)//-1 is the id of the root
+        {
+            DestroyedObj = obj;
+        }
+    }
+
     public class SKObjectGetter : IEvent
     {
         public readonly int ID;

@@ -19,37 +19,44 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
 
         public GameRoom(ServerStateMachine context) : base(context)
         {
-            //id is random negative number so it's cannot have a parent 
-            _root = new SkObject(-974327) { ID = -1, Components = new() { new PosComponent() } };
-            _objects.Add(-1, _root);
-            _root.Init();
+            
         }
 
         public override void OnEnter()
         {
+            //id is random negative number so it's cannot have a parent 
+            _root = new SkObject(-974327) { ID = -1, Components = new() { new PosComponent() } };
 
-            EventBus<SKObjectCreated>.Event += OnObjectCreated;
+            _objects.Add(-1, _root);
+            _root.Init();
+            _currentScene = new GraphScene(this);
+
+            EventBus<SKObjectCreated>.Event += OnLocalObjectCreated;
             EventBus<SKObjectAdded>.Event += OnObjectAdded;
             EventBus<SKObjectRemoved>.Event += OnObjectRemoved;
+            EventBus<SKObjectDestroyed>.Event += OnObjectDestroyed; ;
             EventBus<SKObjectGetter>.Event += ObjectGet;
             _currentScene = new GraphScene(this);
             _currentScene.OnStart();
+            _root.Start();
         }
+
+        
 
         public override void OnExit()
         {
             _currentScene.OnStop();
-            EventBus<SKObjectCreated>.Event -= OnObjectCreated;
+            EventBus<SKObjectCreated>.Event -= OnLocalObjectCreated;
             EventBus<SKObjectAdded>.Event -= OnObjectAdded;
             EventBus<SKObjectRemoved>.Event -= OnObjectRemoved;
             EventBus<SKObjectGetter>.Event -= ObjectGet;
             _objects.Clear();
-            
+            _sendingObjects.Clear();
+
             _root.ForEach(c => { 
                 _root.RemoveChild(c, false);
             });
-
-            _objects.Add(-1, _root);
+            _root = null;
         }
 
         public override void ReceiveMessage(IMessage message, TcpChanel sender)
@@ -58,10 +65,7 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             {
                 Log.Do("Receive create object, id: " + objCreate.NewObj.ID);
 
-                EventBus<SKObjectCreated>.Publish
-                (
-                    new SKObjectCreated(objCreate.NewObj, objCreate.ParentID, objCreate.SenderID)
-                );
+                OnRemoteObjectCreated(new SKObjectCreated(objCreate.NewObj, objCreate.ParentID, objCreate.SenderID));
 
             }
             else if (message is ChangePositionRequest changePositionRequest)
@@ -102,27 +106,58 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
                     };
                     Log.Do("Receive, send Move. ID: " + move.ObjectID);
                     context.SendMessage(response);
+                    try
+                    {
+                        component.OnMove?.Invoke(component, move);
 
-                    component.OnMove?.Invoke(component, move);
+                    }
+                    catch(System.Exception ex)
+                    {
+                        Log.Do(ex);
+                    }
                 }
 
             }
         }
 
-        void OnObjectCreated(SKObjectCreated evnt)
+        void OnRemoteObjectCreated(SKObjectCreated evnt)
+        {
+            SkObject obj = evnt.Obj;
+            if (_objects.ContainsKey(obj.ID))
+            {
+                Log.Do($"obj with ID: {obj.ID} already exists, changing ID");
+                obj.ID = CurrentId++;
+            }    
+            OnRemoteObjectCreatedRecursive(obj);
+            _objects[obj.ParentID].AddChild(obj, false);
+            _sendingObjects.Add(obj.ID, evnt);
+
+        }
+
+        void OnRemoteObjectCreatedRecursive(SkObject obj, bool addToPool = true)
+        {
+            if (addToPool)
+                _objects.Add(obj.ID, obj);
+            obj.Init();
+            obj.ForEach(child => OnRemoteObjectCreatedRecursive(child));
+            obj.Start();
+        }
+
+        void OnLocalObjectCreated(SKObjectCreated evnt)
         {
             var obj = evnt.Obj;
             
             obj.ID = obj.ID == 0 ? CurrentId++ : obj.ID;
 
             _objects.Add(obj.ID, obj);
-            obj.Init();
             _objects[evnt.ParentID].AddChild(obj, false);
+
+            obj.Init();
             obj.Start();
+
             //has parent refers to a parent in the sendingObject queue, it doesn't care if it has a parent outside it
             //because that parent was already sent through the network
             //do object create loop. Find root, if there is one. Only send the root to reduce send count
-            
             _sendingObjects.Add(obj.ID, evnt);
         }
 
@@ -139,6 +174,13 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
             //send response
         }
 
+        void OnObjectDestroyed(SKObjectDestroyed obj)
+        {
+            var parent = obj.DestroyedObj.GetParent();
+            parent.RemoveChild(obj.DestroyedObj, false);
+            _objects.Remove(obj.DestroyedObj.ID);
+        }
+
         void ObjectGet(SKObjectGetter getter)
         {
             getter.ReturnedObj = () => {
@@ -151,14 +193,14 @@ namespace Coop_Vr.Networking.ServerSide.StateMachine.States
         {
             foreach (SKObjectCreated data in _sendingObjects.Values)
             {
-                bool hasParent = _sendingObjects.ContainsKey(data.ParentID);
+                bool hasParent = _sendingObjects.ContainsKey(data.Obj.ParentID);
 
                 if (hasParent) continue;
 
                 var response = new CreateObjectMsg()
                 {
                     NewObj = data.Obj,
-                    ParentID = data.ParentID,
+                    ParentID = data.Obj.ParentID,
                     SenderID = data.SenderID,
                 };
                 Log.Do("Send create object, id: " + response.NewObj.ID);
