@@ -13,7 +13,7 @@ namespace Coop_Vr
 
         static void Main(string[] args)
         {
-            ServerOrClientSetup(isClient: false);
+            ServerOrClientSetup(isClient: true);
         }
 
         static void ServerOrClientSetup(bool isClient)

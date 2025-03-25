@@ -102,6 +102,7 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
                 else
                     _current.ReceiveMessage(msg, _server);
             }
+            HeartBeatLoop();
 
 
             if (_changedScene)
@@ -111,7 +112,6 @@ namespace Coop_Vr.Networking.ClientSide.StateMachine
             }
             _current.Update();
 
-            HeartBeatLoop();
             FixedUpdate();
 
         }
